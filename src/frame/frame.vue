@@ -198,6 +198,7 @@
     </div>
 	<div class="slide-wrap-content" :class="[{'slideWrapClose': hideSlideWrapSlip}]">
 		<t-icon type="close" size="36" class="icon-close mr-5 mt-3" @click.native="handleClickClose"></t-icon>
+		 
 	</div>
 	</div>
 	
