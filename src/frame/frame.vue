@@ -15,10 +15,10 @@
 						<img :src="imgMin" alt="" class="layout-logo-min-img"/>
 					</span>
 				</slot>
-      	<a href="javascript:;" class="d-none d-xl-block thumb-icon" v-if="showMenu">
-      		<t-icon type="menu" class="text-xxl text-black" @click.native="openOrClose" title="收起菜单"></t-icon>
-      	</a>
-      </div>
+				<a href="javascript:;" class="d-none d-xl-block thumb-icon" v-if="showMenu">
+					<t-icon type="menu" class="text-xxl text-black" @click.native="openOrClose" title="收起菜单"></t-icon>
+				</a>
+			</div>
 			<div :class="['layout-menu', {'menu--folded': isOpen === false}, {'menu--fold--show': clientWidth > 1200}, {'menu--fold--min': clientWidth <= 1199}]">
 				<slot name="frame-menu">
 					<t-menu
@@ -170,8 +170,8 @@
 	    			<slot name="slipbox-body">
 			    		<t-tabs>
 					      <t-tab-panel label="System Informs" name="tab-1">
-							  <div class="notice-wrap" :class="{'notice-active': isActive === 0}" @click="handleNoticeClick(0)">
-								  <span class="nw-l"><t-tag state="danger">hot</t-tag></span>
+							  <div class="notice-wrap" :class="{'notice-active': isActive === 0}" @click="handleNoticeClick(0)" style="margin-top:6px;">
+								  <span class="nw-l"><t-tag state='danger'>hot</t-tag></span>
 								  <span class="nw-r">
 									  <p class="nw-r-title">缴纳0元租赁使用高清电视机顶盒一台缴纳0元租赁使用高清电视机顶盒一台</p>
 									  <p class="nw-r-time">有效周期：2017-09-09 至 2020-09-09</p>
@@ -185,7 +185,7 @@
 								  </span>
 							  </div>
 							  <div class="notice-wrap" :class="{'notice-active': isActive === 2}" @click="handleNoticeClick(2)">
-								  <span class="nw-l"><t-tag state="success">new</t-tag></span>
+								  <span class="nw-l"><t-tag state='success'>new</t-tag></span>
 								  <span class="nw-r">
 									  <p class="nw-r-title">缴纳0元租赁使用高清电视机顶盒一台缴纳0元租赁使用高清电视机顶盒一台</p>
 									  <p class="nw-r-time">有效周期：2017-09-09 至 2020-09-09</p>
@@ -201,6 +201,9 @@
         <router-view></router-view>
       </div>
     </div>
+		<div class="slide-wrap-content" :class="[{'slideWrapClose': hideSlideWrapSlip}]">
+			<t-icon type="close" size="36" class="icon-close mr-5 mt-3" @click.native="handleClickClose"></t-icon>
+		</div>
 	</div>
 </template>
 <script>
@@ -286,6 +289,7 @@
 				showMenu: true,
 				needBackDrop: false,
 				hideSlip: true,
+				hideSlideWrapSlip:true,
 				accordion: true,
 				isActive: 0,
         menu: []
@@ -308,6 +312,10 @@
 			/* 消息点击触发 */
 			handleNoticeClick (index) {
 				this.isActive = index
+				this.hideSlideWrapSlip = false
+			},
+			handleClickClose(){
+				this.hideSlideWrapSlip = true
 			},
 			/* 点击图标触发 */
 			handleLogout (item) {
@@ -370,69 +378,69 @@
 	    },
 			handleClickoutSide (e) {
 				if (this._ischild(e.target) && (!e.target.classList.contains('slipbox__content') || !this._isChildNode(e.target, 'slipbox__content')) && !this._isChildNode(e.target, 'slide-wrap-content')) {
-	        this.hideSlipbox()
-	        return true
-	      }
-	      return false
-			}
-		},
-		created () {
-			let accessToken = sessionStorage.get('access_token')
-  		let refreshToken = sessionStorage.get('refresh_token')
-  		if (!accessToken || !refreshToken) return
-  		if (this.menuList && this.menuList.length) return
-			// 获取menu数据
-			this.instance.get(this.authorization.menuUri).then(res => {
-				this.menu = transData(res.data, 'menuId', 'menuPid', 'children')
-			}).catch(res => {
-				/**
-				 * 处理相关错误的问题
-				 */
-				if (res) {
-			    switch (res.status) {
-			      /**
-			      * 判断相关的错误，例如判断 token 失效， 或者没有登录的情况
-			      */
-			      case 401:
-			      	let accessToken = sessionStorage.get('access_token')
-				  		let refreshToken = sessionStorage.get('refresh_token')
-				  		if (!accessToken || !refreshToken) return
-			        let msg = {
-			          client_id: this.authorization.client_id,
-			          redirect_uri: encodeURIComponent(this.authorization.redirect_uri),
-			          state: uuid(6, 16)
-			        }
-			        window.location.href = this.authorization.authorizeUri + '?client_id=' + msg.client_id + '&redirect_uri=' + msg.redirect_uri + '&response_type=code&scope=read&state=' + msg.state
-			        break
-			    }
-			  }
-			})
-		},
-		mounted () {
-			let that = this
-			let clientWidth = document.body.clientWidth || document.body.offsetWidth
-			that.clientWidth = clientWidth
-			if (this.clientWidth < 1200) {
-				this.openPosition = 'down'
-			}
-			if (that.clientWidth >= 1200 && !that.isOpen) {
-				that.showMenu = false
-			} else {
-				that.showMenu = true
-			}
-			window.addEventListener('resize', () => {
+					this.hideSlipbox()
+					return true
+				}
+				return false
+			},
+			created () {
+				let accessToken = sessionStorage.get('access_token')
+	  		let refreshToken = sessionStorage.get('refresh_token')
+	  		if (!accessToken || !refreshToken) return
+	  		if (this.menuList && this.menuList.length) return
+				// 获取menu数据
+				this.instance.get(this.authorization.menuUri).then(res => {
+					this.menu = transData(res.data, 'menuId', 'menuPid', 'children')
+				}).catch(res => {
+					/**
+					 * 处理相关错误的问题
+					 */
+					if (res) {
+				    switch (res.status) {
+				      /**
+				      * 判断相关的错误，例如判断 token 失效， 或者没有登录的情况
+				      */
+				      case 401:
+				      	let accessToken = sessionStorage.get('access_token')
+					  		let refreshToken = sessionStorage.get('refresh_token')
+					  		if (!accessToken || !refreshToken) return
+				        let msg = {
+				          client_id: this.authorization.client_id,
+				          redirect_uri: encodeURIComponent(this.authorization.redirect_uri),
+				          state: uuid(6, 16)
+				        }
+				        window.location.href = this.authorization.authorizeUri + '?client_id=' + msg.client_id + '&redirect_uri=' + msg.redirect_uri + '&response_type=code&scope=read&state=' + msg.state
+				        break
+				    }
+				  }
+				})
+			},
+			mounted () {
+				let that = this
 				let clientWidth = document.body.clientWidth || document.body.offsetWidth
 				that.clientWidth = clientWidth
-				if (that.clientWidth < 1200) {
-					that.openPosition = 'down'
+				if (this.clientWidth < 1200) {
+					this.openPosition = 'down'
 				}
-
 				if (that.clientWidth >= 1200 && !that.isOpen) {
 					that.showMenu = false
 				} else {
 					that.showMenu = true
 				}
-			})
+				window.addEventListener('resize', () => {
+					let clientWidth = document.body.clientWidth || document.body.offsetWidth
+					that.clientWidth = clientWidth
+					if (that.clientWidth < 1200) {
+						that.openPosition = 'down'
+					}
+
+					if (that.clientWidth >= 1200 && !that.isOpen) {
+						that.showMenu = false
+					} else {
+						that.showMenu = true
+					}
+				})
+			}
 		}
 	}
 </script>
