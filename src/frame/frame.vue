@@ -132,7 +132,7 @@
 			    					</t-menu-item>
 		    					</t-submenu>
 		    					<t-menu-item :name="x" v-else>
-		    						<t-badge :count="count" state='danger' v-if="item.icon === 'bell' && count">
+		    						<t-badge :count="count" state="danger" v-if="item.icon === 'bell' && count">
 		    							<span @click="showSlipbox">
 				    						<t-icon :type="item.icon" v-if="item.icon"></t-icon>
 							        	<span class="sub-text" v-if="item.name">{{item.name}}</span>
@@ -144,9 +144,15 @@
 							        	<span class="sub-text" v-if="item.name">{{item.name}}</span>
 							        </span>
 					        	</template>
-					        	<template v-else>
-					        		<t-icon :type="item.icon" v-if="item.icon"></t-icon>
-							        <span class="sub-text" v-if="item.name">{{item.name}}</span>
+					        	<template @click="handleLogout(item)" v-else>
+					        		<a :href="authorization.logout_uri" target="_self" v-if="item.handleType && item.handleType === 'logout'">
+						        		<t-icon :type="item.icon" v-if="item.icon"></t-icon>
+								        <span class="sub-text" v-if="item.name">{{item.name}}</span>
+								      </a>
+								      <span v-else>
+								      	<t-icon :type="item.icon" v-if="item.icon"></t-icon>
+								        <span class="sub-text" v-if="item.name">{{item.name}}</span>
+								      </span>
 					        	</template>
 		    					</t-menu-item>
 		    				</template>
@@ -165,21 +171,21 @@
 			    		<t-tabs>
 					      <t-tab-panel label="System Informs" name="tab-1">
 							  <div class="notice-wrap" :class="{'notice-active': isActive === 0}" @click="handleNoticeClick(0)">
-								  <span class="nw-l"><t-tag state='danger'>hot</t-tag></span>
+								  <span class="nw-l"><t-tag state="danger">hot</t-tag></span>
 								  <span class="nw-r">
 									  <p class="nw-r-title">缴纳0元租赁使用高清电视机顶盒一台缴纳0元租赁使用高清电视机顶盒一台</p>
 									  <p class="nw-r-time">有效周期：2017-09-09 至 2020-09-09</p>
 								  </span>
 							  </div>
 							  <div class="notice-wrap" :class="{'notice-active': isActive === 1}" @click="handleNoticeClick(1)">
-								  <span class="nw-l"><t-tag state='info'>info</t-tag></span>
+								  <span class="nw-l"><t-tag state="info">info</t-tag></span>
 								  <span class="nw-r">
 									  <p class="nw-r-title">缴纳0元租赁使用高清电视机顶盒一台缴纳0元租赁使用高清电视机顶盒一台</p>
 									  <p class="nw-r-time">有效周期：2017-09-09 至 2020-09-09</p>
 								  </span>
 							  </div>
 							  <div class="notice-wrap" :class="{'notice-active': isActive === 2}" @click="handleNoticeClick(2)">
-								  <span class="nw-l"><t-tag state='primary'>new</t-tag></span>
+								  <span class="nw-l"><t-tag state="success">new</t-tag></span>
 								  <span class="nw-r">
 									  <p class="nw-r-title">缴纳0元租赁使用高清电视机顶盒一台缴纳0元租赁使用高清电视机顶盒一台</p>
 									  <p class="nw-r-time">有效周期：2017-09-09 至 2020-09-09</p>
@@ -282,7 +288,7 @@
 				hideSlip: true,
 				accordion: true,
 				isActive: 0,
-        		menu: []
+        menu: []
 			}
 		},
 		computed: {
@@ -299,8 +305,17 @@
 			ClickoutSide
 		},
 		methods: {
+			/* 消息点击触发 */
 			handleNoticeClick (index) {
 				this.isActive = index
+			},
+			/* 点击图标触发 */
+			handleLogout (item) {
+				if (item && item.handleType && item.handleType === 'logout') {
+					/* 登出 */
+					sessionStorage.remove('access_token')
+					sessionStorage.remove('refresh_token')
+				}
 			},
 			closeMenuOnMinWin () {
 				this.isOpenOnMinWin = true
@@ -321,11 +336,9 @@
 				}
 			},
 			hdMenuClick (name) {
-				console.log('menu-click', name)
 				this.$emit('menu-click', name)
 			},
 			handleNavSelect (name) {
-				console.log('menu-nav-click', name)
 				this.$emit('nav-menu-click', name)
 			},
 			getMenu (item) {
@@ -356,7 +369,7 @@
 	      return false
 	    },
 			handleClickoutSide (e) {
-				if (this._ischild(e.target) && (!e.target.classList.contains('slipbox__content') || !this._isChildNode(e.target, 'slipbox__content'))) {
+				if (this._ischild(e.target) && (!e.target.classList.contains('slipbox__content') || !this._isChildNode(e.target, 'slipbox__content')) && !this._isChildNode(e.target, 'slide-wrap-content')) {
 	        this.hideSlipbox()
 	        return true
 	      }

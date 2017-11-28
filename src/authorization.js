@@ -1,7 +1,9 @@
 export default {
   client_id: 'cmiConfidentialWeb',
   clientSecret: 'cmiConfidentialWeb%mvno$SixLou',
-  authorizeUri: '/oauth/authorize',
+  authorizeUri: 'http://192.168.1.186:8081/oauth/authorize',
   tokenUri: '/oauth/token',
-  redirect_uri: 'http://localhost:8080/client/'
+  menuUri: '/api/getStaffMenue',
+  redirect_uri: 'http://localhost:8080/client/',
+  logout_uri: 'http://192.168.1.186:8081/logout'
 }
