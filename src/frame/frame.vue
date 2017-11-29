@@ -34,10 +34,10 @@
 									<template slot="title">
 										<t-icon :type="item1.iconType" v-if="item1.iconType"></t-icon>
 										<t-avatar size="sm" bg-state="success" :text="item1.rightTag" :dot="false" v-else></t-avatar>
-						        <router-link :to="{ path: item1.menuUrl}" v-if="item1.rightTag === tag && item1.menuUrl">
+						        <router-link :to="{ path: item1.menuUrl}" v-if="item1.rightTag === tag">
 				            	<span class="sub-text">{{item1.menuName}}</span>
 						        </router-link>
-						        <a :href="item1.systemUrl + item1.systemUrl" target="_blank" v-else-if="item1.systemUrl && item1.menuUrl && item1.rightTag !== tag">
+						        <a :href="item1.systemUrl + item1.menuUrl" target="_blank" v-else-if="item1.systemUrl && item1.menuUrl && item1.rightTag !== tag">
 						        	<span class="sub-text">{{item1.menuName}}</span>
 						        </a>
 						        <span class="sub-text" v-else>{{item1.menuName}}</span>
@@ -45,10 +45,10 @@
 									<template v-for="(item2, y) in item1.children">
 										<t-submenu v-if="item2.children && item2.children.length" :name="x + '' +y" class="second-submenu">
 											<template slot="title">
-					            	<router-link :to="{ path: item2.menuUrl}" v-if="item2.rightTag === tag && item2.menuUrl">
+					            	<router-link :to="{ path: item2.menuUrl}" v-if="item2.rightTag === tag">
 						            	<span class="sub-text">{{item2.menuName}}</span>
 								        </router-link>
-								        <a :href="item2.systemUrl + item2.systemUrl" target="_blank" v-else-if="item2.systemUrl && item2.menuUrl && item2.rightTag !== tag">
+								        <a :href="item2.systemUrl + item2.menuUrl" target="_blank" v-else-if="item2.systemUrl && item2.menuUrl && item2.rightTag !== tag">
 								        	<span class="sub-text">{{item2.menuName}}</span>
 								        </a>
 								        <span class="sub-text" v-else>{{item2.menuName}}</span>
@@ -56,20 +56,20 @@
 					            <template v-for="(item3, z) in item2.children">
 					            	<t-submenu v-if="item3.children && item3.children.length" :name="x + '' + y + '' + z" :id="x + '' +y" class="second-submenu">
 					            		<t-menu-item v-for="(item4, w) in item3.children" :name="x + '' + y + '' + z + '' + w" :key="w" @click.native="getMenu(item4)" class="sec-item">
-							            	<router-link :to="{ path: item4.menuUrl}" v-if="item4.rightTag === tag && item4.menuUrl">
+							            	<router-link :to="{ path: item4.menuUrl}" v-if="item4.rightTag === tag">
 								            	<span class="sub-text">{{item4.menuName}}</span>
 										        </router-link>
-										        <a :href="item4.systemUrl + item4.systemUrl" target="_blank" v-else-if="item4.systemUrl && item4.menuUrl && item4.rightTag !== tag">
+										        <a :href="item4.systemUrl + item4.menuUrl" target="_blank" v-else-if="item4.systemUrl && item4.menuUrl && item4.rightTag !== tag">
 										        	<span class="sub-text">{{item4.menuName}}</span>
 										        </a>
 										        <span class="sub-text" v-else>{{item4.menuName}}</span>
 							            </t-menu-item>
 					            	</t-submenu>
 						            <t-menu-item :name="x + '' + y + '' + z" :key="z" @click.native="getMenu(item3)" class="sec-item" v-else>
-						            	<router-link :to="{ path: item3.menuUrl}" v-if="item3.rightTag === tag && item3.menuUrl">
+						            	<router-link :to="{ path: item3.menuUrl}" v-if="item3.rightTag === tag">
 							            	<span class="sub-text">{{item3.menuName}}</span>
 									        </router-link>
-									        <a :href="item3.systemUrl + item3.systemUrl" target="_blank" v-else-if="item3.systemUrl && item3.menuUrl && item3.rightTag !== tag">
+									        <a :href="item3.systemUrl + item3.menuUrl" target="_blank" v-else-if="item3.systemUrl && item3.menuUrl && item3.rightTag !== tag">
 									        	<span class="sub-text">{{item3.menuName}}</span>
 									        </a>
 									        <span class="sub-text" v-else>{{item3.menuName}}</span>
@@ -77,10 +77,10 @@
 					            </template>
 										</t-submenu>
 										<t-menu-item :name="x + '' + y" v-else>
-											<router-link :to="{ path: item2.menuUrl}" v-if="item2.rightTag === tag && item2.menuUrl">
+											<router-link :to="{ path: item2.menuUrl}" v-if="item2.rightTag === tag">
 					            	<span class="sub-text">{{item2.menuName}}</span>
 							        </router-link>
-							        <a :href="item2.systemUrl + item2.systemUrl" target="_blank" v-else-if="item2.systemUrl && item2.menuUrl && item2.rightTag !== tag">
+							        <a :href="item2.systemUrl + item2.menuUrl" target="_blank" v-else-if="item2.systemUrl && item2.menuUrl && item2.rightTag !== tag">
 							        	<span class="sub-text">{{item2.menuName}}</span>
 							        </a>
 							        <span class="sub-text" v-else>{{item2.menuName}}</span>
@@ -90,10 +90,10 @@
 								<t-menu-item :name="x" v-else>
 									<t-icon :type="item1.iconType" v-if="item1.iconType"></t-icon>
 									<t-avatar size="sm" bg-state="success" :text="item1.rightTag" :dot="false" v-else></t-avatar>
-					        <router-link :to="{ path: item1.menuUrl}" v-if="item1.rightTag === tag && item1.menuUrl">
+					        <router-link :to="{ path: item1.menuUrl}" v-if="item1.rightTag === tag">
 			            	<span class="sub-text">{{item1.menuName}}</span>
 					        </router-link>
-					        <a :href="item1.systemUrl + item1.systemUrl" target="_blank" v-else-if="item1.systemUrl && item1.menuUrl && item1.rightTag !== tag">
+					        <a :href="item1.systemUrl + item1.menuUrl" target="_blank" v-else-if="item1.systemUrl && item1.menuUrl && item1.rightTag !== tag">
 					        	<span class="sub-text">{{item1.menuName}}</span>
 					        </a>
 					        <span class="sub-text" v-else>{{item1.menuName}}</span>
@@ -382,65 +382,72 @@
 					return true
 				}
 				return false
-			},
-			created () {
-				let accessToken = sessionStorage.get('access_token')
-	  		let refreshToken = sessionStorage.get('refresh_token')
-	  		if (!accessToken || !refreshToken) return
-	  		if (this.menuList && this.menuList.length) return
-				// 获取menu数据
-				this.instance.get(this.authorization.menuUri).then(res => {
-					this.menu = transData(res.data, 'menuId', 'menuPid', 'children')
-				}).catch(res => {
-					/**
-					 * 处理相关错误的问题
-					 */
-					if (res) {
-				    switch (res.status) {
-				      /**
-				      * 判断相关的错误，例如判断 token 失效， 或者没有登录的情况
-				      */
-				      case 401:
-				      	let accessToken = sessionStorage.get('access_token')
-					  		let refreshToken = sessionStorage.get('refresh_token')
-					  		if (!accessToken || !refreshToken) return
-				        let msg = {
-				          client_id: this.authorization.client_id,
-				          redirect_uri: encodeURIComponent(this.authorization.redirect_uri),
-				          state: uuid(6, 16)
-				        }
-				        window.location.href = this.authorization.authorizeUri + '?client_id=' + msg.client_id + '&redirect_uri=' + msg.redirect_uri + '&response_type=code&scope=read&state=' + msg.state
-				        break
-				    }
-				  }
-				})
-			},
-			mounted () {
-				let that = this
+			}
+		},
+		created () {
+			let accessToken = sessionStorage.get('access_token')
+  		let refreshToken = sessionStorage.get('refresh_token')
+  		if (!accessToken || !refreshToken) return
+  		if (this.menuList && this.menuList.length) return
+			// 获取menu数据
+			this.instance.get(this.authorization.menuUri).then(res => {
+				this.menu = transData(res.data, 'menuId', 'menuPid', 'children')
+				// this.menu.unshift({
+				// 	menuId: 1,
+				// 	menuName: '测试',
+				// 	menuPid: -1,
+				// 	menuUrl: "/client",
+				// 	rightTag: "sys",
+				// 	systemUrl: "http://localhost:8085"})
+			}).catch(res => {
+				/**
+				 * 处理相关错误的问题
+				 */
+				if (res) {
+			    switch (res.status) {
+			      /**
+			      * 判断相关的错误，例如判断 token 失效， 或者没有登录的情况
+			      */
+			      case 401:
+			      	let accessToken = sessionStorage.get('access_token')
+				  		let refreshToken = sessionStorage.get('refresh_token')
+				  		if (!accessToken || !refreshToken) return
+			        let msg = {
+			          client_id: this.authorization.client_id,
+			          redirect_uri: encodeURIComponent(this.authorization.redirect_uri),
+			          state: uuid(6, 16)
+			        }
+			        window.location.href = this.authorization.authorizeUri + '?client_id=' + msg.client_id + '&redirect_uri=' + msg.redirect_uri + '&response_type=code&scope=read&state=' + msg.state
+			        break
+			    }
+			  }
+			})
+		},
+		mounted () {
+			let that = this
+			let clientWidth = document.body.clientWidth || document.body.offsetWidth
+			that.clientWidth = clientWidth
+			if (this.clientWidth < 1200) {
+				this.openPosition = 'down'
+			}
+			if (that.clientWidth >= 1200 && !that.isOpen) {
+				that.showMenu = false
+			} else {
+				that.showMenu = true
+			}
+			window.addEventListener('resize', () => {
 				let clientWidth = document.body.clientWidth || document.body.offsetWidth
 				that.clientWidth = clientWidth
-				if (this.clientWidth < 1200) {
-					this.openPosition = 'down'
+				if (that.clientWidth < 1200) {
+					that.openPosition = 'down'
 				}
+
 				if (that.clientWidth >= 1200 && !that.isOpen) {
 					that.showMenu = false
 				} else {
 					that.showMenu = true
 				}
-				window.addEventListener('resize', () => {
-					let clientWidth = document.body.clientWidth || document.body.offsetWidth
-					that.clientWidth = clientWidth
-					if (that.clientWidth < 1200) {
-						that.openPosition = 'down'
-					}
-
-					if (that.clientWidth >= 1200 && !that.isOpen) {
-						that.showMenu = false
-					} else {
-						that.showMenu = true
-					}
-				})
-			}
+			})
 		}
 	}
 </script>
