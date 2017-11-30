@@ -16,7 +16,7 @@
 					</span>
 				</slot>
 				<a href="javascript:;" class="d-none d-xl-block thumb-icon" v-if="showMenu">
-					<t-icon type="menu" class="text-xxl text-black" @click.native="openOrClose" title="收起菜单"></t-icon>
+					<t-icon type="menu" class="text-xxl text-black" @click.native="openOrClose"></t-icon>
 				</a>
 			</div>
 			<div :class="['layout-menu', {'menu--folded': isOpen === false}, {'menu--fold--show': clientWidth > 1200}, {'menu--fold--min': clientWidth <= 1199}]">
@@ -108,7 +108,7 @@
 				<div class="row nav-row">
 					<div class="col col-6 nav-col">
 						<a href="javascript:;" class="d-xm-block thumb-icon" v-show="!showMenu">
-		      		<t-icon type="menu" class="text-xxl text-black" @click.native="openOrClose" title="收起菜单"></t-icon>
+		      		<t-icon type="menu" class="text-xxl text-black" @click.native="openOrClose"></t-icon>
 		      	</a>
 				  	<slot name="frame-nav-left"></slot>
 					</div>
