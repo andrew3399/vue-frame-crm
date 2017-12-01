@@ -1,8 +1,6 @@
 .crm-wrapper{
-    display: inline-block;
     padding: 15px 15px;
     width: 100%;
-    height: 100%;
     background: #f9f9f9;
 }
 .bread-crumbs{
@@ -14,15 +12,14 @@
     padding:15px;
     width: 100%;
     height: auto;
-    
     background: #fff;
     border-radius: 5px;
-    box-shadow: 0 1px 10px 0 rgba(0, 0, 0, .02) 
+    box-shadow: 0 1px 10px 0 rgba(0, 0, 0, .02)
 }
 .enquiries-title{
     width: 100%;
     font-size:16px;
-    color:#455155;  
+    color:#455155;
 }
 .enquiries-title span{
     float: left;
@@ -59,7 +56,14 @@ margin-right: 5px;
 }
 .notice-list-wrap{
     border-bottom: 1px solid #e8ece9;
+    &:hover {
+        color: #89BE1D;
+    }
+    &:last-child {
+        border-bottom: none;
+    }
     .n-l-title{
+        font-size: 16px;
         padding:15px 30px;
         .tips-top{
             width: 48px;
@@ -98,6 +102,7 @@ margin-right: 5px;
             -webkit-box-orient: vertical;
             -webkit-line-clamp: 2;
             overflow: hidden;
+            font-size: 14px;
         }
         .n-l-time{
             color: #4A4B4A ;
@@ -105,10 +110,14 @@ margin-right: 5px;
             em{
                 font-style: normal;
                 margin-left: 10px;
-            }    
+            }
         }
     }
-    .text-emr{
-        color: #89BE1D;
+}
+.notice-pager {
+    margin: 30px auto;
+    text-align: center;
+    .pagination {
+        margin: 0;
     }
 }

@@ -1,34 +1,24 @@
 <template>
-	<!-- <div class="notice__container">
-		<div class="notice__title">{{title}}</div>
-		<div class="notice__content">{{content}}</div>
-		<p class="notice__tip">{{tip}}</p>
-		<p class="notice__time">{{time}}</p>
-	</div> -->
 <div class="crm-wrapper">
 	<!--面包屑star-->
-	<div class="bread-crumbs">
+	<!-- <div class="bread-crumbs">
 		<div class="row">
 			<div class="col-xs-12 col-sm-12 col-md-6 col-lg-6 col-xl-6">
 				<t-breadcrumb separator=">">
 					<t-breadcrumb-item href="/">账户管理</t-breadcrumb-item>
 					<t-breadcrumb-item>公告列表</t-breadcrumb-item>
 				</t-breadcrumb>
-			</div>	
+			</div>
 		</div>
-	</div>	
+	</div>	 -->
     <!--面包屑 end-->
 	<div class="enquiries mt-10">
-		<p class="text-center">巡查公告</p>
-		<p class="text-left text-in">	根据集团党委的统一部署，集团公司党委第二次巡视组于2017年11月根据集团党委的统一部署集团公司党委第二次巡视组于2017年11月根据集团党委的统一部署，集团公司党委第二次巡视组于2017年11月根据集团党委的统一部署，集团公司党委第二次巡视组于2017年11月按照党务公开原则和巡视工作条例有关规定，现将巡视整改情况予以公布。
-	中国移动党组将以此次巡视整改为契机，</p>
-		<p class="text-left text-in">认真贯彻全面从严之治党要求，把巡视整改与加强党的建设、推进反腐倡廉和深化企业改革结合起来，深入推进“战略转型、改革创新、反腐倡廉”战略落地，以实实在在的整改成效推动公司的持续健康发展，以高速快捷安全的数字服务助力经济社会建设，为中国特色社会主义事业作出更大的贡献。
-	欢迎广大干部群众与巡视整改落实情况进行监督。如有意见建议，请及时向我们反映。
-联系方式：123203089</p>
-		<p class="text-right">中移党委第二巡视组</p>
-		<p class="text-right">2017年10月18日</p>
-    </div>
-	<div class="enquiries mt-10">
+		<p class="text-center">{{bullet.bulletinTitle}}</p>
+		<p class="text-left text-in" v-html="bullet.bulletinContent"></p>
+		<p class="text-right">{{bullet.bulletinPublisher}}</p>
+		<p class="text-right">{{bullet.createTime | format}}</p>
+  </div>
+	<div class="enquiries mt-10" v-if="bullet.files">
 		<!-- 标题 star-->
 		<div class="enquiries-title">
 			<span></span>相关附件
@@ -40,7 +30,7 @@
 	  					<div class="col-12 user-lst">
 	  						<ul class="menu">
 	  							<li class="lt">相关附件：</li>
-	  							<li class="rt"><t-icon type="aid-menu aid-file-document"></t-icon>Thing.doc</li>
+	  							<li class="rt"><a :href="bullet.files" target="_self"><t-icon type="aid-menu aid-file-document"></t-icon>{{$t('frame.doc')}}</a></li>
 	  						</ul>
 	  					</div>
 					</div>
@@ -48,20 +38,75 @@
 			</div>
 		</div>
 	</div>
-</div>	
+</div>
 </template>
 <script>
+	import { getQuery } from '../utils/utils.js'
+	import { mapState } from 'vuex'
 	export default {
 		data () {
 			return {
-				// title: '',
-				// content: '',
-				// tip: '',
-				// time: ''
+				bullet: {}
 			}
 		},
-		methods: {
+		filters: {
+			format: function (param) {
+				if (!param || param < 0) return ''
+				let crt = new Date(param)
+				function Format (format) {
+					let fmt = format
+					if (!fmt) fmt = 'yyyy/MM/dd HH:mm:ss'
+					let o = {
+		        "M+": crt.getMonth() + 1, //月份
+		        "d+": crt.getDate(), //日
+		        "h+": crt.getHours(), //小时
+		        "m+": crt.getMinutes(), //分
+		        "s+": crt.getSeconds(), //秒
+		        "q+": Math.floor((crt.getMonth() + 3) / 3), //季度
+		        "S": crt.getMilliseconds() //毫秒
+			    };
+			    if (/(y+)/.test(fmt)) fmt = fmt.replace(RegExp.$1, (crt.getFullYear() + "").substr(4 - RegExp.$1.length))
+			    for (let k in o)
+			    if (new RegExp("(" + k + ")").test(fmt)) fmt = fmt.replace(RegExp.$1, (RegExp.$1.length == 1) ? (o[k]) : (("00" + o[k]).substr(("" + o[k]).length)))
+			    return fmt
+				}
 
+				return Format('yyyy/MM/dd hh:mm:ss')
+			}
+		},
+		computed: {
+      ...mapState({
+        instance: state => state.storeModule.instance,
+        authorization: state => state.storeModule.authorization
+      })
+    },
+    watch: {
+    	'$route' (to, from) {
+	      // 对路由变化作出响应...
+	      this.getBulletinById()
+	    }
+    },
+		methods: {
+			getBulletinById () {
+				let bulletinId = this.$route.params.bulletinId || getQuery('bulletinId')
+				this.instance.get(this.authorization.bulletinByIdUri, {
+					params: {
+						bulletinId: bulletinId
+					}
+				}).then(res => {
+					this.bullet = res.data
+				}).catch(res => {
+					this.$Message.warning(this.$t('frame.warning'))
+				})
+			}
+		},
+		mounted () {
+			/**
+			 * 做延时处理
+			 */
+			setTimeout(() => {
+				this.getBulletinById()
+			}, 300)
 		}
 	}
 </script>

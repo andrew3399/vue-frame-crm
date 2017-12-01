@@ -8,18 +8,19 @@ export default new Router({
   routes: [
     {
       path: '/',
-      name: 'index',
-      component: require('./index.vue')
-    },
-    {
-      path: '/notice',
-      name: 'notice',
-      component: require('../src/views/notice.vue')
-    },
-    {
-      path: '/notice-list',
-      name: 'notice-list',
-      component: require('../src/views/notice-list.vue')
+      component: require('./index.vue'),
+      children: [
+        {
+          path: '',
+          name: 'notice-list',
+          component: require('../src/views/notice-list.vue')
+        },
+        {
+          path: '/notice',
+          name: 'notice',
+          component: require('../src/views/notice.vue')
+        }
+      ]
     }
   ]
 })

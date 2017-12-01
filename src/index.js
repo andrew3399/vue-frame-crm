@@ -1,6 +1,9 @@
 import Frame from './frame'
 import * as route from './route'
 import * as httpHandle from './http'
+import * as locals from './locals'
+import views from './notices'
+import storeModule from './store'
 
 const TFrame = function (Vue, opts = {}) {
   Vue.component(Frame.name, Frame)
@@ -13,5 +16,8 @@ if (typeof window !== 'undefined' && window.Vue) {
 export {
   TFrame,
   route,
-  httpHandle
+  httpHandle,
+  locals,
+  views,
+  storeModule
 }

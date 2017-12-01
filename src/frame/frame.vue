@@ -132,7 +132,7 @@
 			    					</t-menu-item>
 		    					</t-submenu>
 		    					<t-menu-item :name="x" v-else>
-		    						<t-badge :count="count" state="danger" v-if="item.icon === 'bell' && count">
+		    						<t-badge dot state="danger" v-if="item.icon === 'bell' && count">
 		    							<span @click="showSlipbox">
 				    						<t-icon :type="item.icon" v-if="item.icon"></t-icon>
 							        	<span class="sub-text" v-if="item.name">{{item.name}}</span>
@@ -144,8 +144,8 @@
 							        	<span class="sub-text" v-if="item.name">{{item.name}}</span>
 							        </span>
 					        	</template>
-					        	<template @click="handleLogout(item)" v-else>
-					        		<a :href="authorization.logout_uri" target="_self" v-if="item.handleType && item.handleType === 'logout'">
+					        	<template v-else>
+					        		<a href="javascript:;" target="_self" v-if="item.handleType && item.handleType === 'logout'" @click="handleLogout(item)">
 						        		<t-icon :type="item.icon" v-if="item.icon"></t-icon>
 								        <span class="sub-text" v-if="item.name">{{item.name}}</span>
 								      </a>
@@ -169,36 +169,49 @@
 	    		<div class="slipbox__body">
 	    			<slot name="slipbox-body">
 			    		<t-tabs>
-					      <t-tab-panel label="System Informs" name="tab-1">
-							  <div class="notice-wrap" :class="{'notice-active': isActive === 0}" @click="handleNoticeClick(0)" style="margin-top:6px;">
-								  <span class="nw-l"><t-tag state='danger'>hot</t-tag></span>
-								  <span class="nw-r">
-									  <p class="nw-r-title">缴纳0元租赁使用高清电视机顶盒一台缴纳0元租赁使用高清电视机顶盒一台</p>
-									  <p class="nw-r-time">有效周期：2017-09-09 至 2020-09-09</p>
-								  </span>
-							  </div>
-							  <div class="notice-wrap" :class="{'notice-active': isActive === 1}" @click="handleNoticeClick(1)">
-								  <span class="nw-l"><t-tag state="info">info</t-tag></span>
-								  <span class="nw-r">
-									  <p class="nw-r-title">缴纳0元租赁使用高清电视机顶盒一台缴纳0元租赁使用高清电视机顶盒一台</p>
-									  <p class="nw-r-time">有效周期：2017-09-09 至 2020-09-09</p>
-								  </span>
-							  </div>
-							  <div class="notice-wrap" :class="{'notice-active': isActive === 2}" @click="handleNoticeClick(2)">
-								  <span class="nw-l"><t-tag state='success'>new</t-tag></span>
-								  <span class="nw-r">
-									  <p class="nw-r-title">缴纳0元租赁使用高清电视机顶盒一台缴纳0元租赁使用高清电视机顶盒一台</p>
-									  <p class="nw-r-time">有效周期：2017-09-09 至 2020-09-09</p>
-								  </span>
-							  </div>
-						  </t-tab-panel>
+					      <t-tab-panel :label="$t('frame.sysInform')" name="tab-1">
+					      	<div class="notice-wrap" v-for="(item, index) in notices" :class="{'notice-active': isActive === index}" @click="handleNoticeClick(index, item)">
+					      		<span class="nw-l"><t-tag state="info">info</t-tag></span>
+									  <span class="nw-r">
+										  <p class="nw-r-title">{{item.bulletinTitle}}</p>
+										  <p class="nw-r-time">有效周期：{{item.activeTime | format}} 至 {{item.inactiveTime | format}}</p>
+									  </span>
+					      	</div>
+								  <!-- <div class="notice-wrap" :class="{'notice-active': isActive === 0}" @click="handleNoticeClick(0)" style="margin-top:6px;">
+									  <span class="nw-l"><t-tag state='danger'>hot</t-tag></span>
+									  <span class="nw-r">
+										  <p class="nw-r-title">缴纳0元租赁使用高清电视机顶盒一台缴纳0元租赁使用高清电视机顶盒一台</p>
+										  <p class="nw-r-time">有效周期：2017-09-09 至 2020-09-09</p>
+									  </span>
+								  </div>
+								  <div class="notice-wrap" :class="{'notice-active': isActive === 1}" @click="handleNoticeClick(1)">
+									  <span class="nw-l"><t-tag state="info">info</t-tag></span>
+									  <span class="nw-r">
+										  <p class="nw-r-title">缴纳0元租赁使用高清电视机顶盒一台缴纳0元租赁使用高清电视机顶盒一台</p>
+										  <p class="nw-r-time">有效周期：2017-09-09 至 2020-09-09</p>
+									  </span>
+								  </div>
+								  <div class="notice-wrap" :class="{'notice-active': isActive === 2}" @click="handleNoticeClick(2)">
+									  <span class="nw-l"><t-tag state='success'>new</t-tag></span>
+									  <span class="nw-r">
+										  <p class="nw-r-title">缴纳0元租赁使用高清电视机顶盒一台缴纳0元租赁使用高清电视机顶盒一台</p>
+										  <p class="nw-r-time">有效周期：2017-09-09 至 2020-09-09</p>
+									  </span>
+								  </div> -->
+								  <p class="notice__loading"><a href="javascript:;" target="_self"  @click="loadingMore">{{$t('frame.loadingMore')}}</a></p>
+							  </t-tab-panel>
 					    </t-tabs>
 					  </slot>
 	    		</div>
 	    	</div>
     	</div>
     	<div class="layout-main">
-        <router-view></router-view>
+    		<div class="layout-main--content">
+        	<router-view></router-view>
+	        <div class="pager-footer">
+	        	<p>©️ 2017 China Mobile International Limited. All rights reserved.</p>
+	        </div>
+        </div>
       </div>
     </div>
 		<div class="slide-wrap-content" :class="[{'slideWrapClose': hideSlideWrapSlip}]">
@@ -210,6 +223,8 @@
 	import ClickoutSide from './clickoutside.js'
 	import SessionStorage from '../utils/sessionStorage.js'
 	import { transData } from '../utils/utils.js'
+	import * as Constant from '../store/constant.js'
+	import { mapMutations } from 'vuex'
 	let sessionStorage = new SessionStorage ()
 	export default {
 		name: 'TFrame',
@@ -258,14 +273,11 @@
 				type: Array,
 				default: []
 			},
-			count: {
-				type: Number
-			},
 			/**
 			 * 服务调用实例
 			 */
 			instance: {
-				type: Object
+				type: Function
 			},
 			/**
 			 * 登录相关的设置
@@ -292,7 +304,9 @@
 				hideSlideWrapSlip:true,
 				accordion: true,
 				isActive: 0,
-        menu: []
+        menu: [],
+        count: 10,
+        notices: []
 			}
 		},
 		computed: {
@@ -303,16 +317,57 @@
 					return this.menu
 				}
 				return []
+			},
+			ins () {
+				this.setInstance(this.instance)
+				return this.instance
+			},
+			auth () {
+				this.setAuthorization(this.authorization)
+				return this.authorization
 			}
 		},
 		directives: {
 			ClickoutSide
 		},
+		filters: {
+			format: function (param) {
+				if (!param || param < 0) return ''
+				let crt = new Date(param)
+				function Format (format) {
+					let fmt = format
+					if (!fmt) fmt = 'yyyy/MM/dd HH:mm:ss'
+					let o = {
+		        "M+": crt.getMonth() + 1, //月份
+		        "d+": crt.getDate(), //日
+		        "h+": crt.getHours(), //小时
+		        "m+": crt.getMinutes(), //分
+		        "s+": crt.getSeconds(), //秒
+		        "q+": Math.floor((crt.getMonth() + 3) / 3), //季度
+		        "S": crt.getMilliseconds() //毫秒
+			    };
+			    if (/(y+)/.test(fmt)) fmt = fmt.replace(RegExp.$1, (crt.getFullYear() + "").substr(4 - RegExp.$1.length))
+			    for (let k in o)
+			    if (new RegExp("(" + k + ")").test(fmt)) fmt = fmt.replace(RegExp.$1, (RegExp.$1.length == 1) ? (o[k]) : (("00" + o[k]).substr(("" + o[k]).length)))
+			    return fmt
+				}
+
+				return Format('yyyy/MM/dd')
+			}
+		},
 		methods: {
 			/* 消息点击触发 */
-			handleNoticeClick (index) {
+			handleNoticeClick (index, item) {
 				this.isActive = index
-				this.hideSlideWrapSlip = false
+				// this.hideSlideWrapSlip = false
+				this.hideSlip = true
+				this.$router.push({ path: `/notice/${item.bulletinId}` })
+				// this.$router.push({ path: '/notice', query: { bulletinId: item.bulletinId } })
+			},
+			/* 加载更多 */
+			loadingMore () {
+				this.hideSlip = true
+				this.$router.push({path: '/'})
 			},
 			handleClickClose(){
 				this.hideSlideWrapSlip = true
@@ -323,7 +378,9 @@
 					/* 登出 */
 					sessionStorage.remove('access_token')
 					sessionStorage.remove('refresh_token')
+					sessionStorage.remove('MVNO_KEY_TIMEOUT_MAP')
 				}
+				window.location.href = this.authorization.logout_uri
 			},
 			closeMenuOnMinWin () {
 				this.isOpenOnMinWin = true
@@ -382,7 +439,11 @@
 					return true
 				}
 				return false
-			}
+			},
+			...mapMutations([
+				'setInstance',
+				'setAuthorization'
+			])
 		},
 		created () {
 			let accessToken = sessionStorage.get('access_token')
@@ -392,13 +453,39 @@
 			// 获取menu数据
 			this.instance.get(this.authorization.menuUri).then(res => {
 				this.menu = transData(res.data, 'menuId', 'menuPid', 'children')
-				// this.menu.unshift({
-				// 	menuId: 1,
-				// 	menuName: '测试',
-				// 	menuPid: -1,
-				// 	menuUrl: "/client",
-				// 	rightTag: "sys",
-				// 	systemUrl: "http://localhost:8085"})
+			}).catch(res => {
+				/**
+				 * 处理相关错误的问题
+				 */
+				if (res) {
+			    switch (res.status) {
+			      /**
+			      * 判断相关的错误，例如判断 token 失效， 或者没有登录的情况
+			      */
+			      case 401:
+			      	let accessToken = sessionStorage.get('access_token')
+				  		let refreshToken = sessionStorage.get('refresh_token')
+				  		if (!accessToken || !refreshToken) return
+			        let msg = {
+			          client_id: this.authorization.client_id,
+			          redirect_uri: encodeURIComponent(this.authorization.redirect_uri),
+			          state: uuid(6, 16)
+			        }
+			        window.location.href = this.authorization.authorizeUri + '?client_id=' + msg.client_id + '&redirect_uri=' + msg.redirect_uri + '&response_type=code&scope=read&state=' + msg.state
+			        break
+			    }
+			  }
+			})
+
+			/* 获取10个最新的消息列表 */
+			this.instance.get(this.authorization.bulletinListUri,
+				{
+					params: {
+						pageNo: 1,
+						pageSize: 10
+					}
+				}).then(res => {
+				this.notices = res.data.result
 			}).catch(res => {
 				/**
 				 * 处理相关错误的问题
@@ -424,6 +511,11 @@
 			})
 		},
 		mounted () {
+			/* 设置 */
+			this.$nextTick(() => {
+				this.setInstance(this.instance)
+				this.setAuthorization(this.authorization)
+			})
 			let that = this
 			let clientWidth = document.body.clientWidth || document.body.offsetWidth
 			that.clientWidth = clientWidth

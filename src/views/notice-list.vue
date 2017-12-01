@@ -1,55 +1,120 @@
 <template>
 <div class="crm-wrapper">
 	<!--面包屑star-->
-	<div class="bread-crumbs">
+	<!-- <div class="bread-crumbs">
 		<div class="row">
 			<div class="col-xs-12 col-sm-12 col-md-6 col-lg-6 col-xl-6">
 				<t-breadcrumb separator=">">
 					<t-breadcrumb-item href="/">账户管理</t-breadcrumb-item>
 					<t-breadcrumb-item>公告列表</t-breadcrumb-item>
 				</t-breadcrumb>
-			</div>	
+			</div>
 		</div>
-	</div>	
+	</div> -->
     <!--面包屑 end-->
     <div class="enquiries mt-10" style="padding:0px 0px 20px 0px;">
-        <div class="notice-list-wrap">
+        <div class="notice-list-wrap" v-for="item in items" @click="navToDetail(item)">
             <div class="n-l-title">
-                <span>巡查公告</span>
-                <i class="tips-top">置顶</i>
+                <span>{{item.bulletinTitle}}</span>
+                <i class="tips-top" v-if="item.topFlag">置顶</i>
             </div>
             <div class="n-l-content">
-                <p class="text-left n-l-nr">根据集团党委的统一部署，集团公司党委第二次巡视组于2017年11月根据集团党委的统一部署集团公司党委第二次巡视组于2017年11月根据集团党委的统一部署，集团公司党委第二次巡视组于2017年11月根据集团党委的统一部署，集团公司党委第二次巡视组于2017年11月……</p>
-                <p class="text-left n-l-time">党委第二次巡视组 <em>08-12 14:09:09</em></p>
+                <p class="text-left n-l-nr" v-html="item.bulletinContent"></p>
+                <p class="text-left n-l-time">{{item.bulletinPublisher}} <em>{{item.createTime | format}}</em></p>
             </div>
         </div>
-        <div class="notice-list-wrap">
-            <div class="n-l-title">
-                <span class="text-emr">双节促销 </span>
-                <i class="tips-emr">紧急</i>
-            </div>
-            <div class="n-l-content">
-                <p class="text-left  n-l-nr text-emr">根据集团党委的统一部署，集团公司党委第二次巡视组于2017年11月根据集团党委的统一部署集团公司党委第二次巡视组于2017年11月根据集团党委的统一部署，集团公司党委第二次巡视组于2017年11月根据集团党委的统一部署，集团公司党委第二次巡视组于2017年11月……</p>
-                <p class="text-left n-l-time">党委第二次巡视组 <em>08-12 14:09:09</em></p>
-            </div>
-        </div>
+    </div>
+    <div class="notice-pager">
+        <t-pager :total="total" :page-size="pageSize" :sizer-range="sizerRange" @on-change="handleOnPagerChange" @on-size-change="handleOnPagerSizeChange" show-sizer show-elevator></t-pager>
     </div>
 </div>
 </template>
 <script>
-	export default {
-		data () {
-			return {
-				// title: '',
-				// content: '',
-				// tip: '',
-				// time: ''
-			}
-		},
-		methods: {
+    import { getQuery } from '../utils/utils.js'
+    import { mapState } from 'vuex'
+    export default {
+        data () {
+            return {
+                total: 0,
+                pageSize: 10,
+                sizerRange: [10, 15, 20, 50],
+                pageNo: 1,
+                items: []
+            }
+        },
+        filters: {
+            format: function (param) {
+                if (!param || param < 0) return ''
+                let crt = new Date(param)
+                function Format (format) {
+                    let fmt = format
+                    if (!fmt) fmt = 'yyyy/MM/dd HH:mm:ss'
+                    let o = {
+                "M+": crt.getMonth() + 1, //月份
+                "d+": crt.getDate(), //日
+                "h+": crt.getHours(), //小时
+                "m+": crt.getMinutes(), //分
+                "s+": crt.getSeconds(), //秒
+                "q+": Math.floor((crt.getMonth() + 3) / 3), //季度
+                "S": crt.getMilliseconds() //毫秒
+                };
+                if (/(y+)/.test(fmt)) fmt = fmt.replace(RegExp.$1, (crt.getFullYear() + "").substr(4 - RegExp.$1.length))
+                for (let k in o)
+                if (new RegExp("(" + k + ")").test(fmt)) fmt = fmt.replace(RegExp.$1, (RegExp.$1.length == 1) ? (o[k]) : (("00" + o[k]).substr(("" + o[k]).length)))
+                return fmt
+                }
 
-		}
-	}
+                return Format('yyyy/MM/dd hh:mm:ss')
+            }
+        },
+        computed: {
+          ...mapState({
+            instance: state => state.storeModule.instance,
+            authorization: state => state.storeModule.authorization
+          })
+        },
+        methods: {
+            navToDetail (item) {
+                this.$router.push({ path: `/notice/${item.bulletinId}` })
+                // this.$router.push({ path: '/notice', query: { bulletinId: item.bulletinId } })
+            },
+            handleOnPagerChange (item) {
+                this.pageNo = item
+                this.getBulletinList()
+            },
+            handleOnPagerSizeChange (item) {
+                this.pageSize = item
+                this.pageNo = 1
+                this.getBulletinList()
+            },
+            getBulletinList (params) {
+                this.$nextTick(() => {
+                    this.instance.get(this.authorization.bulletinListUri, {
+                        params: {
+                            pageNo: this.pageNo,
+                            pageSize: this.pageSize
+                        }
+                    }).then(res => {
+                        let data = res.data
+                        this.total = data.count
+                        this.pageSize = data.pageSize
+                        this.pageNo = data.pageNo
+                        this.items = data.result
+                    }).catch(res => {
+                        this.$Message.warning(this.$t('frame.warning'))
+                    })
+                })
+            }
+        },
+        mounted () {
+            /**
+             * 等待首次加载生效
+             */
+            setTimeout(() => {
+                this.getBulletinList()
+            }, 300)
+        }
+    }
 </script>
 <style lang="scss" scoped>
 	@import './notice.scss'
