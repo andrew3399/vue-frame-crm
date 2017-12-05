@@ -117,9 +117,12 @@ margin-right: 5px;
     }
 }
 .notice-pager {
-    margin: 30px auto;
+    margin: 20px 0px 120px 0px!important;
     text-align: center;
     .pagination {
         margin: 0;
     }
+}
+.dropdown__menu{
+    margin:0!important;
 }
