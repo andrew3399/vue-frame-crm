@@ -159,6 +159,7 @@
 		    				</template>
 		    			</t-menu>
 		    		</slot>
+		    		<t-button type="outline-secondary" size="sm" class="btn-lang" @click="handleChangeLang">{{lang}}</t-button>
 					</div>
 				</div>
     	</div>
@@ -223,10 +224,12 @@
 <script>
 	import ClickoutSide from './clickoutside.js'
 	import SessionStorage from '../utils/sessionStorage.js'
+	import LocalStorage from '../utils/localStorage.js'
 	import { transData, getQueryData } from '../utils/utils.js'
 	import * as Constant from '../store/constant.js'
 	import { mapMutations } from 'vuex'
 	let sessionStorage = new SessionStorage ()
+	let localStorage = new LocalStorage()
 	export default {
 		name: 'TFrame',
 		props: {
@@ -312,7 +315,8 @@
         count: 10,
         notices: [],
         queryActiveMenu: '',
-        queryOpenName: []
+        queryOpenName: [],
+        lang: 'EN'
 			}
 		},
 		computed: {
@@ -446,12 +450,53 @@
 				}
 				return false
 			},
+			handleChangeLang () {
+				if (this.lang === 'EN') {
+					this.lang = 'CN'
+					localStorage.set('aid-language', 'en-US')
+					this.$i18n.locale = 'en-US'
+				} else if (this.lang === 'CN') {
+					this.lang = 'EN'
+					localStorage.set('aid-language', 'zh-CN')
+					this.$i18n.locale = 'zh-CN'
+				}
+				// 获取menu数据
+				this.instance.get(this.authorization.menuUri, {
+					params: {
+						language: this.lang === 'CN' ? 'en' : 'cn'
+					}
+				}).then(res => {
+					this.menu = transData(res.data, 'menuId', 'menuPid', 'children')
+				}).catch(res => {
+					/**
+					 * 处理相关错误的问题
+					 */
+					if (res) {
+				    switch (res.status) {
+				      /**
+				      * 判断相关的错误，例如判断 token 失效， 或者没有登录的情况
+				      */
+				      case 401:
+				      	let accessToken = sessionStorage.get('access_token')
+					  		let refreshToken = sessionStorage.get('refresh_token')
+					  		if (!accessToken || !refreshToken) return
+				        let msg = {
+				          client_id: this.authorization.client_id,
+				          redirect_uri: encodeURIComponent(this.authorization.redirect_uri),
+				          state: uuid(6, 16)
+				        }
+				        window.location.href = this.authorization.authorizeUri + '?client_id=' + msg.client_id + '&redirect_uri=' + msg.redirect_uri + '&response_type=code&scope=read&state=' + msg.state
+				        break
+				    }
+				  }
+				})
+			},
 			...mapMutations([
 				'setInstance',
 				'setAuthorization'
 			])
 		},
-		created () {
+		async created () {
 			// let menu = [
 			// 	{
 			// 	    "menuId": 20,
@@ -785,6 +830,19 @@
   		let refreshToken = sessionStorage.get('refresh_token')
   		if (!accessToken || !refreshToken) return
   		if (this.menuList && this.menuList.length) return
+
+  		// 获取login处设置的语言
+  		let fetchLang = await this.instance.get(this.authorization.langUri)
+  		if (fetchLang.data === 'zh') {
+				this.lang = 'EN'
+				localStorage.set('aid-language', 'zh-CN')
+				this.$i18n.locale = 'zh-CN'
+			} else if (fetchLang.data === 'en') {
+				this.lang = 'CN'
+				localStorage.set('aid-language', 'en-US')
+				this.$i18n.locale = 'en-US'
+			}
+
 			// 获取menu数据
 			this.instance.get(this.authorization.menuUri).then(res => {
 				this.menu = transData(res.data, 'menuId', 'menuPid', 'children')
