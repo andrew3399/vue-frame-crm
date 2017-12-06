@@ -23,77 +23,78 @@
 				<slot name="frame-menu">
 					<t-menu
 						type="light"
-						:active-name="activeMenu"
+						:active-name="queryActiveMenu"
+						:open-names="queryOpenName"
             :open-position="openPosition"
             :accordion="accordion"
             :class="[{'menu--folded': isOpen === false && clientWidth > 1200}]"
             @on-select="hdMenuClick"
             ref="sidebarMenu">
 							<template v-for="(item1, x) in treeData">
-								<t-submenu :name="x" v-if="item1.children && item1.children.length">
+								<t-submenu :name="item1.menuName" v-if="item1.children && item1.children.length">
 									<template slot="title">
 										<t-icon :type="item1.iconType" v-if="item1.iconType"></t-icon>
 										<t-avatar size="sm" bg-state="success" :text="item1.rightTag" :dot="false" v-else></t-avatar>
-						        <router-link :to="{ path: item1.menuUrl}" v-if="item1.rightTag === tag">
+						        <router-link :to="{ path: item1.menuUrl }" v-if="item1.rightTag === tag">
 				            	<span class="sub-text">{{item1.menuName}}</span>
 						        </router-link>
-						        <a :href="item1.systemUrl + item1.menuUrl" target="_blank" v-else-if="item1.systemUrl && item1.menuUrl && item1.rightTag !== tag">
+						        <a :href="item1.systemUrl + item1.menuUrl" target="_self" v-else-if="item1.systemUrl && item1.menuUrl && item1.rightTag !== tag">
 						        	<span class="sub-text">{{item1.menuName}}</span>
 						        </a>
 						        <span class="sub-text" v-else>{{item1.menuName}}</span>
 				          </template>
 									<template v-for="(item2, y) in item1.children">
-										<t-submenu v-if="item2.children && item2.children.length" :name="x + '' +y" class="second-submenu">
+										<t-submenu v-if="item2.children && item2.children.length" :name="item2.menuName" class="second-submenu">
 											<template slot="title">
 					            	<router-link :to="{ path: item2.menuUrl}" v-if="item2.rightTag === tag">
 						            	<span class="sub-text">{{item2.menuName}}</span>
 								        </router-link>
-								        <a :href="item2.systemUrl + item2.menuUrl" target="_blank" v-else-if="item2.systemUrl && item2.menuUrl && item2.rightTag !== tag">
+								        <a :href="item2.systemUrl + item2.menuUrl" target="_self" v-else-if="item2.systemUrl && item2.menuUrl && item2.rightTag !== tag">
 								        	<span class="sub-text">{{item2.menuName}}</span>
 								        </a>
 								        <span class="sub-text" v-else>{{item2.menuName}}</span>
 					            </template>
 					            <template v-for="(item3, z) in item2.children">
-					            	<t-submenu v-if="item3.children && item3.children.length" :name="x + '' + y + '' + z" :id="x + '' +y" class="second-submenu">
-					            		<t-menu-item v-for="(item4, w) in item3.children" :name="x + '' + y + '' + z + '' + w" :key="w" @click.native="getMenu(item4)" class="sec-item">
-							            	<router-link :to="{ path: item4.menuUrl}" v-if="item4.rightTag === tag">
+					            	<t-submenu v-if="item3.children && item3.children.length" :name="item3.menuName" :id="x + '' +y" class="second-submenu">
+					            		<t-menu-item v-for="(item4, w) in item3.children" :name="item4.menuName" :key="w" @click.native="getMenu(item4)" class="sec-item">
+							            	<router-link :to="{ path: item4.menuUrl }" v-if="item4.rightTag === tag">
 								            	<span class="sub-text">{{item4.menuName}}</span>
 										        </router-link>
-										        <a :href="item4.systemUrl + item4.menuUrl" target="_blank" v-else-if="item4.systemUrl && item4.menuUrl && item4.rightTag !== tag">
+										        <a :href="item4.systemUrl + item4.menuUrl" target="_self" v-else-if="item4.systemUrl && item4.menuUrl && item4.rightTag !== tag">
 										        	<span class="sub-text">{{item4.menuName}}</span>
 										        </a>
 										        <span class="sub-text" v-else>{{item4.menuName}}</span>
 							            </t-menu-item>
 					            	</t-submenu>
-						            <t-menu-item :name="x + '' + y + '' + z" :key="z" @click.native="getMenu(item3)" class="sec-item" v-else>
-						            	<router-link :to="{ path: item3.menuUrl}" v-if="item3.rightTag === tag">
+						            <t-menu-item :name="item3.menuName" :key="z" @click.native="getMenu(item3)" class="sec-item" v-else>
+						            	<router-link :to="{ path: item3.menuUrl }" v-if="item3.rightTag === tag">
 							            	<span class="sub-text">{{item3.menuName}}</span>
 									        </router-link>
-									        <a :href="item3.systemUrl + item3.menuUrl" target="_blank" v-else-if="item3.systemUrl && item3.menuUrl && item3.rightTag !== tag">
+									        <a :href="item3.systemUrl + item3.menuUrl" target="_self" v-else-if="item3.systemUrl && item3.menuUrl && item3.rightTag !== tag">
 									        	<span class="sub-text">{{item3.menuName}}</span>
 									        </a>
 									        <span class="sub-text" v-else>{{item3.menuName}}</span>
 						            </t-menu-item>
 					            </template>
 										</t-submenu>
-										<t-menu-item :name="x + '' + y" v-else>
-											<router-link :to="{ path: item2.menuUrl}" v-if="item2.rightTag === tag">
+										<t-menu-item :name="item2.menuName" v-else>
+											<router-link :to="{ path: item2.menuUrl }" v-if="item2.rightTag === tag">
 					            	<span class="sub-text">{{item2.menuName}}</span>
 							        </router-link>
-							        <a :href="item2.systemUrl + item2.menuUrl" target="_blank" v-else-if="item2.systemUrl && item2.menuUrl && item2.rightTag !== tag">
+							        <a :href="item2.systemUrl + item2.menuUrl" target="_self" v-else-if="item2.systemUrl && item2.menuUrl && item2.rightTag !== tag">
 							        	<span class="sub-text">{{item2.menuName}}</span>
 							        </a>
 							        <span class="sub-text" v-else>{{item2.menuName}}</span>
 										</t-menu-item>
 									</template>
 								</t-submenu>
-								<t-menu-item :name="x" v-else>
+								<t-menu-item :name="item1.menuName" v-else>
 									<t-icon :type="item1.iconType" v-if="item1.iconType"></t-icon>
 									<t-avatar size="sm" bg-state="success" :text="item1.rightTag" :dot="false" v-else></t-avatar>
-					        <router-link :to="{ path: item1.menuUrl}" v-if="item1.rightTag === tag">
+					        <router-link :to="{ path: item1.menuUrl }" v-if="item1.rightTag === tag">
 			            	<span class="sub-text">{{item1.menuName}}</span>
 					        </router-link>
-					        <a :href="item1.systemUrl + item1.menuUrl" target="_blank" v-else-if="item1.systemUrl && item1.menuUrl && item1.rightTag !== tag">
+					        <a :href="item1.systemUrl + item1.menuUrl" target="_self" v-else-if="item1.systemUrl && item1.menuUrl && item1.rightTag !== tag">
 					        	<span class="sub-text">{{item1.menuName}}</span>
 					        </a>
 					        <span class="sub-text" v-else>{{item1.menuName}}</span>
@@ -222,7 +223,7 @@
 <script>
 	import ClickoutSide from './clickoutside.js'
 	import SessionStorage from '../utils/sessionStorage.js'
-	import { transData } from '../utils/utils.js'
+	import { transData, getQueryData } from '../utils/utils.js'
 	import * as Constant from '../store/constant.js'
 	import { mapMutations } from 'vuex'
 	let sessionStorage = new SessionStorage ()
@@ -247,6 +248,9 @@
 			// 当前展开的menu
 			activeMenu: {
 				type: [ String, Number ]
+			},
+			openNames: {
+				type: [ Array ]
 			},
 			/**
 			 * 渲染menu菜单
@@ -306,7 +310,9 @@
 				isActive: 0,
         menu: [],
         count: 10,
-        notices: []
+        notices: [],
+        queryActiveMenu: '',
+        queryOpenName: []
 			}
 		},
 		computed: {
@@ -446,6 +452,335 @@
 			])
 		},
 		created () {
+			// let menu = [
+			// 	{
+			// 	    "menuId": 20,
+			// 	    "menuName": "Accounting Manage",
+			// 	    "menuDesc": null,
+			// 	    "menuPid": -1,
+			// 	    "menuPidName": null,
+			// 	    "menuType": "0",
+			// 	    "menuOrder": 0,
+			// 	    "menuTarget": null,
+			// 	    "menuUrl": null,
+			// 	    "menuPic": null,
+			// 	    "rightTag": "ACCT",
+			// 	    "systemId": "11009",
+			// 	    "activeTime": null,
+			// 	    "inactiveTime": null,
+			// 	    "treeDisplay": null,
+			// 	    "createTime": null,
+			// 	    "createOperId": 0,
+			// 	    "updateTime": null,
+			// 	    "updateOperId": 0,
+			// 	    "funcType": null,
+			// 	    "systemUrl": "http://10.1.130.203:48069"
+			// 	},
+			// 	{
+			// 	    "menuId": 1703,
+			// 	    "menuName": "Batch Query",
+			// 	    "menuDesc": null,
+			// 	    "menuPid": 17,
+			// 	    "menuPidName": null,
+			// 	    "menuType": "1",
+			// 	    "menuOrder": 0,
+			// 	    "menuTarget": null,
+			// 	    "menuUrl": "/cmi-inquery",
+			// 	    "menuPic": null,
+			// 	    "rightTag": "ORD",
+			// 	    "systemId": "11006",
+			// 	    "activeTime": null,
+			// 	    "inactiveTime": null,
+			// 	    "treeDisplay": null,
+			// 	    "createTime": null,
+			// 	    "createOperId": 0,
+			// 	    "updateTime": null,
+			// 	    "updateOperId": 0,
+			// 	    "funcType": null,
+			// 	    "systemUrl": "http://10.1.130.203:48067"
+			// 	},
+			// 	{
+			// 	    "menuId": 1801,
+			// 	    "menuName": "Physical Storage",
+			// 	    "menuDesc": null,
+			// 	    "menuPid": 18,
+			// 	    "menuPidName": null,
+			// 	    "menuType": "1",
+			// 	    "menuOrder": 0,
+			// 	    "menuTarget": null,
+			// 	    "menuUrl": "/cmi-storage-new",
+			// 	    "menuPic": null,
+			// 	    "rightTag": "RES",
+			// 	    "systemId": "11007",
+			// 	    "activeTime": null,
+			// 	    "inactiveTime": null,
+			// 	    "treeDisplay": null,
+			// 	    "createTime": null,
+			// 	    "createOperId": 0,
+			// 	    "updateTime": null,
+			// 	    "updateOperId": 0,
+			// 	    "funcType": null,
+			// 	    "systemUrl": "http://10.1.130.203:48068"
+			// 	},
+			// 	{
+			// 	    "menuId": 19,
+			// 	    "menuName": "Customer Manage",
+			// 	    "menuDesc": null,
+			// 	    "menuPid": -1,
+			// 	    "menuPidName": null,
+			// 	    "menuType": "0",
+			// 	    "menuOrder": 0,
+			// 	    "menuTarget": null,
+			// 	    "menuUrl": null,
+			// 	    "menuPic": null,
+			// 	    "rightTag": "CRM",
+			// 	    "systemId": "11008",
+			// 	    "activeTime": null,
+			// 	    "inactiveTime": null,
+			// 	    "treeDisplay": null,
+			// 	    "createTime": null,
+			// 	    "createOperId": 0,
+			// 	    "updateTime": null,
+			// 	    "updateOperId": 0,
+			// 	    "funcType": null,
+			// 	    "systemUrl": "http://10.1.130.203:48066"
+			// 	},
+			// 	{
+			// 	    "menuId": 1702,
+			// 	    "menuName": "Cmi Batch",
+			// 	    "menuDesc": null,
+			// 	    "menuPid": 17,
+			// 	    "menuPidName": null,
+			// 	    "menuType": "1",
+			// 	    "menuOrder": 0,
+			// 	    "menuTarget": null,
+			// 	    "menuUrl": "/cmi-batch",
+			// 	    "menuPic": null,
+			// 	    "rightTag": "ORD",
+			// 	    "systemId": "11006",
+			// 	    "activeTime": null,
+			// 	    "inactiveTime": null,
+			// 	    "treeDisplay": null,
+			// 	    "createTime": null,
+			// 	    "createOperId": 0,
+			// 	    "updateTime": null,
+			// 	    "updateOperId": 0,
+			// 	    "funcType": null,
+			// 	    "systemUrl": "http://10.1.130.203:48067"
+			// 	},
+			// 	{
+			// 	    "menuId": 1804,
+			// 	    "menuName": "Resource query",
+			// 	    "menuDesc": null,
+			// 	    "menuPid": 18,
+			// 	    "menuPidName": null,
+			// 	    "menuType": "1",
+			// 	    "menuOrder": 0,
+			// 	    "menuTarget": null,
+			// 	    "menuUrl": "/cmi-Resource-information",
+			// 	    "menuPic": null,
+			// 	    "rightTag": "RES",
+			// 	    "systemId": "11007",
+			// 	    "activeTime": null,
+			// 	    "inactiveTime": null,
+			// 	    "treeDisplay": null,
+			// 	    "createTime": null,
+			// 	    "createOperId": 0,
+			// 	    "updateTime": null,
+			// 	    "updateOperId": 0,
+			// 	    "funcType": null,
+			// 	    "systemUrl": "http://10.1.130.203:48068"
+			// 	},
+			// 	{
+			// 	    "menuId": 1802,
+			// 	    "menuName": "Inquery Result",
+			// 	    "menuDesc": null,
+			// 	    "menuPid": 18,
+			// 	    "menuPidName": null,
+			// 	    "menuType": "1",
+			// 	    "menuOrder": 0,
+			// 	    "menuTarget": null,
+			// 	    "menuUrl": "/cmi-storage-info",
+			// 	    "menuPic": null,
+			// 	    "rightTag": "RES",
+			// 	    "systemId": "11007",
+			// 	    "activeTime": null,
+			// 	    "inactiveTime": null,
+			// 	    "treeDisplay": null,
+			// 	    "createTime": null,
+			// 	    "createOperId": 0,
+			// 	    "updateTime": null,
+			// 	    "updateOperId": 0,
+			// 	    "funcType": null,
+			// 	    "systemUrl": "http://10.1.130.203:48068"
+			// 	},
+			// 	{
+			// 	    "menuId": 1701,
+			// 	    "menuName": "Order Query",
+			// 	    "menuDesc": null,
+			// 	    "menuPid": 17,
+			// 	    "menuPidName": null,
+			// 	    "menuType": "1",
+			// 	    "menuOrder": 0,
+			// 	    "menuTarget": null,
+			// 	    "menuUrl": "/cmi-order",
+			// 	    "menuPic": null,
+			// 	    "rightTag": "ORD",
+			// 	    "systemId": "11006",
+			// 	    "activeTime": null,
+			// 	    "inactiveTime": null,
+			// 	    "treeDisplay": null,
+			// 	    "createTime": null,
+			// 	    "createOperId": 0,
+			// 	    "updateTime": null,
+			// 	    "updateOperId": 0,
+			// 	    "funcType": null,
+			// 	    "systemUrl": "http://10.1.130.203:48067"
+			// 	},
+			// 	{
+			// 	    "menuId": 17,
+			// 	    "menuName": "Order Manage",
+			// 	    "menuDesc": null,
+			// 	    "menuPid": -1,
+			// 	    "menuPidName": null,
+			// 	    "menuType": "0",
+			// 	    "menuOrder": 0,
+			// 	    "menuTarget": null,
+			// 	    "menuUrl": null,
+			// 	    "menuPic": null,
+			// 	    "rightTag": "ORD",
+			// 	    "systemId": "11006",
+			// 	    "activeTime": null,
+			// 	    "inactiveTime": null,
+			// 	    "treeDisplay": null,
+			// 	    "createTime": null,
+			// 	    "createOperId": 0,
+			// 	    "updateTime": null,
+			// 	    "updateOperId": 0,
+			// 	    "funcType": null,
+			// 	    "systemUrl": "http://10.1.130.203:48067"
+			// 	},
+			// 	{
+			// 	    "menuId": 2001,
+			// 	    "menuName": "Bill Query",
+			// 	    "menuDesc": null,
+			// 	    "menuPid": 20,
+			// 	    "menuPidName": null,
+			// 	    "menuType": "1",
+			// 	    "menuOrder": 0,
+			// 	    "menuTarget": null,
+			// 	    "menuUrl": "/cmi-bill-manage",
+			// 	    "menuPic": null,
+			// 	    "rightTag": "ACCT",
+			// 	    "systemId": "11009",
+			// 	    "activeTime": null,
+			// 	    "inactiveTime": null,
+			// 	    "treeDisplay": null,
+			// 	    "createTime": null,
+			// 	    "createOperId": 0,
+			// 	    "updateTime": null,
+			// 	    "updateOperId": 0,
+			// 	    "funcType": null,
+			// 	    "systemUrl": "http://10.1.130.203:48069"
+			// 	},
+			// 	{
+			// 	    "menuId": 1803,
+			// 	    "menuName": "Inventory Query",
+			// 	    "menuDesc": null,
+			// 	    "menuPid": 18,
+			// 	    "menuPidName": null,
+			// 	    "menuType": "1",
+			// 	    "menuOrder": 0,
+			// 	    "menuTarget": null,
+			// 	    "menuUrl": "/cmi-storage-check",
+			// 	    "menuPic": null,
+			// 	    "rightTag": "RES",
+			// 	    "systemId": "11007",
+			// 	    "activeTime": null,
+			// 	    "inactiveTime": null,
+			// 	    "treeDisplay": null,
+			// 	    "createTime": null,
+			// 	    "createOperId": 0,
+			// 	    "updateTime": null,
+			// 	    "updateOperId": 0,
+			// 	    "funcType": null,
+			// 	    "systemUrl": "http://10.1.130.203:48068"
+			// 	},
+			// 	{
+			// 	    "menuId": 1805,
+			// 	    "menuName": "Product Binding",
+			// 	    "menuDesc": null,
+			// 	    "menuPid": 18,
+			// 	    "menuPidName": null,
+			// 	    "menuType": "1",
+			// 	    "menuOrder": 0,
+			// 	    "menuTarget": null,
+			// 	    "menuUrl": "/cmi-Product-binding",
+			// 	    "menuPic": null,
+			// 	    "rightTag": "RES",
+			// 	    "systemId": "11007",
+			// 	    "activeTime": null,
+			// 	    "inactiveTime": null,
+			// 	    "treeDisplay": null,
+			// 	    "createTime": null,
+			// 	    "createOperId": 0,
+			// 	    "updateTime": null,
+			// 	    "updateOperId": 0,
+			// 	    "funcType": null,
+			// 	    "systemUrl": "http://10.1.130.203:48068"
+			// 	},
+			// 	{
+			// 	    "menuId": 18,
+			// 	    "menuName": "Resource Manage",
+			// 	    "menuDesc": null,
+			// 	    "menuPid": -1,
+			// 	    "menuPidName": null,
+			// 	    "menuType": "0",
+			// 	    "menuOrder": 0,
+			// 	    "menuTarget": null,
+			// 	    "menuUrl": null,
+			// 	    "menuPic": null,
+			// 	    "rightTag": "RES",
+			// 	    "systemId": "11007",
+			// 	    "activeTime": null,
+			// 	    "inactiveTime": null,
+			// 	    "treeDisplay": null,
+			// 	    "createTime": null,
+			// 	    "createOperId": 0,
+			// 	    "updateTime": null,
+			// 	    "updateOperId": 0,
+			// 	    "funcType": null,
+			// 	    "systemUrl": "http://10.1.130.203:48068"
+			// 	},
+			// 	{
+			// 	    "menuId": 1901,
+			// 	    "menuName": "Customer 360 Views",
+			// 	    "menuDesc": null,
+			// 	    "menuPid": 19,
+			// 	    "menuPidName": null,
+			// 	    "menuType": "1",
+			// 	    "menuOrder": 0,
+			// 	    "menuTarget": null,
+			// 	    "menuUrl": "/cmi-Customer-View",
+			// 	    "menuPic": null,
+			// 	    "rightTag": "CRM",
+			// 	    "systemId": "11008",
+			// 	    "activeTime": null,
+			// 	    "inactiveTime": null,
+			// 	    "treeDisplay": null,
+			// 	    "createTime": null,
+			// 	    "createOperId": 0,
+			// 	    "updateTime": null,
+			// 	    "updateOperId": 0,
+			// 	    "funcType": null,
+			// 	    "systemUrl": "http://10.1.130.203:48066"
+			// 	}]
+			// this.$nextTick(() => {
+			// 	let route = '/cmi-Customer-View' || this.$route.path
+			// 	let queryName = getQueryData(menu, 'menuId', 'menuPid', route, 'menuName')
+			// 	this.queryActiveMenu = queryName.name
+			// 	this.queryOpenName = queryName.names
+			// })
 			let accessToken = sessionStorage.get('access_token')
   		let refreshToken = sessionStorage.get('refresh_token')
   		if (!accessToken || !refreshToken) return
@@ -453,6 +788,18 @@
 			// 获取menu数据
 			this.instance.get(this.authorization.menuUri).then(res => {
 				this.menu = transData(res.data, 'menuId', 'menuPid', 'children')
+				/**
+				 * 设置自动展开
+				 */
+				this.$nextTick(() => {
+					let route = this.$route.path
+					let queryName = getQueryData(res.data, 'menuId', 'menuPid', route, 'menuName')
+					this.queryActiveMenu = queryName.name
+					this.queryOpenName = queryName.names
+				})
+				/**
+				 * 先找出这一条数据，并将其 menuName 组成一个数组
+				 */
 			}).catch(res => {
 				/**
 				 * 处理相关错误的问题

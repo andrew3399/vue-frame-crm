@@ -1,6 +1,6 @@
 export default [
   {
-    path: '/notice/:bulletinId',
+    path: 'notice/:bulletinId',
     name: 'notice',
     component: require('../views/notice.vue'),
     meta: {

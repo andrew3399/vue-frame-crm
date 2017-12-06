@@ -38,9 +38,12 @@ export function getQuery (name) {
  */
 export function transData (original, idField, pidField, childrenField) {
   if (original && original.length) {
+    /* 做升序处理 */
     original.sort((a, b) => {
       return a[idField] - b[idField]
     })
+  } else {
+    return []
   }
   let result = []
   let hash = {}
@@ -68,8 +71,64 @@ export function transData (original, idField, pidField, childrenField) {
       result.push(aVal)
     }
   }
+  /* 做升序处理 */
   result.sort((a, b) => {
     return a[idField] - b[idField]
   })
   return result
+}
+
+/**
+ * 拿到当前路由数据的总值.
+ *
+ * @param      {<array>}  original       The original
+ * @param      {<string>}  idField        The identifier field
+ * @param      {<string>}  pidField       The pid field
+ * @param      {<type>}  childrenField  The children field
+ */
+export function getQueryData (original, idField, pidField, path, name) {
+  if (original && original.length) {
+    /* 做升序处理 */
+    original.sort((a, b) => {
+      return a[idField] - b[idField]
+    })
+  } else {
+    return []
+  }
+  let hash = {}
+  const id = idField
+  const pid = pidField
+  const fName = name
+  let i = 0
+  let len = original.length
+  let fieldName = ''
+  let names = []
+  /**
+   * 第一层将对象数组转化成JSON数据
+   */
+  for (; i < len; i++) {
+    if (!hash[original[i][id]]) {
+      hash[original[i][id]] = original[i]
+    }
+  }
+
+  /* 将path的这一条数据找出来 */
+  for (let k = 0; k < len; k++) {
+    if (path === original[k].menuUrl) {
+      fieldName = original[k][fName]
+      let item = original[k]
+      while (item[pid] !== -1) {
+        let hashVP = hash[original[k][pid]]
+        if (hashVP) {
+          names.push(hashVP[fName])
+        }
+        item = hashVP
+      }
+    }
+  }
+
+  return {
+    name: fieldName,
+    names: names
+  }
 }
