@@ -11,7 +11,7 @@ export function requestInterceptor (config, authorization, tokenUri) {
   let accessToken = sessionStorage.get('access_token')
   let refreshToken = sessionStorage.get('refresh_token')
   if (accessToken && refreshToken) {
-    if (config.url.indexOf(tokenUri) !== -1) {
+    if (config.url && config.url.indexOf(tokenUri) !== -1) {
       config.headers.Authorization = 'Basic ' + Base64.encode(authorization.client_id + ':' + authorization.clientSecret)
     } else {
       config.headers.Authorization = 'Bearer ' + accessToken

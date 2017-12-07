@@ -25,7 +25,7 @@ export function beforeEach (to, from, next, authorization, requestInstance, cb) 
         .then(res => {
           sessionStorage.set('access_token', res.data.access_token, res.data.expires_in * 1000)
           sessionStorage.set('refresh_token', res.data.refresh_token, res.data.expires_in * 1000)
-          window.location.search = ''
+          // window.location.search = ''
           next()
         }).catch(res => {
           let msg = {
