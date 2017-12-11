@@ -259,7 +259,7 @@
   position: fixed;
   top: 0;
   bottom: 0;
-  width: 280px;
+  width:320px;
   z-index: 2002;
   left: -50%;
   background: #fff;
@@ -329,7 +329,7 @@
 }
 @media (min-width: 1200px) {
   .layout--one-screen .layout-content {
-    margin-left: 280px;
+    margin-left:320px;
   }
   .layout--one-screen .layout-sidebar--folded + .layout-content {
     margin-left: 64px;
@@ -520,4 +520,10 @@
   display: inline-block;
   width: 32px;
   height: 32px;
+}
+.layout-menu .menu .menu__item, .layout-menu .menu .menu__submenu-title .sub-text{
+  width: 90%;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  overflow: hidden;
 }
