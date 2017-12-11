@@ -3,11 +3,13 @@
  */
 import SessionStorage from '../utils/sessionStorage.js'
 import { getQuery, uuid } from '../utils/utils.js'
+import { Base64 } from 'js-base64'
 
 export function beforeEach (to, from, next, authorization, requestInstance, cb) {
   let sessionStorage = new SessionStorage()
   let accessToken = sessionStorage.get('access_token')
   let refreshToken = sessionStorage.get('refresh_token')
+  let sessionTime = sessionStorage.get('session-time')
   // 路由拦截 根据路由配置中meta.requireAuth判断是否需要登录
   if (to.meta.requireAuth) {
     if (accessToken && refreshToken) {
@@ -17,15 +19,16 @@ export function beforeEach (to, from, next, authorization, requestInstance, cb) 
       let state = getQuery('state')
       if (code && state) {
         /**
-         *  这里需要去请求token的值
+         *  这里需要去请求token的值,并设置sessiion-time
          */
         // cb(code, state, next, sessionStorage, uuid(6, 16))
         requestInstance.post(authorization.tokenUri + '?code=' + code + '&state=' + state +
           '&grant_type=authorization_code' + '&client_id=' + authorization.client_id + '&redirect_uri=' + encodeURIComponent(authorization.redirect_uri))
         .then(res => {
+          let time = new Date().getTime() + 30 * 60 * 1000
           sessionStorage.set('access_token', res.data.access_token, res.data.expires_in * 1000)
-          sessionStorage.set('refresh_token', res.data.refresh_token, res.data.expires_in * 1000)
-          // window.location.search = ''
+          sessionStorage.set('refresh_token', res.data.refresh_token, Math.pow(2, 32))
+          sessionStorage.set('session-time', time, 30 * 60 * 1000)
           next()
         }).catch(res => {
           let msg = {
@@ -37,12 +40,37 @@ export function beforeEach (to, from, next, authorization, requestInstance, cb) 
           next()
         })
       } else {
-        let msg = {
-          client_id: authorization.client_id,
-          redirect_uri: encodeURIComponent(authorization.redirect_uri),
-          state: uuid(6, 16)
+        /**
+         * 需要判断页面sessionTime是否生效，如果失效，需要重新去登录
+         */
+        if (sessionTime && !accessToken) {
+          /**
+           * 如果生效，且accessToken 失效，
+           * 需要重新获取accessToken
+           */
+          requestInstance.post(authorization.tokenUri + '?grant_type=refresh_token' + '&refresh_token=' + refreshToken + '&scope=read', {
+            headers: {
+              Authorization: 'Basic ' + Base64.encode(authorization.client_id + ':' + authorization.clientSecret)
+            }
+          }).then(res => {
+            sessionStorage.set('access_token', res.data.access_token, res.data.expires_in * 1000)
+            sessionStorage.set('refresh_token', res.data.refresh_token, Math.pow(2, 32))
+          }).catch(res => {
+            let msg = {
+              client_id: authorization.client_id,
+              redirect_uri: encodeURIComponent(authorization.redirect_uri),
+              state: uuid(6, 16)
+            }
+            window.location.href = authorization.authorizeUri + '?client_id=' + msg.client_id + '&redirect_uri=' + msg.redirect_uri + '&response_type=code&scope=read&state=' + msg.state
+          })
+        } else {
+          let msg = {
+            client_id: authorization.client_id,
+            redirect_uri: encodeURIComponent(authorization.redirect_uri),
+            state: uuid(6, 16)
+          }
+          window.location.href = authorization.authorizeUri + '?client_id=' + msg.client_id + '&redirect_uri=' + msg.redirect_uri + '&response_type=code&scope=read&state=' + msg.state
         }
-        window.location.href = authorization.authorizeUri + '?client_id=' + msg.client_id + '&redirect_uri=' + msg.redirect_uri + '&response_type=code&scope=read&state=' + msg.state
       }
     }
   } else {

@@ -4,6 +4,7 @@ import * as httpHandle from './http'
 import * as locals from './locals'
 import views from './notices'
 import storeModule from './store'
+// import EventHub from './eventHub'
 
 const TFrame = function (Vue, opts = {}) {
   Vue.component(Frame.name, Frame)
@@ -20,4 +21,5 @@ export {
   locals,
   views,
   storeModule
+  // EventHub
 }

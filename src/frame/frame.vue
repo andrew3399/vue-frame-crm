@@ -38,7 +38,7 @@
 						        <router-link :to="{ path: item1.menuUrl }" v-if="item1.rightTag === tag && item1.menuUrl">
 				            	<span class="sub-text">{{item1.menuName}}</span>
 						        </router-link>
-						        <a :href="item1.systemUrl + item1.menuUrl" target="_self" v-else-if="item1.systemUrl && item1.menuUrl && item1.rightTag !== tag">
+						        <a href="javascript:;" @click="handleOtherRegin(item1.systemUrl + item1.menuUrl)" target="_self" v-else-if="item1.systemUrl && item1.menuUrl && item1.rightTag !== tag">
 						        	<span class="sub-text">{{item1.menuName}}</span>
 						        </a>
 						        <span class="sub-text" v-else>{{item1.menuName}}</span>
@@ -49,7 +49,7 @@
 					            	<router-link :to="{ path: item2.menuUrl}" v-if="item2.rightTag === tag && item2.menuUrl">
 						            	<span class="sub-text">{{item2.menuName}}</span>
 								        </router-link>
-								        <a :href="item2.systemUrl + item2.menuUrl" target="_self" v-else-if="item2.systemUrl && item2.menuUrl && item2.rightTag !== tag">
+								        <a href="javascript:;" @click="handleOtherRegin(item2.systemUrl + item2.menuUrl)" target="_self" v-else-if="item2.systemUrl && item2.menuUrl && item2.rightTag !== tag">
 								        	<span class="sub-text">{{item2.menuName}}</span>
 								        </a>
 								        <span class="sub-text" v-else>{{item2.menuName}}</span>
@@ -60,7 +60,7 @@
 							            	<router-link :to="{ path: item4.menuUrl }" v-if="item4.rightTag === tag && item4.menuUrl">
 								            	<span class="sub-text">{{item4.menuName}}</span>
 										        </router-link>
-										        <a :href="item4.systemUrl + item4.menuUrl" target="_self" v-else-if="item4.systemUrl && item4.menuUrl && item4.rightTag !== tag">
+										        <a href="javascript:;" @click="handleOtherRegin(item4.systemUrl + item4.menuUrl)" target="_self" v-else-if="item4.systemUrl && item4.menuUrl && item4.rightTag !== tag">
 										        	<span class="sub-text">{{item4.menuName}}</span>
 										        </a>
 										        <span class="sub-text" v-else>{{item4.menuName}}</span>
@@ -70,7 +70,7 @@
 						            	<router-link :to="{ path: item3.menuUrl }" v-if="item3.rightTag === tag && item3.menuUrl">
 							            	<span class="sub-text">{{item3.menuName}}</span>
 									        </router-link>
-									        <a :href="item3.systemUrl + item3.menuUrl" target="_self" v-else-if="item3.systemUrl && item3.menuUrl && item3.rightTag !== tag">
+									        <a href="javascript:;" @click="handleOtherRegin(item3.systemUrl + item3.menuUrl)" target="_self" v-else-if="item3.systemUrl && item3.menuUrl && item3.rightTag !== tag">
 									        	<span class="sub-text">{{item3.menuName}}</span>
 									        </a>
 									        <span class="sub-text" v-else>{{item3.menuName}}</span>
@@ -81,7 +81,7 @@
 											<router-link :to="{ path: item2.menuUrl }" v-if="item2.rightTag === tag && item2.menuUrl">
 					            	<span class="sub-text">{{item2.menuName}}</span>
 							        </router-link>
-							        <a :href="item2.systemUrl + item2.menuUrl" target="_self" v-else-if="item2.systemUrl && item2.menuUrl && item2.rightTag !== tag">
+							        <a href="javascript:;" @click="handleOtherRegin(item2.systemUrl + item2.menuUrl)" target="_self" v-else-if="item2.systemUrl && item2.menuUrl && item2.rightTag !== tag">
 							        	<span class="sub-text">{{item2.menuName}}</span>
 							        </a>
 							        <span class="sub-text" v-else>{{item2.menuName}}</span>
@@ -94,7 +94,7 @@
 					        <router-link :to="{ path: item1.menuUrl }" v-if="item1.rightTag === tag && item1.menuUrl">
 			            	<span class="sub-text">{{item1.menuName}}</span>
 					        </router-link>
-					        <a :href="item1.systemUrl + item1.menuUrl" target="_self" v-else-if="item1.systemUrl && item1.menuUrl && item1.rightTag !== tag">
+					        <a href="javascript:;" @click="handleOtherRegin(item1.systemUrl + item1.menuUrl)" target="_self" v-else-if="item1.systemUrl && item1.menuUrl && item1.rightTag !== tag">
 					        	<span class="sub-text">{{item1.menuName}}</span>
 					        </a>
 					        <span class="sub-text" v-else>{{item1.menuName}}</span>
@@ -176,30 +176,9 @@
 					      		<span class="nw-l"><t-tag state="info">info</t-tag></span>
 									  <span class="nw-r">
 										  <p class="nw-r-title">{{item.bulletinTitle}}</p>
-										  <p class="nw-r-time">有效周期：{{item.activeTime | format}} 至 {{item.inactiveTime | format}}</p>
+										  <p class="nw-r-time">{{$t('frame.expiryDate')}}：{{item.activeTime | format}} {{$t('frame.to')}} {{item.inactiveTime | format}}</p>
 									  </span>
 					      	</div>
-								  <!-- <div class="notice-wrap" :class="{'notice-active': isActive === 0}" @click="handleNoticeClick(0)" style="margin-top:6px;">
-									  <span class="nw-l"><t-tag state='danger'>hot</t-tag></span>
-									  <span class="nw-r">
-										  <p class="nw-r-title">缴纳0元租赁使用高清电视机顶盒一台缴纳0元租赁使用高清电视机顶盒一台</p>
-										  <p class="nw-r-time">有效周期：2017-09-09 至 2020-09-09</p>
-									  </span>
-								  </div>
-								  <div class="notice-wrap" :class="{'notice-active': isActive === 1}" @click="handleNoticeClick(1)">
-									  <span class="nw-l"><t-tag state="info">info</t-tag></span>
-									  <span class="nw-r">
-										  <p class="nw-r-title">缴纳0元租赁使用高清电视机顶盒一台缴纳0元租赁使用高清电视机顶盒一台</p>
-										  <p class="nw-r-time">有效周期：2017-09-09 至 2020-09-09</p>
-									  </span>
-								  </div>
-								  <div class="notice-wrap" :class="{'notice-active': isActive === 2}" @click="handleNoticeClick(2)">
-									  <span class="nw-l"><t-tag state='success'>new</t-tag></span>
-									  <span class="nw-r">
-										  <p class="nw-r-title">缴纳0元租赁使用高清电视机顶盒一台缴纳0元租赁使用高清电视机顶盒一台</p>
-										  <p class="nw-r-time">有效周期：2017-09-09 至 2020-09-09</p>
-									  </span>
-								  </div> -->
 								  <p class="notice__loading"><a href="javascript:;" target="_self"  @click="loadingMore">{{$t('frame.loadingMore')}}</a></p>
 							  </t-tab-panel>
 					    </t-tabs>
@@ -225,11 +204,55 @@
 	import ClickoutSide from './clickoutside.js'
 	import SessionStorage from '../utils/sessionStorage.js'
 	import LocalStorage from '../utils/localStorage.js'
-	import { transData, getQueryData } from '../utils/utils.js'
+	import { transData, getQueryData, getQuery, uuid } from '../utils/utils.js'
 	import * as Constant from '../store/constant.js'
 	import { mapMutations } from 'vuex'
+	import { Base64 } from 'js-base64'
+	// import EventHub from '../eventHub'
 	let sessionStorage = new SessionStorage ()
 	let localStorage = new LocalStorage()
+
+	let timeout = null
+
+	let throttle = function (func, wait, options) {
+	  let context
+	  let args
+	  let result
+	  // 上次执行时间点
+	  let previous = 0
+	  if (!options) options = {}
+	  // 延迟执行函数
+	  let later = function () {
+	    // 若设定了开始边界不执行选项，上次执行时间始终为0
+	    previous = options.leading === false ? 0 : new Date().getTime()
+	    timeout = null
+	    result = func.apply(context, args)
+	    if (!timeout) context = args = null
+	  }
+	  return function () {
+	    let now = new Date().getTime()
+	    // 首次执行时，如果设定了开始边界不执行选项，将上次执行时间设定为当前时间。
+	    if (!previous && options.leading === false) previous = now
+	    // 延迟执行时间间隔
+	    let remaining = wait - (now - previous)
+	    context = this
+	    args = arguments
+	    // 延迟时间间隔remaining小于等于0，表示上次执行至此所间隔时间已经超过一个时间窗口
+	    // remaining大于时间窗口wait，表示客户端系统时间被调整过
+	    if (remaining <= 0 || remaining > wait) {
+	      clearTimeout(timeout)
+	      timeout = null
+	      previous = now
+	      result = func.apply(context, args)
+	      if (!timeout) context = args = null
+	    // 如果延迟执行不存在，且没有设定结尾边界不执行选项
+	    } else if (!timeout && options.trailing !== false) {
+	      timeout = setTimeout(later, remaining)
+	    }
+	    return result
+	  }
+	}
+
 	export default {
 		name: 'TFrame',
 		props: {
@@ -374,6 +397,50 @@
 				this.$router.push({ path: `/notice/${item.bulletinId}` })
 				// this.$router.push({ path: '/notice', query: { bulletinId: item.bulletinId } })
 			},
+			/* 页面存在点击操作、keyUp操作, 将sessionTime更新 */
+			handleRefreshSessionTime (that) {
+				/**
+				 *  在存数据之前需要判断一下当前 sessionTime 是否生效
+				 *  如果已经失效，则不需要存数据
+				 *  如果没失效，这里需要判断accsstoken 是否存在，不存在的话，需要重新请求token
+				 */
+				let accessToken = sessionStorage.get('access_token')
+				let refreshToken = sessionStorage.get('refresh_token')
+				let sessionTime = sessionStorage.get('session-time')
+				let currentTime = new Date().getTime()
+				/**
+				 * sessionTime 存在,需要重新设置sessiontime的过期时间
+				 */
+				if (sessionTime) {
+					let time = new Date().getTime() + 30 * 60 * 1000
+					throttle(() => {
+						sessionStorage.set('session-time', time, 30 * 60 * 1000)
+					}, 5 * 1000, {leading: false, trailing: true})()
+					/**
+					 * accessToken 不存在，需要根据refreshToken，获取并设置accessToken、refreshToken
+					 */
+					if (!accessToken) {
+						that.instance.post(that.authorization.tokenUri +
+		          '?grant_type=refresh_token' + '&refresh_token=' + encodeURIComponent(refreshToken) + '&scope=read')
+		        .then(res => {
+		          sessionStorage.set('access_token', res.data.access_token, res.data.expires_in * 1000)
+		          sessionStorage.set('refresh_token', res.data.refresh_token, Math.pow(2, 32))
+		        })
+					}
+				} else {
+					let alink = document.createElement('a')
+					alink.href = window.location.href
+					let path = alink.pathname.replace(/^([^\/])/,'/$1')
+					localStorage.set('aid-path', path)
+					// let msg = {
+		   //      client_id: that.authorization.client_id,
+		   //      redirect_uri: encodeURIComponent(window.location.href),
+		   //      state: uuid(6, 16)
+		   //    }
+		   //    window.location.href = that.authorization.authorizeUri + '?client_id=' + msg.client_id + '&redirect_uri=' + msg.redirect_uri + '&response_type=code&scope=read&state=' + msg.state
+					that.logoutAndRemoveSession()
+				}
+			},
 			/* 加载更多 */
 			loadingMore () {
 				this.hideSlip = true
@@ -386,10 +453,14 @@
 			handleLogout (item) {
 				if (item && item.handleType && item.handleType === 'logout') {
 					/* 登出 */
-					sessionStorage.remove('access_token')
-					sessionStorage.remove('refresh_token')
-					sessionStorage.remove('MVNO_KEY_TIMEOUT_MAP')
+					this.logoutAndRemoveSession()
 				}
+			},
+			logoutAndRemoveSession () {
+				sessionStorage.remove('access_token')
+				sessionStorage.remove('refresh_token')
+				sessionStorage.remove('session-time')
+				sessionStorage.remove('MVNO_KEY_TIMEOUT_MAP')
 				window.location.href = this.authorization.logout_uri
 			},
 			closeMenuOnMinWin () {
@@ -450,6 +521,7 @@
 				}
 				return false
 			},
+			/* 切换语言 */
 			handleChangeLang () {
 				if (this.lang === 'EN') {
 					this.lang = 'CN'
@@ -460,16 +532,10 @@
 					localStorage.set('aid-language', 'zh-CN')
 					this.$i18n.locale = 'zh-CN'
 				}
-				let accessToken = sessionStorage.get('access_token')
-	  		let refreshToken = sessionStorage.get('refresh_token')
-	  		if (!accessToken || !refreshToken) return
-				// 获取menu数据
-				this.instance.get(this.authorization.menuUri, {
-					params: {
-						language: this.lang === 'CN' ? 'en' : 'cn'
-					}
+				this.instance.post(this.authorization.changeLangUri, {
+					language: this.lang === 'CN' ? 'en' : 'zh'
 				}).then(res => {
-					this.menu = transData(res.data, 'menuId', 'menuPid', 'children')
+					window.location.reload()
 				}).catch(res => {
 					/**
 					 * 处理相关错误的问题
@@ -477,8 +543,8 @@
 					if (res) {
 				    switch (res.status) {
 				      /**
-				      * 判断相关的错误，例如判断 token 失效， 或者没有登录的情况
-				      */
+				     	 * 判断相关的错误，例如判断 token 失效， 或者没有登录的情况
+				       */
 				      case 401:
 				      	let accessToken = sessionStorage.get('access_token')
 					  		let refreshToken = sessionStorage.get('refresh_token')
@@ -493,6 +559,49 @@
 				    }
 				  }
 				})
+
+				// EventHub.$emit('eventHub-change-lang', this.lang === 'CN' ? 'en-US' : 'zh-CN')
+				// let accessToken = sessionStorage.get('access_token')
+	  	// 	let refreshToken = sessionStorage.get('refresh_token')
+	  	// 	if (!accessToken || !refreshToken) return
+				// // 获取menu数据
+				// this.instance.get(this.authorization.menuUri, {
+				// 	params: {
+				// 		language: this.lang === 'CN' ? 'en' : 'zh'
+				// 	}
+				// }).then(res => {
+				// 	this.menu = transData(res.data, 'menuId', 'menuPid', 'children')
+				// }).catch(res => {
+				// 	/**
+				// 	 * 处理相关错误的问题
+				// 	 */
+				// 	if (res) {
+				//     switch (res.status) {
+				//       *
+				//       * 判断相关的错误，例如判断 token 失效， 或者没有登录的情况
+				      
+				//       case 401:
+				//       	let accessToken = sessionStorage.get('access_token')
+				// 	  		let refreshToken = sessionStorage.get('refresh_token')
+				// 	  		if (!accessToken || !refreshToken) return
+				//         let msg = {
+				//           client_id: this.authorization.client_id,
+				//           redirect_uri: encodeURIComponent(this.authorization.redirect_uri),
+				//           state: uuid(6, 16)
+				//         }
+				//         window.location.href = this.authorization.authorizeUri + '?client_id=' + msg.client_id + '&redirect_uri=' + msg.redirect_uri + '&response_type=code&scope=read&state=' + msg.state
+				//         break
+				//     }
+				//   }
+				// })
+			},
+			/* 跳出当前域，并将其 path 保存下来 */
+			handleOtherRegin (url) {
+				let alink = document.createElement('a')
+				alink.href = url
+				let path = alink.pathname.replace(/^([^\/])/,'/$1')
+				window.location.href = url + '?path=' + path
+				localStorage.set('aid-path', 5 * 60 * 1000)
 			},
 			...mapMutations([
 				'setInstance',
@@ -500,335 +609,18 @@
 			])
 		},
 		async created () {
-			// let menu = [
-			// 	{
-			// 	    "menuId": 20,
-			// 	    "menuName": "Accounting Manage",
-			// 	    "menuDesc": null,
-			// 	    "menuPid": -1,
-			// 	    "menuPidName": null,
-			// 	    "menuType": "0",
-			// 	    "menuOrder": 0,
-			// 	    "menuTarget": null,
-			// 	    "menuUrl": null,
-			// 	    "menuPic": null,
-			// 	    "rightTag": "ACCT",
-			// 	    "systemId": "11009",
-			// 	    "activeTime": null,
-			// 	    "inactiveTime": null,
-			// 	    "treeDisplay": null,
-			// 	    "createTime": null,
-			// 	    "createOperId": 0,
-			// 	    "updateTime": null,
-			// 	    "updateOperId": 0,
-			// 	    "funcType": null,
-			// 	    "systemUrl": "http://10.1.130.203:48069"
-			// 	},
-			// 	{
-			// 	    "menuId": 1703,
-			// 	    "menuName": "Batch Query",
-			// 	    "menuDesc": null,
-			// 	    "menuPid": 17,
-			// 	    "menuPidName": null,
-			// 	    "menuType": "1",
-			// 	    "menuOrder": 0,
-			// 	    "menuTarget": null,
-			// 	    "menuUrl": "/cmi-inquery",
-			// 	    "menuPic": null,
-			// 	    "rightTag": "ORD",
-			// 	    "systemId": "11006",
-			// 	    "activeTime": null,
-			// 	    "inactiveTime": null,
-			// 	    "treeDisplay": null,
-			// 	    "createTime": null,
-			// 	    "createOperId": 0,
-			// 	    "updateTime": null,
-			// 	    "updateOperId": 0,
-			// 	    "funcType": null,
-			// 	    "systemUrl": "http://10.1.130.203:48067"
-			// 	},
-			// 	{
-			// 	    "menuId": 1801,
-			// 	    "menuName": "Physical Storage",
-			// 	    "menuDesc": null,
-			// 	    "menuPid": 18,
-			// 	    "menuPidName": null,
-			// 	    "menuType": "1",
-			// 	    "menuOrder": 0,
-			// 	    "menuTarget": null,
-			// 	    "menuUrl": "/cmi-storage-new",
-			// 	    "menuPic": null,
-			// 	    "rightTag": "RES",
-			// 	    "systemId": "11007",
-			// 	    "activeTime": null,
-			// 	    "inactiveTime": null,
-			// 	    "treeDisplay": null,
-			// 	    "createTime": null,
-			// 	    "createOperId": 0,
-			// 	    "updateTime": null,
-			// 	    "updateOperId": 0,
-			// 	    "funcType": null,
-			// 	    "systemUrl": "http://10.1.130.203:48068"
-			// 	},
-			// 	{
-			// 	    "menuId": 19,
-			// 	    "menuName": "Customer Manage",
-			// 	    "menuDesc": null,
-			// 	    "menuPid": -1,
-			// 	    "menuPidName": null,
-			// 	    "menuType": "0",
-			// 	    "menuOrder": 0,
-			// 	    "menuTarget": null,
-			// 	    "menuUrl": null,
-			// 	    "menuPic": null,
-			// 	    "rightTag": "CRM",
-			// 	    "systemId": "11008",
-			// 	    "activeTime": null,
-			// 	    "inactiveTime": null,
-			// 	    "treeDisplay": null,
-			// 	    "createTime": null,
-			// 	    "createOperId": 0,
-			// 	    "updateTime": null,
-			// 	    "updateOperId": 0,
-			// 	    "funcType": null,
-			// 	    "systemUrl": "http://10.1.130.203:48066"
-			// 	},
-			// 	{
-			// 	    "menuId": 1702,
-			// 	    "menuName": "Cmi Batch",
-			// 	    "menuDesc": null,
-			// 	    "menuPid": 17,
-			// 	    "menuPidName": null,
-			// 	    "menuType": "1",
-			// 	    "menuOrder": 0,
-			// 	    "menuTarget": null,
-			// 	    "menuUrl": "/cmi-batch",
-			// 	    "menuPic": null,
-			// 	    "rightTag": "ORD",
-			// 	    "systemId": "11006",
-			// 	    "activeTime": null,
-			// 	    "inactiveTime": null,
-			// 	    "treeDisplay": null,
-			// 	    "createTime": null,
-			// 	    "createOperId": 0,
-			// 	    "updateTime": null,
-			// 	    "updateOperId": 0,
-			// 	    "funcType": null,
-			// 	    "systemUrl": "http://10.1.130.203:48067"
-			// 	},
-			// 	{
-			// 	    "menuId": 1804,
-			// 	    "menuName": "Resource query",
-			// 	    "menuDesc": null,
-			// 	    "menuPid": 18,
-			// 	    "menuPidName": null,
-			// 	    "menuType": "1",
-			// 	    "menuOrder": 0,
-			// 	    "menuTarget": null,
-			// 	    "menuUrl": "/cmi-Resource-information",
-			// 	    "menuPic": null,
-			// 	    "rightTag": "RES",
-			// 	    "systemId": "11007",
-			// 	    "activeTime": null,
-			// 	    "inactiveTime": null,
-			// 	    "treeDisplay": null,
-			// 	    "createTime": null,
-			// 	    "createOperId": 0,
-			// 	    "updateTime": null,
-			// 	    "updateOperId": 0,
-			// 	    "funcType": null,
-			// 	    "systemUrl": "http://10.1.130.203:48068"
-			// 	},
-			// 	{
-			// 	    "menuId": 1802,
-			// 	    "menuName": "Inquery Result",
-			// 	    "menuDesc": null,
-			// 	    "menuPid": 18,
-			// 	    "menuPidName": null,
-			// 	    "menuType": "1",
-			// 	    "menuOrder": 0,
-			// 	    "menuTarget": null,
-			// 	    "menuUrl": "/cmi-storage-info",
-			// 	    "menuPic": null,
-			// 	    "rightTag": "RES",
-			// 	    "systemId": "11007",
-			// 	    "activeTime": null,
-			// 	    "inactiveTime": null,
-			// 	    "treeDisplay": null,
-			// 	    "createTime": null,
-			// 	    "createOperId": 0,
-			// 	    "updateTime": null,
-			// 	    "updateOperId": 0,
-			// 	    "funcType": null,
-			// 	    "systemUrl": "http://10.1.130.203:48068"
-			// 	},
-			// 	{
-			// 	    "menuId": 1701,
-			// 	    "menuName": "Order Query",
-			// 	    "menuDesc": null,
-			// 	    "menuPid": 17,
-			// 	    "menuPidName": null,
-			// 	    "menuType": "1",
-			// 	    "menuOrder": 0,
-			// 	    "menuTarget": null,
-			// 	    "menuUrl": "/cmi-order",
-			// 	    "menuPic": null,
-			// 	    "rightTag": "ORD",
-			// 	    "systemId": "11006",
-			// 	    "activeTime": null,
-			// 	    "inactiveTime": null,
-			// 	    "treeDisplay": null,
-			// 	    "createTime": null,
-			// 	    "createOperId": 0,
-			// 	    "updateTime": null,
-			// 	    "updateOperId": 0,
-			// 	    "funcType": null,
-			// 	    "systemUrl": "http://10.1.130.203:48067"
-			// 	},
-			// 	{
-			// 	    "menuId": 17,
-			// 	    "menuName": "Order Manage",
-			// 	    "menuDesc": null,
-			// 	    "menuPid": -1,
-			// 	    "menuPidName": null,
-			// 	    "menuType": "0",
-			// 	    "menuOrder": 0,
-			// 	    "menuTarget": null,
-			// 	    "menuUrl": null,
-			// 	    "menuPic": null,
-			// 	    "rightTag": "ORD",
-			// 	    "systemId": "11006",
-			// 	    "activeTime": null,
-			// 	    "inactiveTime": null,
-			// 	    "treeDisplay": null,
-			// 	    "createTime": null,
-			// 	    "createOperId": 0,
-			// 	    "updateTime": null,
-			// 	    "updateOperId": 0,
-			// 	    "funcType": null,
-			// 	    "systemUrl": "http://10.1.130.203:48067"
-			// 	},
-			// 	{
-			// 	    "menuId": 2001,
-			// 	    "menuName": "Bill Query",
-			// 	    "menuDesc": null,
-			// 	    "menuPid": 20,
-			// 	    "menuPidName": null,
-			// 	    "menuType": "1",
-			// 	    "menuOrder": 0,
-			// 	    "menuTarget": null,
-			// 	    "menuUrl": "/cmi-bill-manage",
-			// 	    "menuPic": null,
-			// 	    "rightTag": "ACCT",
-			// 	    "systemId": "11009",
-			// 	    "activeTime": null,
-			// 	    "inactiveTime": null,
-			// 	    "treeDisplay": null,
-			// 	    "createTime": null,
-			// 	    "createOperId": 0,
-			// 	    "updateTime": null,
-			// 	    "updateOperId": 0,
-			// 	    "funcType": null,
-			// 	    "systemUrl": "http://10.1.130.203:48069"
-			// 	},
-			// 	{
-			// 	    "menuId": 1803,
-			// 	    "menuName": "Inventory Query",
-			// 	    "menuDesc": null,
-			// 	    "menuPid": 18,
-			// 	    "menuPidName": null,
-			// 	    "menuType": "1",
-			// 	    "menuOrder": 0,
-			// 	    "menuTarget": null,
-			// 	    "menuUrl": "/cmi-storage-check",
-			// 	    "menuPic": null,
-			// 	    "rightTag": "RES",
-			// 	    "systemId": "11007",
-			// 	    "activeTime": null,
-			// 	    "inactiveTime": null,
-			// 	    "treeDisplay": null,
-			// 	    "createTime": null,
-			// 	    "createOperId": 0,
-			// 	    "updateTime": null,
-			// 	    "updateOperId": 0,
-			// 	    "funcType": null,
-			// 	    "systemUrl": "http://10.1.130.203:48068"
-			// 	},
-			// 	{
-			// 	    "menuId": 1805,
-			// 	    "menuName": "Product Binding",
-			// 	    "menuDesc": null,
-			// 	    "menuPid": 18,
-			// 	    "menuPidName": null,
-			// 	    "menuType": "1",
-			// 	    "menuOrder": 0,
-			// 	    "menuTarget": null,
-			// 	    "menuUrl": "/cmi-Product-binding",
-			// 	    "menuPic": null,
-			// 	    "rightTag": "RES",
-			// 	    "systemId": "11007",
-			// 	    "activeTime": null,
-			// 	    "inactiveTime": null,
-			// 	    "treeDisplay": null,
-			// 	    "createTime": null,
-			// 	    "createOperId": 0,
-			// 	    "updateTime": null,
-			// 	    "updateOperId": 0,
-			// 	    "funcType": null,
-			// 	    "systemUrl": "http://10.1.130.203:48068"
-			// 	},
-			// 	{
-			// 	    "menuId": 18,
-			// 	    "menuName": "Resource Manage",
-			// 	    "menuDesc": null,
-			// 	    "menuPid": -1,
-			// 	    "menuPidName": null,
-			// 	    "menuType": "0",
-			// 	    "menuOrder": 0,
-			// 	    "menuTarget": null,
-			// 	    "menuUrl": null,
-			// 	    "menuPic": null,
-			// 	    "rightTag": "RES",
-			// 	    "systemId": "11007",
-			// 	    "activeTime": null,
-			// 	    "inactiveTime": null,
-			// 	    "treeDisplay": null,
-			// 	    "createTime": null,
-			// 	    "createOperId": 0,
-			// 	    "updateTime": null,
-			// 	    "updateOperId": 0,
-			// 	    "funcType": null,
-			// 	    "systemUrl": "http://10.1.130.203:48068"
-			// 	},
-			// 	{
-			// 	    "menuId": 1901,
-			// 	    "menuName": "Customer 360 Views",
-			// 	    "menuDesc": null,
-			// 	    "menuPid": 19,
-			// 	    "menuPidName": null,
-			// 	    "menuType": "1",
-			// 	    "menuOrder": 0,
-			// 	    "menuTarget": null,
-			// 	    "menuUrl": "/cmi-Customer-View",
-			// 	    "menuPic": null,
-			// 	    "rightTag": "CRM",
-			// 	    "systemId": "11008",
-			// 	    "activeTime": null,
-			// 	    "inactiveTime": null,
-			// 	    "treeDisplay": null,
-			// 	    "createTime": null,
-			// 	    "createOperId": 0,
-			// 	    "updateTime": null,
-			// 	    "updateOperId": 0,
-			// 	    "funcType": null,
-			// 	    "systemUrl": "http://10.1.130.203:48066"
-			// 	}]
-			// this.$nextTick(() => {
-			// 	let route = '/cmi-Customer-View' || this.$route.path
-			// 	let queryName = getQueryData(menu, 'menuId', 'menuPid', route, 'menuName')
-			// 	this.queryActiveMenu = queryName.name
-			// 	this.queryOpenName = queryName.names
-			// })
+			/**
+			 * 用于监测用户点击和输入行为
+			 */
+			let that = this
+			document.body.onclick = function () {
+				that.handleRefreshSessionTime(that)
+			}
+			document.body.onkeyup = function () {
+				that.handleRefreshSessionTime(that)
+			}
+			// let path = getQuery('path')
+			// localStorage.set('aid-path', path, 5 * 60 * 1000)
 			let accessToken = sessionStorage.get('access_token')
   		let refreshToken = sessionStorage.get('refresh_token')
   		if (!accessToken || !refreshToken) return
@@ -847,16 +639,23 @@
 			}
 
 			// 获取menu数据
-			this.instance.get(this.authorization.menuUri).then(res => {
+			this.instance.get(this.authorization.menuUri,
+				{
+					params: {
+						language: fetchLang.data
+					}
+				}).then(res => {
 				this.menu = transData(res.data, 'menuId', 'menuPid', 'children')
 				/**
 				 * 设置自动展开
 				 */
 				this.$nextTick(() => {
-					let route = this.$route.path
+					let route = localStorage.get('aid-path') || this.$route.path || getQuery('path') || '/'
+					localStorage.remove('aid-path')
 					let queryName = getQueryData(res.data, 'menuId', 'menuPid', route, 'menuName')
 					this.queryActiveMenu = queryName.name
 					this.queryOpenName = queryName.names
+					this.$router.push({ path: route })
 				})
 				/**
 				 * 先找出这一条数据，并将其 menuName 组成一个数组

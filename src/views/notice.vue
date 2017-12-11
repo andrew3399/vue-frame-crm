@@ -21,7 +21,7 @@
 	<div class="enquiries mt-10" v-if="bullet.files">
 		<!-- 标题 star-->
 		<div class="enquiries-title">
-			<span></span>相关附件
+			<span></span>{{$t('frame.relatedFiles')}}
 		</div>
 		<div class="enquiries-form">
 			<div class="row">
@@ -29,7 +29,7 @@
 					<div class="row">
 	  					<div class="col-12 user-lst">
 	  						<ul class="menu">
-	  							<li class="lt">相关附件：</li>
+	  							<li class="lt">{{$t('frame.relatedFiles')}}:</li>
 	  							<li class="rt"><a :href="bullet.files" target="_self"><t-icon type="aid-menu aid-file-document"></t-icon>{{$t('frame.doc')}}</a></li>
 	  						</ul>
 	  					</div>

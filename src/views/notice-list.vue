@@ -16,7 +16,7 @@
         <div class="notice-list-wrap" v-for="item in items" @click="navToDetail(item)">
             <div class="n-l-title">
                 <span>{{item.bulletinTitle}}</span>
-                <i class="tips-top" v-if="item.topFlag">置顶</i>
+                <i class="tips-top" v-if="parseInt(item.topFlag) === 1">{{$t('frame.top')}}</i>
             </div>
             <div class="n-l-content">
                 <p class="text-left n-l-nr" v-html="item.bulletinContent"></p>
@@ -25,7 +25,7 @@
         </div>
     </div>
     <div class="notice-pager">
-        <t-pager :total="total" :page-size="pageSize" :sizer-range="sizerRange" @on-change="handleOnPagerChange" @on-size-change="handleOnPagerSizeChange" show-sizer show-elevator></t-pager>
+        <t-pager :total="total" :page-size="pageSize" :sizer-range="sizerRange" @on-change="handleOnPagerChange" @on-size-change="handleOnPagerSizeChange" show-elevator show-sizer></t-pager>
     </div>
 </div>
 </template>
@@ -99,7 +99,11 @@
                         this.total = data.count
                         this.pageSize = data.pageSize
                         this.pageNo = data.pageNo
-                        this.items = data.result
+                        if (data.result && data.result.length) {
+                            this.items = data.result.sort((a,b) => {
+                                return parseInt(a.topFlag) - parseInt(b.topFlag)
+                            })
+                        }
                     }).catch(res => {
                         this.$Message.warning(this.$t('frame.warning'))
                     })
