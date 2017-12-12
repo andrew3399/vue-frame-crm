@@ -289,7 +289,9 @@
 			 */
 			menuList: {
 				type: Array,
-				default: []
+				default: () => {
+					return []
+				}
 			},
 			/**
 			 * 渲染头部menu
@@ -394,7 +396,9 @@
 				this.isActive = index
 				// this.hideSlideWrapSlip = false
 				this.hideSlip = true
-				this.$router.push({ path: `/notice/${item.bulletinId}` })
+				const bulletinId = item.bulletinId
+        this.$router.push({ name: 'notice', params: { bulletinId }})
+				// this.$router.push({ path: `/notice/${item.bulletinId}` })
 				// this.$router.push({ path: '/notice', query: { bulletinId: item.bulletinId } })
 			},
 			/* 页面存在点击操作、keyUp操作, 将sessionTime更新 */
@@ -444,7 +448,7 @@
 			/* 加载更多 */
 			loadingMore () {
 				this.hideSlip = true
-				this.$router.push({path: '/'})
+				this.$router.push({ name: 'notice-list' })
 			},
 			handleClickClose(){
 				this.hideSlideWrapSlip = true

@@ -75,7 +75,9 @@
         },
         methods: {
             navToDetail (item) {
-                this.$router.push({ path: `/notice/${item.bulletinId}` })
+                const bulletinId = item.bulletinId
+                this.$router.push({ name: 'notice', params: { bulletinId }})
+                // this.$router.push({ path: `notice/${item.bulletinId}` })
                 // this.$router.push({ path: '/notice', query: { bulletinId: item.bulletinId } })
             },
             handleOnPagerChange (item) {
