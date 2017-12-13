@@ -435,7 +435,7 @@
 					let alink = document.createElement('a')
 					alink.href = window.location.href
 					let path = alink.pathname.replace(/^([^\/])/,'/$1')
-					localStorage.set('aid-path', path)
+					localStorage.set('aid-path', decodeURIComponent(path))
 					// let msg = {
 		   //      client_id: that.authorization.client_id,
 		   //      redirect_uri: encodeURIComponent(window.location.href),
@@ -563,49 +563,14 @@
 				    }
 				  }
 				})
-
-				// EventHub.$emit('eventHub-change-lang', this.lang === 'CN' ? 'en-US' : 'zh-CN')
-				// let accessToken = sessionStorage.get('access_token')
-	  	// 	let refreshToken = sessionStorage.get('refresh_token')
-	  	// 	if (!accessToken || !refreshToken) return
-				// // 获取menu数据
-				// this.instance.get(this.authorization.menuUri, {
-				// 	params: {
-				// 		language: this.lang === 'CN' ? 'en' : 'zh'
-				// 	}
-				// }).then(res => {
-				// 	this.menu = transData(res.data, 'menuId', 'menuPid', 'children')
-				// }).catch(res => {
-				// 	/**
-				// 	 * 处理相关错误的问题
-				// 	 */
-				// 	if (res) {
-				//     switch (res.status) {
-				//       *
-				//       * 判断相关的错误，例如判断 token 失效， 或者没有登录的情况
-				      
-				//       case 401:
-				//       	let accessToken = sessionStorage.get('access_token')
-				// 	  		let refreshToken = sessionStorage.get('refresh_token')
-				// 	  		if (!accessToken || !refreshToken) return
-				//         let msg = {
-				//           client_id: this.authorization.client_id,
-				//           redirect_uri: encodeURIComponent(this.authorization.redirect_uri),
-				//           state: uuid(6, 16)
-				//         }
-				//         window.location.href = this.authorization.authorizeUri + '?client_id=' + msg.client_id + '&redirect_uri=' + msg.redirect_uri + '&response_type=code&scope=read&state=' + msg.state
-				//         break
-				//     }
-				//   }
-				// })
 			},
 			/* 跳出当前域，并将其 path 保存下来 */
 			handleOtherRegin (url) {
 				let alink = document.createElement('a')
 				alink.href = url
 				let path = alink.pathname.replace(/^([^\/])/,'/$1')
+				// localStorage.set('aid-path', path)
 				window.location.href = url + '?path=' + path
-				localStorage.set('aid-path', 5 * 60 * 1000)
 			},
 			...mapMutations([
 				'setInstance',
@@ -613,6 +578,11 @@
 			])
 		},
 		async created () {
+			/* 用于监测传过来的path */
+			let path = getQuery('path') || this.$route.path
+			if (path && decodeURIComponent(path) !== '/') {
+				localStorage.set('aid-path', decodeURIComponent(path))
+			}
 			/**
 			 * 用于监测用户点击和输入行为
 			 */
@@ -655,11 +625,13 @@
 				 */
 				this.$nextTick(() => {
 					let route = localStorage.get('aid-path') || this.$route.path || getQuery('path') || '/'
-					localStorage.remove('aid-path')
-					let queryName = getQueryData(res.data, 'menuId', 'menuPid', route, 'menuName')
+					let queryName = getQueryData(res.data, 'menuId', 'menuPid', decodeURIComponent(route), 'menuName')
 					this.queryActiveMenu = queryName.name
 					this.queryOpenName = queryName.names
-					this.$router.push({ path: route })
+					if (decodeURIComponent(route) !== '/') {
+						this.$router.push({ path: decodeURIComponent(route) })
+						localStorage.remove('aid-path')
+					}
 				})
 				/**
 				 * 先找出这一条数据，并将其 menuName 组成一个数组

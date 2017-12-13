@@ -19,7 +19,6 @@
                 <i class="tips-top" v-if="parseInt(item.topFlag) === 1">{{$t('frame.top')}}</i>
             </div>
             <div class="n-l-content">
-                <p class="text-left n-l-nr" v-html="item.bulletinContent"></p>
                 <p class="text-left n-l-time">{{item.bulletinPublisher}} <em>{{item.createTime | format}}</em></p>
             </div>
         </div>
