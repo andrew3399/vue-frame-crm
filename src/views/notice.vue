@@ -14,7 +14,7 @@
     <!--面包屑 end-->
 	<div class="enquiries mt-10">
 		<p class="text-center">{{bullet.bulletinTitle}}</p>
-		<p class="text-left text-in" v-html="bullet.bulletinContent"></p>
+		<div class="text-left text-in" v-html="bullet.bulletinContent"></div>
 		<p class="text-right">{{bullet.bulletinPublisher}}</p>
 		<p class="text-right">{{bullet.createTime | format}}</p>
   </div>
