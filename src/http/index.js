@@ -1,16 +1,16 @@
 /**
  * 服务调用的拦截器，用于服务头添加token，及相关的逻辑判断
  */
-import SessionStorage from '../utils/sessionStorage.js'
+import LocalStorage from '../utils/localStorage.js'
 import { Base64 } from 'js-base64'
 import { getQuery, uuid } from '../utils/utils.js'
 // import { TModal } from 'aid-taurus-desktop'
 
-let sessionStorage = new SessionStorage()
+let localStorage = new LocalStorage()
 
 /***
   sessionTime 设置来实现单点登录设置
-  1. 设置sessionTime的sessionStorage
+  1. 设置sessionTime的localStorage
   2. 设置全局的带有截流的click事件
   3. 如果sessionTime存在时，且accesstoken 不存在，需要重新取token，然后更新token
   4. 重新获取token 可在用户操作中直接请求
@@ -18,9 +18,9 @@ let sessionStorage = new SessionStorage()
 */
 
 export function requestInterceptor (config, authorization, tokenUri) {
-  let accessToken = sessionStorage.get('access_token')
-  let refreshToken = sessionStorage.get('refresh_token')
-  // let sessionTime = sessionStorage.get('session-time')
+  let accessToken = localStorage.get('access_token')
+  let refreshToken = localStorage.get('refresh_token')
+  // let sessionTime = localStorage.get('session-time')
   if (accessToken && refreshToken) {
     if (config.url && config.url.indexOf(tokenUri) !== -1) {
       config.headers.Authorization = 'Basic ' + Base64.encode(authorization.client_id + ':' + authorization.clientSecret)
@@ -52,9 +52,9 @@ export function handleResponseError (error, authorization) {
       * 判断相关的错误，例如判断 token 失效， 或者没有登录的情况
       */
       case 401:
-        let accessToken = sessionStorage.get('access_token')
-        let refreshToken = sessionStorage.get('refresh_token')
-        let sessionTime = sessionStorage.get('session-time')
+        let accessToken = localStorage.get('access_token')
+        let refreshToken = localStorage.get('refresh_token')
+        let sessionTime = localStorage.get('session-time')
         if (!accessToken && !refreshToken) break
         /**
          * 此时需要加载判断

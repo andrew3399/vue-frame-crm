@@ -1,15 +1,15 @@
 /**
  * 进入路由之前判断是否有token存在
  */
-import SessionStorage from '../utils/sessionStorage.js'
+import LocalStorage from '../utils/localStorage.js'
 import { getQuery, uuid } from '../utils/utils.js'
 import { Base64 } from 'js-base64'
 
 export function beforeEach (to, from, next, authorization, requestInstance, cb) {
-  let sessionStorage = new SessionStorage()
-  let accessToken = sessionStorage.get('access_token')
-  let refreshToken = sessionStorage.get('refresh_token')
-  let sessionTime = sessionStorage.get('session-time')
+  let localStorage = new LocalStorage()
+  let accessToken = localStorage.get('access_token')
+  let refreshToken = localStorage.get('refresh_token')
+  let sessionTime = localStorage.get('session-time')
   // 路由拦截 根据路由配置中meta.requireAuth判断是否需要登录
   if (to.meta.requireAuth) {
     if (accessToken && refreshToken) {
@@ -21,14 +21,14 @@ export function beforeEach (to, from, next, authorization, requestInstance, cb) 
         /**
          *  这里需要去请求token的值,并设置sessiion-time
          */
-        // cb(code, state, next, sessionStorage, uuid(6, 16))
+        // cb(code, state, next, localStorage, uuid(6, 16))
         requestInstance.post(authorization.tokenUri + '?code=' + code + '&state=' + state +
           '&grant_type=authorization_code' + '&client_id=' + authorization.client_id + '&redirect_uri=' + encodeURIComponent(authorization.redirect_uri))
         .then(res => {
           let time = new Date().getTime() + 30 * 60 * 1000
-          sessionStorage.set('access_token', res.data.access_token, res.data.expires_in * 1000)
-          sessionStorage.set('refresh_token', res.data.refresh_token, Math.pow(2, 32))
-          sessionStorage.set('session-time', time, 30 * 60 * 1000)
+          localStorage.set('access_token', res.data.access_token, res.data.expires_in * 1000)
+          localStorage.set('refresh_token', res.data.refresh_token, Math.pow(2, 32))
+          localStorage.set('session-time', time, 30 * 60 * 1000)
           next()
         }).catch(res => {
           let msg = {
@@ -53,8 +53,8 @@ export function beforeEach (to, from, next, authorization, requestInstance, cb) 
               Authorization: 'Basic ' + Base64.encode(authorization.client_id + ':' + authorization.clientSecret)
             }
           }).then(res => {
-            sessionStorage.set('access_token', res.data.access_token, res.data.expires_in * 1000)
-            sessionStorage.set('refresh_token', res.data.refresh_token, Math.pow(2, 32))
+            localStorage.set('access_token', res.data.access_token, res.data.expires_in * 1000)
+            localStorage.set('refresh_token', res.data.refresh_token, Math.pow(2, 32))
           }).catch(res => {
             let msg = {
               client_id: authorization.client_id,

@@ -202,14 +202,14 @@
 </template>
 <script>
 	import ClickoutSide from './clickoutside.js'
-	import SessionStorage from '../utils/sessionStorage.js'
+	// import SessionStorage from '../utils/sessionStorage.js'
 	import LocalStorage from '../utils/localStorage.js'
 	import { transData, getQueryData, getQuery, uuid } from '../utils/utils.js'
 	import * as Constant from '../store/constant.js'
 	import { mapMutations } from 'vuex'
 	import { Base64 } from 'js-base64'
 	// import EventHub from '../eventHub'
-	let sessionStorage = new SessionStorage ()
+	// let sessionStorage = new SessionStorage ()
 	let localStorage = new LocalStorage()
 
 	let timeout = null
@@ -408,9 +408,9 @@
 				 *  如果已经失效，则不需要存数据
 				 *  如果没失效，这里需要判断accsstoken 是否存在，不存在的话，需要重新请求token
 				 */
-				let accessToken = sessionStorage.get('access_token')
-				let refreshToken = sessionStorage.get('refresh_token')
-				let sessionTime = sessionStorage.get('session-time')
+				let accessToken = localStorage.get('access_token')
+				let refreshToken = localStorage.get('refresh_token')
+				let sessionTime = localStorage.get('session-time')
 				let currentTime = new Date().getTime()
 				/**
 				 * sessionTime 存在,需要重新设置sessiontime的过期时间
@@ -418,7 +418,7 @@
 				if (sessionTime) {
 					let time = new Date().getTime() + 30 * 60 * 1000
 					throttle(() => {
-						sessionStorage.set('session-time', time, 30 * 60 * 1000)
+						localStorage.set('session-time', time, 30 * 60 * 1000)
 					}, 5 * 1000, {leading: false, trailing: true})()
 					/**
 					 * accessToken 不存在，需要根据refreshToken，获取并设置accessToken、refreshToken
@@ -427,8 +427,8 @@
 						that.instance.post(that.authorization.tokenUri +
 		          '?grant_type=refresh_token' + '&refresh_token=' + encodeURIComponent(refreshToken) + '&scope=read')
 		        .then(res => {
-		          sessionStorage.set('access_token', res.data.access_token, res.data.expires_in * 1000)
-		          sessionStorage.set('refresh_token', res.data.refresh_token, Math.pow(2, 32))
+		          localStorage.set('access_token', res.data.access_token, res.data.expires_in * 1000)
+		          localStorage.set('refresh_token', res.data.refresh_token, Math.pow(2, 32))
 		        })
 					}
 				} else {
@@ -461,11 +461,10 @@
 				}
 			},
 			logoutAndRemoveSession () {
-				sessionStorage.remove('access_token')
-				sessionStorage.remove('refresh_token')
-				sessionStorage.remove('session-time')
-				sessionStorage.remove('MVNO_KEY_TIMEOUT_MAP')
-				window.location.href = this.authorization.logout_uri
+					localStorage.remove('access_token')
+					localStorage.remove('refresh_token')
+					localStorage.remove('session-time')
+					window.location.href = this.authorization.logout_uri
 			},
 			closeMenuOnMinWin () {
 				this.isOpenOnMinWin = true
@@ -550,8 +549,8 @@
 				     	 * 判断相关的错误，例如判断 token 失效， 或者没有登录的情况
 				       */
 				      case 401:
-				      	let accessToken = sessionStorage.get('access_token')
-					  		let refreshToken = sessionStorage.get('refresh_token')
+				      	let accessToken = localStorage.get('access_token')
+					  		let refreshToken = localStorage.get('refresh_token')
 					  		if (!accessToken || !refreshToken) return
 				        let msg = {
 				          client_id: this.authorization.client_id,
@@ -580,7 +579,8 @@
 		async created () {
 			/* 用于监测传过来的path */
 			let path = getQuery('path') || this.$route.path
-			if (path && decodeURIComponent(path) !== '/') {
+			let routeArr = ['/res', '/cust', '/order', '/acct', '/']
+			if (path && !routeArr.includes(decodeURIComponent(path))) {
 				localStorage.set('aid-path', decodeURIComponent(path))
 			}
 			/**
@@ -595,8 +595,8 @@
 			}
 			// let path = getQuery('path')
 			// localStorage.set('aid-path', path, 5 * 60 * 1000)
-			let accessToken = sessionStorage.get('access_token')
-  		let refreshToken = sessionStorage.get('refresh_token')
+			let accessToken = localStorage.get('access_token')
+  		let refreshToken = localStorage.get('refresh_token')
   		if (!accessToken || !refreshToken) return
   		if (this.menuList && this.menuList.length) return
 
@@ -628,7 +628,8 @@
 					let queryName = getQueryData(res.data, 'menuId', 'menuPid', decodeURIComponent(route), 'menuName')
 					this.queryActiveMenu = queryName.name
 					this.queryOpenName = queryName.names
-					if (decodeURIComponent(route) !== '/') {
+					let routeArr2 = ['/res', '/cust', '/order', '/acct', '/']
+					if (route && !routeArr2.includes(decodeURIComponent(path))) {
 						this.$router.push({ path: decodeURIComponent(route) })
 						localStorage.remove('aid-path')
 					}
@@ -646,8 +647,8 @@
 			      * 判断相关的错误，例如判断 token 失效， 或者没有登录的情况
 			      */
 			      case 401:
-			      	let accessToken = sessionStorage.get('access_token')
-				  		let refreshToken = sessionStorage.get('refresh_token')
+			      	let accessToken = localStorage.get('access_token')
+				  		let refreshToken = localStorage.get('refresh_token')
 				  		if (!accessToken || !refreshToken) return
 			        let msg = {
 			          client_id: this.authorization.client_id,
@@ -679,8 +680,8 @@
 			      * 判断相关的错误，例如判断 token 失效， 或者没有登录的情况
 			      */
 			      case 401:
-			      	let accessToken = sessionStorage.get('access_token')
-				  		let refreshToken = sessionStorage.get('refresh_token')
+			      	let accessToken = localStorage.get('access_token')
+				  		let refreshToken = localStorage.get('refresh_token')
 				  		if (!accessToken || !refreshToken) return
 			        let msg = {
 			          client_id: this.authorization.client_id,

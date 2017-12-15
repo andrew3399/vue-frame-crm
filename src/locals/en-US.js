@@ -7,6 +7,10 @@ export default {
     top: 'Top',
     expiryDate: 'Expiry Date',
     to: 'to',
-    relatedFiles: 'Related Files'
+    relatedFiles: 'Related Files',
+    home: 'Home',
+    list: 'Notice List',
+    title: 'Notice List',
+    listDetail: 'Notice Detail'
   }
 }

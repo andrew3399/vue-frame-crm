@@ -122,8 +122,12 @@
         top: auto;
         left: 0;
         bottom: 0;
-        padding: 0 30px 40px;
+        padding: 0 30px 20px;
+        margin-bottom: -20px;
         text-align: right;
+        p {
+          margin: 0;
+        }
     }
     .btn-lang {
         position: absolute;
@@ -131,7 +135,9 @@
         right: -15px;
         transform: translate(0, -50%);
     }
-
+    .avatar.bg-success {
+      background-color: #8dc31e;
+    }
     .avatar--danger .avatar__dot, .avatar__dot, .badge--danger {
       background-color: #ff5f5f;
     }
@@ -466,7 +472,7 @@
 
 .layout--one-screen .layout-main {
     position: absolute;
-    top: 60px;
+    top: 45px;
     bottom: 0;
     left: 0;
     right: 0;

@@ -1,25 +1,28 @@
 <template>
 <div class="crm-wrapper">
 	<!--面包屑star-->
-	<!-- <div class="bread-crumbs">
+	<div class="bread-crumbs">
 		<div class="row">
 			<div class="col-xs-12 col-sm-12 col-md-6 col-lg-6 col-xl-6">
 				<t-breadcrumb separator=">">
-					<t-breadcrumb-item href="/">账户管理</t-breadcrumb-item>
-					<t-breadcrumb-item>公告列表</t-breadcrumb-item>
+					<t-breadcrumb-item href="/">{{$t('frame.home')}}</t-breadcrumb-item>
+					<t-breadcrumb-item>{{$t('frame.list')}}</t-breadcrumb-item>
 				</t-breadcrumb>
 			</div>
 		</div>
-	</div> -->
+	</div>
     <!--面包屑 end-->
     <div class="enquiries mt-10" style="padding:0px 0px 20px 0px;">
+        <div class="enquiries-title">
+            <span></span>{{$t('frame.title')}}
+        </div>
         <div class="notice-list-wrap" v-for="item in items" @click="navToDetail(item)">
             <div class="n-l-title">
                 <span>{{item.bulletinTitle}}</span>
                 <i class="tips-top" v-if="parseInt(item.topFlag) === 1">{{$t('frame.top')}}</i>
             </div>
             <div class="n-l-content">
-                <p class="text-left n-l-time">{{item.bulletinPublisher}} <em>{{item.createTime | format}}</em></p>
+                <p class="text-right n-l-time">{{item.bulletinPublisher}} <em>{{item.createTime | format}}</em></p>
             </div>
         </div>
     </div>
