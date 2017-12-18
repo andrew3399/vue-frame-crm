@@ -137,6 +137,7 @@
     }
     .avatar.bg-success {
       background-color: #8dc31e;
+      background-image: linear-gradient(-225deg,#46cf8f,#8dc31e)
     }
     .avatar--danger .avatar__dot, .avatar__dot, .badge--danger {
       background-color: #ff5f5f;
@@ -233,6 +234,10 @@
     bottom: 0;
 }
 
+.menu--vertical.menu--folded .menu__submenu-title, .menu--vertical.menu--folded>li {
+    padding: 0;
+}
+
 .layout-menu {
     position: relative;
     box-shadow: 2px 10px 10px 0 rgba(0, 0, 0, 0.1);
@@ -252,6 +257,9 @@
     .menu__submenu-title a {
         display: inline-block;
     }
+    // .menu .menu__submenu-title {
+    //     padding-left: 15px;
+    // }
     .menu .menu__submenu-title,
     .menu .menu__item {
         height: 50px;
@@ -370,7 +378,7 @@
     .menu.menu--folded {
         >li,
         .menu__submenu-title {
-            width: auto;
+            // width: auto;
             height: 40px;
             line-height: 40px;
             i {
@@ -461,7 +469,7 @@
 
 .layout--one-screen .layout-sidebar .menu--vertical.menu--folded .menu__submenu-title,
 .layout--one-screen .layout-sidebar .menu--vertical.menu--folded>li {
-    width: auto;
+    // width: auto;
 }
 
 .layout--one-screen .layout-content {
@@ -535,16 +543,27 @@
     margin: 0 auto;
 }
 
+// .layout-menu .menu__submenu-title .avatar{
+//     margin-top: 9px;
+// }
+
 .layout-menu .menu__submenu-title .avatar,
 .layout-menu .avatar__text {
     display: inline-block;
     width: 32px;
     height: 32px;
 }
-
-.layout-menu .menu .menu__item,
 .layout-menu .menu .menu__submenu-title .sub-text {
-    // width: 90%;
+     /* 实现换行 */
+    // flex: 1;
+    width: 200px;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    overflow: hidden;
+    vertical-align: middle;
+}
+
+.layout-menu .menu .menu__item{
     white-space: nowrap;
     text-overflow: ellipsis;
     overflow: hidden;

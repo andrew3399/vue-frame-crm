@@ -11,6 +11,8 @@ export default {
     home: 'Home',
     list: 'Notice List',
     title: 'Notice List',
-    listDetail: 'Notice Detail'
+    listDetail: 'Notice Detail',
+    systemInfo: 'System Info',
+    systemInfoContent: 'Your token is invalid, please try login again'
   }
 }

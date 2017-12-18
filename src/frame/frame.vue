@@ -36,55 +36,55 @@
 										<t-icon :type="item1.iconType" v-if="item1.iconType"></t-icon>
 										<t-avatar size="sm" bg-state="success" :text="item1.rightTag" :dot="false" v-else></t-avatar>
 						        <router-link :to="{ path: item1.menuUrl }" v-if="item1.rightTag === tag && item1.menuUrl">
-				            	<span class="sub-text">{{item1.menuName}}</span>
+				            	<span class="sub-text" :title="item1.menuName">{{item1.menuName}}</span>
 						        </router-link>
 						        <a href="javascript:;" @click="handleOtherRegin(item1.systemUrl + item1.menuUrl)" target="_self" v-else-if="item1.systemUrl && item1.menuUrl && item1.rightTag !== tag">
-						        	<span class="sub-text">{{item1.menuName}}</span>
+						        	<span class="sub-text" :title="item1.menuName">{{item1.menuName}}</span>
 						        </a>
-						        <span class="sub-text" v-else>{{item1.menuName}}</span>
+						        <span class="sub-text" :title="item1.menuName" v-else>{{item1.menuName}}</span>
 				          </template>
 									<template v-for="(item2, y) in item1.children">
 										<t-submenu v-if="item2.children && item2.children.length" :name="item2.menuName" class="second-submenu">
 											<template slot="title">
 					            	<router-link :to="{ path: item2.menuUrl}" v-if="item2.rightTag === tag && item2.menuUrl">
-						            	<span class="sub-text">{{item2.menuName}}</span>
+						            	<span class="sub-text" :title="item2.menuName">{{item2.menuName}}</span>
 								        </router-link>
 								        <a href="javascript:;" @click="handleOtherRegin(item2.systemUrl + item2.menuUrl)" target="_self" v-else-if="item2.systemUrl && item2.menuUrl && item2.rightTag !== tag">
-								        	<span class="sub-text">{{item2.menuName}}</span>
+								        	<span class="sub-text" :title="item2.menuName">{{item2.menuName}}</span>
 								        </a>
-								        <span class="sub-text" v-else>{{item2.menuName}}</span>
+								        <span class="sub-text" :title="item2.menuName" v-else>{{item2.menuName}}</span>
 					            </template>
 					            <template v-for="(item3, z) in item2.children">
 					            	<t-submenu v-if="item3.children && item3.children.length" :name="item3.menuName" :id="x + '' +y" class="second-submenu">
 					            		<t-menu-item v-for="(item4, w) in item3.children" :name="item4.menuName" :key="w" @click.native="getMenu(item4)" class="sec-item">
 							            	<router-link :to="{ path: item4.menuUrl }" v-if="item4.rightTag === tag && item4.menuUrl">
-								            	<span class="sub-text">{{item4.menuName}}</span>
+								            	<span class="sub-text" :title="item4.menuName">{{item4.menuName}}</span>
 										        </router-link>
 										        <a href="javascript:;" @click="handleOtherRegin(item4.systemUrl + item4.menuUrl)" target="_self" v-else-if="item4.systemUrl && item4.menuUrl && item4.rightTag !== tag">
-										        	<span class="sub-text">{{item4.menuName}}</span>
+										        	<span class="sub-text" :title="item4.menuName">{{item4.menuName}}</span>
 										        </a>
-										        <span class="sub-text" v-else>{{item4.menuName}}</span>
+										        <span class="sub-text" :title="item4.menuName" v-else>{{item4.menuName}}</span>
 							            </t-menu-item>
 					            	</t-submenu>
 						            <t-menu-item :name="item3.menuName" :key="z" @click.native="getMenu(item3)" class="sec-item" v-else>
 						            	<router-link :to="{ path: item3.menuUrl }" v-if="item3.rightTag === tag && item3.menuUrl">
-							            	<span class="sub-text">{{item3.menuName}}</span>
+							            	<span class="sub-text" :title="item3.menuName">{{item3.menuName}}</span>
 									        </router-link>
 									        <a href="javascript:;" @click="handleOtherRegin(item3.systemUrl + item3.menuUrl)" target="_self" v-else-if="item3.systemUrl && item3.menuUrl && item3.rightTag !== tag">
-									        	<span class="sub-text">{{item3.menuName}}</span>
+									        	<span class="sub-text" :title="item3.menuName">{{item3.menuName}}</span>
 									        </a>
-									        <span class="sub-text" v-else>{{item3.menuName}}</span>
+									        <span class="sub-text" :title="item3.menuName" v-else>{{item3.menuName}}</span>
 						            </t-menu-item>
 					            </template>
 										</t-submenu>
 										<t-menu-item :name="item2.menuName" v-else>
 											<router-link :to="{ path: item2.menuUrl }" v-if="item2.rightTag === tag && item2.menuUrl">
-					            	<span class="sub-text">{{item2.menuName}}</span>
+					            	<span class="sub-text" :title="item2.menuName">{{item2.menuName}}</span>
 							        </router-link>
 							        <a href="javascript:;" @click="handleOtherRegin(item2.systemUrl + item2.menuUrl)" target="_self" v-else-if="item2.systemUrl && item2.menuUrl && item2.rightTag !== tag">
-							        	<span class="sub-text">{{item2.menuName}}</span>
+							        	<span class="sub-text" :title="item2.menuName">{{item2.menuName}}</span>
 							        </a>
-							        <span class="sub-text" v-else>{{item2.menuName}}</span>
+							        <span class="sub-text" :title="item2.menuName" v-else>{{item2.menuName}}</span>
 										</t-menu-item>
 									</template>
 								</t-submenu>
@@ -92,12 +92,12 @@
 									<t-icon :type="item1.iconType" v-if="item1.iconType"></t-icon>
 									<t-avatar size="sm" bg-state="success" :text="item1.rightTag" :dot="false" v-else></t-avatar>
 					        <router-link :to="{ path: item1.menuUrl }" v-if="item1.rightTag === tag && item1.menuUrl">
-			            	<span class="sub-text">{{item1.menuName}}</span>
+			            	<span class="sub-text" :title="item1.menuName">{{item1.menuName}}</span>
 					        </router-link>
 					        <a href="javascript:;" @click="handleOtherRegin(item1.systemUrl + item1.menuUrl)" target="_self" v-else-if="item1.systemUrl && item1.menuUrl && item1.rightTag !== tag">
-					        	<span class="sub-text">{{item1.menuName}}</span>
+					        	<span class="sub-text" :title="item1.menuName">{{item1.menuName}}</span>
 					        </a>
-					        <span class="sub-text" v-else>{{item1.menuName}}</span>
+					        <span class="sub-text" :title="item1.menuName" v-else>{{item1.menuName}}</span>
 								</t-menu-item>
 							</template>
 			    </t-menu>
@@ -549,15 +549,24 @@
 				     	 * 判断相关的错误，例如判断 token 失效， 或者没有登录的情况
 				       */
 				      case 401:
-				      	let accessToken = localStorage.get('access_token')
-					  		let refreshToken = localStorage.get('refresh_token')
-					  		if (!accessToken || !refreshToken) return
-				        let msg = {
-				          client_id: this.authorization.client_id,
-				          redirect_uri: encodeURIComponent(this.authorization.redirect_uri),
-				          state: uuid(6, 16)
-				        }
-				        window.location.href = this.authorization.authorizeUri + '?client_id=' + msg.client_id + '&redirect_uri=' + msg.redirect_uri + '&response_type=code&scope=read&state=' + msg.state
+					      let that = this
+					      let title = this.$t('frame.systemInfo')
+					      let content = this.$t('frame.systemInfoContent')
+					      this.$Modal.warning({
+	                title: title,
+	                content: content,
+	                onOk: () => {
+						      	let accessToken = localStorage.get('access_token')
+							  		let refreshToken = localStorage.get('refresh_token')
+							  		if (!accessToken || !refreshToken) return
+						        let msg = {
+						          client_id: that.authorization.client_id,
+						          redirect_uri: encodeURIComponent(that.authorization.redirect_uri),
+						          state: uuid(6, 16)
+						        }
+						        window.location.href = that.authorization.authorizeUri + '?client_id=' + msg.client_id + '&redirect_uri=' + msg.redirect_uri + '&response_type=code&scope=read&state=' + msg.state
+	                }
+	              })
 				        break
 				    }
 				  }
@@ -647,15 +656,29 @@
 			      * 判断相关的错误，例如判断 token 失效， 或者没有登录的情况
 			      */
 			      case 401:
-			      	let accessToken = localStorage.get('access_token')
-				  		let refreshToken = localStorage.get('refresh_token')
-				  		if (!accessToken || !refreshToken) return
-			        let msg = {
-			          client_id: this.authorization.client_id,
-			          redirect_uri: encodeURIComponent(this.authorization.redirect_uri),
-			          state: uuid(6, 16)
-			        }
-			        window.location.href = this.authorization.authorizeUri + '?client_id=' + msg.client_id + '&redirect_uri=' + msg.redirect_uri + '&response_type=code&scope=read&state=' + msg.state
+			      	/**
+			      	 * 增加错误判断，避免无限刷新
+			      	 */
+			      	// let invalidCount = localStorage.get('token-invalid')
+			      	// localStorage.set('token-invalid', parseInt(invalidCount) + 1)
+			      	let that = this
+				      let title = this.$t('frame.systemInfo')
+				      let content = this.$t('frame.systemInfoContent')
+				      this.$Modal.warning({
+                title: title,
+                content: content,
+                onOk: () => {
+					      	let accessToken = localStorage.get('access_token')
+						  		let refreshToken = localStorage.get('refresh_token')
+						  		if (!accessToken || !refreshToken) return
+					        let msg = {
+					          client_id: that.authorization.client_id,
+					          redirect_uri: encodeURIComponent(that.authorization.redirect_uri),
+					          state: uuid(6, 16)
+					        }
+					        window.location.href = that.authorization.authorizeUri + '?client_id=' + msg.client_id + '&redirect_uri=' + msg.redirect_uri + '&response_type=code&scope=read&state=' + msg.state
+                }
+              })
 			        break
 			    }
 			  }
@@ -680,15 +703,24 @@
 			      * 判断相关的错误，例如判断 token 失效， 或者没有登录的情况
 			      */
 			      case 401:
-			      	let accessToken = localStorage.get('access_token')
-				  		let refreshToken = localStorage.get('refresh_token')
-				  		if (!accessToken || !refreshToken) return
-			        let msg = {
-			          client_id: this.authorization.client_id,
-			          redirect_uri: encodeURIComponent(this.authorization.redirect_uri),
-			          state: uuid(6, 16)
-			        }
-			        window.location.href = this.authorization.authorizeUri + '?client_id=' + msg.client_id + '&redirect_uri=' + msg.redirect_uri + '&response_type=code&scope=read&state=' + msg.state
+			      	let that = this
+				      let title = this.$t('frame.systemInfo')
+				      let content = this.$t('frame.systemInfoContent')
+				      this.$Modal.warning({
+                title: title,
+                content: content,
+                onOk: () => {
+					      	let accessToken = localStorage.get('access_token')
+						  		let refreshToken = localStorage.get('refresh_token')
+						  		if (!accessToken || !refreshToken) return
+					        let msg = {
+					          client_id: that.authorization.client_id,
+					          redirect_uri: encodeURIComponent(that.authorization.redirect_uri),
+					          state: uuid(6, 16)
+					        }
+					        window.location.href = that.authorization.authorizeUri + '?client_id=' + msg.client_id + '&redirect_uri=' + msg.redirect_uri + '&response_type=code&scope=read&state=' + msg.state
+                }
+              })
 			        break
 			    }
 			  }

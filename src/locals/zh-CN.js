@@ -11,6 +11,8 @@ export default {
     home: '首页',
     list: '消息列表',
     title: '消息列表',
-    listDetail: '消息详情'
+    listDetail: '消息详情',
+    systemInfo: '系统消息',
+    systemInfoContent: '您的token已失效，请尝试重新登录！'
   }
 }
