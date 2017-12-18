@@ -1,3 +1,8 @@
+/**
+ * 生成随机数的功能函数
+ * @param {number} len 
+ * @param {number} radix
+ */
 export function uuid (len, radix) {
   let chars = '0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz'.split('')
   let uuid = []
@@ -18,7 +23,10 @@ export function uuid (len, radix) {
   }
   return uuid.join('')
 }
-
+/**
+ * 获取url内的参数
+ * @param {String} name 
+ */
 export function getQuery (name) {
   let result = window.location.search.match(new RegExp('[\?\&]' + name + '=([^\&]+)', 'i'))
   if (result == null || result.length < 1) {
@@ -38,7 +46,7 @@ export function getQuery (name) {
  */
 export function transData (original, idField, pidField, childrenField) {
   if (original && original.length) {
-    /* 做升序处理 */
+    /* 做升序处理 Array.sort()*/
     original.sort((a, b) => {
       return a[idField] - b[idField]
     })

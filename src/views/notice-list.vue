@@ -22,7 +22,7 @@
                 <i class="tips-top" v-if="parseInt(item.topFlag) === 1">{{$t('frame.top')}}</i>
             </div>
             <div class="n-l-content">
-                <p class="text-right n-l-time">{{item.bulletinPublisher}} <em>{{item.createTime | format}}</em></p>
+                <p class="text-right n-l-time">{{item.bulletinPublisher}} <em>{{item.createTimeString}}</em></p>
             </div>
         </div>
     </div>

@@ -20,6 +20,7 @@ export function beforeEach (to, from, next, authorization, requestInstance, cb) 
       if (code && state) {
         /**
          *  这里需要去请求token的值,并设置sessiion-time
+         *  oauth2
          */
         // cb(code, state, next, localStorage, uuid(6, 16))
         requestInstance.post(authorization.tokenUri + '?code=' + code + '&state=' + state +
