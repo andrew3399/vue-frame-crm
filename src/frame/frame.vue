@@ -472,8 +472,13 @@
 			openOrClose () {
 				this.isOpen = !this.isOpen
 				this.isOpenOnMinWin = false
-				if (this.clientWidth >= 1200 && !this.isOpen) {
-					this.openPosition = 'right'
+				// if (this.clientWidth >= 1200 && !this.isOpen) {
+				// 	this.openPosition = 'right'
+				// } else {
+				// 	this.openPosition = 'down'
+				// }
+				if (this.clientWidth >= 1200) {
+					this.openPosition = this.openPosition === 'down' ? 'right' : 'down'
 				} else {
 					this.openPosition = 'down'
 				}
