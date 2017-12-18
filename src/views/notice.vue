@@ -16,7 +16,7 @@
 		<p class="text-center">{{bullet.bulletinTitle}}</p>
 		<div class="text-left text-in" v-html="bullet.bulletinContent"></div>
 		<p class="text-right">{{bullet.bulletinPublisher}}</p>
-		<p class="text-right">{{bullet.createTime | format}}</p>
+		<p class="text-right">{{bullet.createTimeString}}</p>
   </div>
 	<div class="enquiries mt-10" v-if="bullet.files">
 		<!-- 标题 star-->
