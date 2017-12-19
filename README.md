@@ -6,6 +6,13 @@
 
 > npm install vue-frame-crm --save || npm install vue-frame-crm@xxx --save
 
+#### 编译和发布
+1. npm run build 进行编译和打包
+2. 切换到当前项目目录
+3. npm login
+4. 修改package.json的版本号
+5. npm publish
+
 #### Useage
 
 - frame component install
@@ -194,3 +201,4 @@ router.beforeEach((to, from, next) => {
     route.beforeEach(to, from, next, authorization, http.$cmi)
 })
 ```
+

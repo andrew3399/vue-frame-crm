@@ -208,6 +208,7 @@
 	import * as Constant from '../store/constant.js'
 	import { mapMutations } from 'vuex'
 	import { Base64 } from 'js-base64'
+	import QueryString from 'query-string'
 	// import EventHub from '../eventHub'
 	// let sessionStorage = new SessionStorage ()
 	let localStorage = new LocalStorage()
@@ -597,6 +598,12 @@
 			if (path && !routeArr.includes(decodeURIComponent(path))) {
 				localStorage.set('aid-path', decodeURIComponent(path))
 			}
+
+			/**
+			 * 获取所有URL query 并存储
+			 */
+			const parsed = QueryString.parse(window.location.search)
+			localStorage.set('query-key', JSON.stringify(parsed))
 			/**
 			 * 用于监测用户点击和输入行为
 			 */
@@ -643,9 +650,12 @@
 					this.queryActiveMenu = queryName.name
 					this.queryOpenName = queryName.names
 					let routeArr2 = ['/res', '/cust', '/order', '/acct', '/']
+					let querys = localStorage.get('query-key')
 					if (route && !routeArr2.includes(decodeURIComponent(path))) {
-						this.$router.push({ path: decodeURIComponent(route) })
+						let query = JSON.parse(querys)
+						this.$router.push({ path: decodeURIComponent(route), query: query })
 						localStorage.remove('aid-path')
+						localStorage.remove('query-key')
 					}
 				})
 				/**
