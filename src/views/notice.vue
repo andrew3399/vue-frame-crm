@@ -95,6 +95,7 @@
 					}
 				}).then(res => {
 					this.bullet = res.data
+					this.bullet.bulletinContent = res.data.bulletinContent.replace(/[^\\]?\\n/g, '')
 				}).catch(res => {
 					this.$Message.warning(this.$t('frame.warning'))
 				})
