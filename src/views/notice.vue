@@ -46,6 +46,7 @@
 	export default {
 		data () {
 			return {
+				// bulletinContent:'',
 				bullet: {}
 			}
 		},
@@ -88,6 +89,7 @@
     },
 		methods: {
 			getBulletinById () {
+				debugger
 				let bulletinId = this.$route.params.bulletinId || getQuery('bulletinId')
 				this.instance.get(this.authorization.bulletinByIdUri, {
 					params: {
