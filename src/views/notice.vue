@@ -46,6 +46,7 @@
 	export default {
 		data () {
 			return {
+				// bulletinContent:'',
 				bullet: {}
 			}
 		},
@@ -88,6 +89,7 @@
     },
 		methods: {
 			getBulletinById () {
+				debugger
 				let bulletinId = this.$route.params.bulletinId || getQuery('bulletinId')
 				this.instance.get(this.authorization.bulletinByIdUri, {
 					params: {
@@ -95,10 +97,14 @@
 					}
 				}).then(res => {
 					this.bullet = res.data
+					// this.bulletinContent = res.data.bulletinContent.replace(/[\r\n]/g, "")
+					// console.log(this.bulletinContent)
 				}).catch(res => {
 					this.$Message.warning(this.$t('frame.warning'))
 				})
-			}
+			},
+			// let vHtml = document.getElementById(vHtml)
+			
 		},
 		mounted () {
 			/**

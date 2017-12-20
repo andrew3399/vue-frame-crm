@@ -532,17 +532,18 @@
 			},
 			/* 切换语言 */
 			handleChangeLang () {
+			    debugger
 				if (this.lang === 'EN') {
-					this.lang = 'CN'
+					this.lang = '中'
 					localStorage.set('aid-language', 'en-US')
 					this.$i18n.locale = 'en-US'
-				} else if (this.lang === 'CN') {
+				} else if (this.lang === '中') {
 					this.lang = 'EN'
 					localStorage.set('aid-language', 'zh-CN')
 					this.$i18n.locale = 'zh-CN'
 				}
 				this.instance.post(this.authorization.changeLangUri, {
-					language: this.lang === 'CN' ? 'en' : 'zh'
+					language: this.lang === '中' ? 'en' : 'zh'
 				}).then(res => {
 					window.location.reload()
 				}).catch(res => {
@@ -623,12 +624,12 @@
 
   		// 获取login处设置的语言
   		let fetchLang = await this.instance.get(this.authorization.langUri)
-  		if (fetchLang.data === 'zh') {
+  		if (fetchLang.data === '中') {
 				this.lang = 'EN'
 				localStorage.set('aid-language', 'zh-CN')
 				this.$i18n.locale = 'zh-CN'
 			} else if (fetchLang.data === 'en') {
-				this.lang = 'CN'
+				this.lang = '中'
 				localStorage.set('aid-language', 'en-US')
 				this.$i18n.locale = 'en-US'
 			}
