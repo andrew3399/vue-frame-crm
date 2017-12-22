@@ -6,12 +6,12 @@
 				<slot name="frame-header">
 					<span v-if="logoRouter">
 						<router-link :to="logoRouter">
-			        <img :src="img" alt="" class="layout-logo-img"/>
-			        <img :src="imgMin" alt="" class="layout-logo-min-img"/>
-		        </router-link>
+							<img :src="img" alt="" class="layout-logo-img"/>
+							<img :src="imgMin" alt="" class="layout-logo-min-img"/>
+						</router-link>
 					</span>
 					<span v-else>
-	        	<img :src="img" alt="" class="layout-logo-img"/>
+						<img :src="img" alt="" class="layout-logo-img"/>
 						<img :src="imgMin" alt="" class="layout-logo-min-img"/>
 					</span>
 				</slot>
@@ -108,9 +108,16 @@
     	<div class="layout-nav navbar navbar-expand-lg bg-white align-items-center layout-nav--top">
 				<div class="row nav-row">
 					<div class="col col-6 nav-col">
+						
+						
 						<a href="javascript:;" class="d-xm-block thumb-icon" v-show="!showMenu">
-		      		<t-icon type="menu" class="text-xxl text-black" @click.native="openOrClose"></t-icon>
-		      	</a>
+							<div :class="['layout-logo-min-min',{'span-hide': isOpen === false}]">
+								<span>
+									<img :src="imgMin" alt="" class="layout-logo-min-img"/>
+								</span>
+							</div>
+							<t-icon type="menu" class="text-xxl text-black" @click.native="openOrClose"></t-icon>
+						</a>
 				  	<slot name="frame-nav-left"></slot>
 					</div>
 					<div class="col col-6 nav-col nav-col--right">
@@ -473,6 +480,7 @@
 			openOrClose () {
 				this.isOpen = !this.isOpen
 				this.isOpenOnMinWin = false
+
 				// if (this.clientWidth >= 1200 && !this.isOpen) {
 				// 	this.openPosition = 'right'
 				// } else {
