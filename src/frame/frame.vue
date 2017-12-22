@@ -33,7 +33,7 @@
 							<template v-for="(item1, x) in treeData">
 								<t-submenu :name="item1.menuName" v-if="item1.children && item1.children.length">
 									<template slot="title">
-										<t-icon :type="item1.iconType" v-if="item1.iconType"></t-icon>
+										<t-icon :type="item1.menuIcon" v-if="item1.menuIcon"></t-icon>
 										<t-avatar size="sm" bg-state="success" :text="item1.rightTag" :dot="false" v-else></t-avatar>
 						        <router-link :to="{ path: item1.menuUrl }" v-if="item1.rightTag === tag && item1.menuUrl">
 				            	<span class="sub-text" :title="item1.menuName">{{item1.menuName}}</span>
@@ -89,7 +89,7 @@
 									</template>
 								</t-submenu>
 								<t-menu-item :name="item1.menuName" v-else>
-									<t-icon :type="item1.iconType" v-if="item1.iconType"></t-icon>
+									<t-icon :type="item1.menuIcon" v-if="item1.menuIcon"></t-icon>
 									<t-avatar size="sm" bg-state="success" :text="item1.rightTag" :dot="false" v-else></t-avatar>
 					        <router-link :to="{ path: item1.menuUrl }" v-if="item1.rightTag === tag && item1.menuUrl">
 			            	<span class="sub-text" :title="item1.menuName">{{item1.menuName}}</span>
@@ -282,7 +282,7 @@
 			/**
 			 * 渲染menu菜单
 			 * {
-			 * 	iconType, 一级菜单的右侧icon的type，对应的是aidesign的图标库
+			 * 	menuIcon, 一级菜单的右侧icon的type，对应的是aidesign的图标库
 			 * 	name, 当前菜单的名称
 			 * 	path, 路由的path对象
 			 * 	link  非本项目的链接

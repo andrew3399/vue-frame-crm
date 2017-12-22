@@ -7,11 +7,12 @@ import { getQuery, uuid } from '../utils/utils.js'
 // import { TModal } from 'aid-taurus-desktop'
 
 let localStorage = new LocalStorage()
+let c =   'aaaa'
 
 /***
   sessionTime 设置来实现单点登录设置
   1. 设置sessionTime的localStorage
-  2. 设置全局的带有截流的click事件
+  2. 设置全局的带有截流的click事件∏
   3. 如果sessionTime存在时，且accesstoken 不存在，需要重新取token，然后更新token
   4. 重新获取token 可在用户操作中直接请求
   4. 如果sessionTime不存在，重新登录
