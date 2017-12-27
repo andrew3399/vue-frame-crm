@@ -7,7 +7,6 @@ import { getQuery, uuid } from '../utils/utils.js'
 // import { TModal } from 'aid-taurus-desktop'
 
 let localStorage = new LocalStorage()
-let c =   'aaaa'
 
 /***
   sessionTime 设置来实现单点登录设置

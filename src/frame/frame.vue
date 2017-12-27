@@ -6,12 +6,12 @@
 				<slot name="frame-header">
 					<span v-if="logoRouter">
 						<router-link :to="logoRouter">
-							<img :src="img" alt="" class="layout-logo-img"/>
-							<img :src="imgMin" alt="" class="layout-logo-min-img"/>
-						</router-link>
+			        <img :src="img" alt="" class="layout-logo-img"/>
+			        <img :src="imgMin" alt="" class="layout-logo-min-img"/>
+		        </router-link>
 					</span>
 					<span v-else>
-						<img :src="img" alt="" class="layout-logo-img"/>
+	        	<img :src="img" alt="" class="layout-logo-img"/>
 						<img :src="imgMin" alt="" class="layout-logo-min-img"/>
 					</span>
 				</slot>
@@ -30,77 +30,77 @@
             :class="[{'menu--folded': isOpen === false && clientWidth > 1200}]"
             @on-select="hdMenuClick"
             ref="sidebarMenu">
-						<template v-for="(item1, x) in treeData">
-							<t-submenu :name="item1.menuName" v-if="item1.children && item1.children.length">
-								<template slot="title">
+							<template v-for="(item1, x) in treeData">
+								<t-submenu :name="item1.menuName" v-if="item1.children && item1.children.length">
+									<template slot="title">
+										<t-icon :type="item1.menuIcon" v-if="item1.menuIcon"></t-icon>
+										<t-avatar size="sm" bg-state="success" :text="item1.rightTag" :dot="false" v-else></t-avatar>
+						        <router-link :to="{ path: item1.menuUrl }" v-if="item1.rightTag === tag && item1.menuUrl">
+				            	<span class="sub-text" :title="item1.menuName">{{item1.menuName}}</span>
+						        </router-link>
+						        <a href="javascript:;" @click="handleOtherRegin(item1.systemUrl + item1.menuUrl)" target="_self" v-else-if="item1.systemUrl && item1.menuUrl && item1.rightTag !== tag">
+						        	<span class="sub-text" :title="item1.menuName">{{item1.menuName}}</span>
+						        </a>
+						        <span class="sub-text" :title="item1.menuName" v-else>{{item1.menuName}}</span>
+				          </template>
+									<template v-for="(item2, y) in item1.children">
+										<t-submenu v-if="item2.children && item2.children.length" :name="item2.menuName" class="second-submenu">
+											<template slot="title">
+					            	<router-link :to="{ path: item2.menuUrl}" v-if="item2.rightTag === tag && item2.menuUrl">
+						            	<span class="sub-text" :title="item2.menuName">{{item2.menuName}}</span>
+								        </router-link>
+								        <a href="javascript:;" @click="handleOtherRegin(item2.systemUrl + item2.menuUrl)" target="_self" v-else-if="item2.systemUrl && item2.menuUrl && item2.rightTag !== tag">
+								        	<span class="sub-text" :title="item2.menuName">{{item2.menuName}}</span>
+								        </a>
+								        <span class="sub-text" :title="item2.menuName" v-else>{{item2.menuName}}</span>
+					            </template>
+					            <template v-for="(item3, z) in item2.children">
+					            	<t-submenu v-if="item3.children && item3.children.length" :name="item3.menuName" :id="x + '' +y" class="second-submenu">
+					            		<t-menu-item v-for="(item4, w) in item3.children" :name="item4.menuName" :key="w" @click.native="getMenu(item4)" class="sec-item">
+							            	<router-link :to="{ path: item4.menuUrl }" v-if="item4.rightTag === tag && item4.menuUrl">
+								            	<span class="sub-text" :title="item4.menuName">{{item4.menuName}}</span>
+										        </router-link>
+										        <a href="javascript:;" @click="handleOtherRegin(item4.systemUrl + item4.menuUrl)" target="_self" v-else-if="item4.systemUrl && item4.menuUrl && item4.rightTag !== tag">
+										        	<span class="sub-text" :title="item4.menuName">{{item4.menuName}}</span>
+										        </a>
+										        <span class="sub-text" :title="item4.menuName" v-else>{{item4.menuName}}</span>
+							            </t-menu-item>
+					            	</t-submenu>
+						            <t-menu-item :name="item3.menuName" :key="z" @click.native="getMenu(item3)" class="sec-item" v-else>
+						            	<router-link :to="{ path: item3.menuUrl }" v-if="item3.rightTag === tag && item3.menuUrl">
+							            	<span class="sub-text" :title="item3.menuName">{{item3.menuName}}</span>
+									        </router-link>
+									        <a href="javascript:;" @click="handleOtherRegin(item3.systemUrl + item3.menuUrl)" target="_self" v-else-if="item3.systemUrl && item3.menuUrl && item3.rightTag !== tag">
+									        	<span class="sub-text" :title="item3.menuName">{{item3.menuName}}</span>
+									        </a>
+									        <span class="sub-text" :title="item3.menuName" v-else>{{item3.menuName}}</span>
+						            </t-menu-item>
+					            </template>
+										</t-submenu>
+										<t-menu-item :name="item2.menuName" v-else>
+											<router-link :to="{ path: item2.menuUrl }" v-if="item2.rightTag === tag && item2.menuUrl">
+					            	<span class="sub-text" :title="item2.menuName">{{item2.menuName}}</span>
+							        </router-link>
+							        <a href="javascript:;" @click="handleOtherRegin(item2.systemUrl + item2.menuUrl)" target="_self" v-else-if="item2.systemUrl && item2.menuUrl && item2.rightTag !== tag">
+							        	<span class="sub-text" :title="item2.menuName">{{item2.menuName}}</span>
+							        </a>
+							        <span class="sub-text" :title="item2.menuName" v-else>{{item2.menuName}}</span>
+										</t-menu-item>
+									</template>
+								</t-submenu>
+								<t-menu-item :name="item1.menuName" v-else>
 									<t-icon :type="item1.menuIcon" v-if="item1.menuIcon"></t-icon>
 									<t-avatar size="sm" bg-state="success" :text="item1.rightTag" :dot="false" v-else></t-avatar>
-										<router-link :to="{ path: item1.menuUrl }" v-if="item1.rightTag === tag && item1.menuUrl">
-										<span class="sub-text" :title="item1.menuName">{{item1.menuName}}</span>
-										</router-link>
-										<a href="javascript:;" @click="handleOtherRegin(item1.systemUrl + item1.menuUrl)" target="_self" v-else-if="item1.systemUrl && item1.menuUrl && item1.rightTag !== tag">
-											<span class="sub-text" :title="item1.menuName">{{item1.menuName}}</span>
-										</a>
-										<span class="sub-text" :title="item1.menuName" v-else>{{item1.menuName}}</span>
-								</template>
-								<template v-for="(item2, y) in item1.children">
-									<t-submenu v-if="item2.children && item2.children.length" :name="item2.menuName" class="second-submenu">
-										<template slot="title">
-											<router-link :to="{ path: item2.menuUrl}" v-if="item2.rightTag === tag && item2.menuUrl">
-												<span class="sub-text" :title="item2.menuName">{{item2.menuName}}</span>
-												</router-link>
-												<a href="javascript:;" @click="handleOtherRegin(item2.systemUrl + item2.menuUrl)" target="_self" v-else-if="item2.systemUrl && item2.menuUrl && item2.rightTag !== tag">
-													<span class="sub-text" :title="item2.menuName">{{item2.menuName}}</span>
-												</a>
-												<span class="sub-text" :title="item2.menuName" v-else>{{item2.menuName}}</span>
-										</template>
-										<template v-for="(item3, z) in item2.children">
-											<t-submenu v-if="item3.children && item3.children.length" :name="item3.menuName" :id="x + '' +y" class="second-submenu">
-												<t-menu-item v-for="(item4, w) in item3.children" :name="item4.menuName" :key="w" @click.native="getMenu(item4)" class="sec-item">
-													<router-link :to="{ path: item4.menuUrl }" v-if="item4.rightTag === tag && item4.menuUrl">
-														<span class="sub-text" :title="item4.menuName">{{item4.menuName}}</span>
-														</router-link>
-														<a href="javascript:;" @click="handleOtherRegin(item4.systemUrl + item4.menuUrl)" target="_self" v-else-if="item4.systemUrl && item4.menuUrl && item4.rightTag !== tag">
-															<span class="sub-text" :title="item4.menuName">{{item4.menuName}}</span>
-														</a>
-														<span class="sub-text" :title="item4.menuName" v-else>{{item4.menuName}}</span>
-												</t-menu-item>
-											</t-submenu>
-											<t-menu-item :name="item3.menuName" :key="z" @click.native="getMenu(item3)" class="sec-item" v-else>
-												<router-link :to="{ path: item3.menuUrl }" v-if="item3.rightTag === tag && item3.menuUrl">
-													<span class="sub-text" :title="item3.menuName">{{item3.menuName}}</span>
-													</router-link>
-													<a href="javascript:;" @click="handleOtherRegin(item3.systemUrl + item3.menuUrl)" target="_self" v-else-if="item3.systemUrl && item3.menuUrl && item3.rightTag !== tag">
-														<span class="sub-text" :title="item3.menuName">{{item3.menuName}}</span>
-													</a>
-													<span class="sub-text" :title="item3.menuName" v-else>{{item3.menuName}}</span>
-											</t-menu-item>
-										</template>
-									</t-submenu>
-									<t-menu-item :name="item2.menuName" v-else>
-										<router-link :to="{ path: item2.menuUrl }" v-if="item2.rightTag === tag && item2.menuUrl">
-								<span class="sub-text" :title="item2.menuName">{{item2.menuName}}</span>
-								</router-link>
-								<a href="javascript:;" @click="handleOtherRegin(item2.systemUrl + item2.menuUrl)" target="_self" v-else-if="item2.systemUrl && item2.menuUrl && item2.rightTag !== tag">
-									<span class="sub-text" :title="item2.menuName">{{item2.menuName}}</span>
-								</a>
-								<span class="sub-text" :title="item2.menuName" v-else>{{item2.menuName}}</span>
-									</t-menu-item>
-								</template>
-							</t-submenu>
-							<t-menu-item :name="item1.menuName" v-else>
-								<t-icon :type="item1.menuIcon" v-if="item1.menuIcon"></t-icon>
-								<t-avatar size="sm" bg-state="success" :text="item1.rightTag" :dot="false" v-else></t-avatar>
-								<router-link :to="{ path: item1.menuUrl }" v-if="item1.rightTag === tag && item1.menuUrl">
-								<span class="sub-text" :title="item1.menuName">{{item1.menuName}}</span>
-								</router-link>
-								<a href="javascript:;" @click="handleOtherRegin(item1.systemUrl + item1.menuUrl)" target="_self" v-else-if="item1.systemUrl && item1.menuUrl && item1.rightTag !== tag">
-									<span class="sub-text" :title="item1.menuName">{{item1.menuName}}</span>
-								</a>
-								<span class="sub-text" :title="item1.menuName" v-else>{{item1.menuName}}</span>
-							</t-menu-item>
-						</template>
-			    	</t-menu>
+					        <router-link :to="{ path: item1.menuUrl }" v-if="item1.rightTag === tag && item1.menuUrl">
+			            	<span class="sub-text" :title="item1.menuName">{{item1.menuName}}</span>
+					        </router-link>
+					        <a href="javascript:;" @click="handleOtherRegin(item1.systemUrl + item1.menuUrl)" target="_self" v-else-if="item1.systemUrl && item1.menuUrl && item1.rightTag !== tag">
+					        	<span class="sub-text" :title="item1.menuName">{{item1.menuName}}</span>
+					        </a>
+					        <span class="sub-text" :title="item1.menuName" v-else>{{item1.menuName}}</span>
+								</t-menu-item>
+							</template>
+			    </t-menu>
 				</slot>
 			</div>
     </div>
@@ -108,16 +108,9 @@
     	<div class="layout-nav navbar navbar-expand-lg bg-white align-items-center layout-nav--top">
 				<div class="row nav-row">
 					<div class="col col-6 nav-col">
-						
-						
 						<a href="javascript:;" class="d-xm-block thumb-icon" v-show="!showMenu">
-							<div :class="['layout-logo-min-min',{'span-hide': isOpen === false}]">
-								<span>
-									<img :src="imgMin" alt="" class="layout-logo-min-img"/>
-								</span>
-							</div>
-							<t-icon type="menu" class="text-xxl text-black" @click.native="openOrClose"></t-icon>
-						</a>
+		      		<t-icon type="menu" class="text-xxl text-black" @click.native="openOrClose"></t-icon>
+		      	</a>
 				  	<slot name="frame-nav-left"></slot>
 					</div>
 					<div class="col col-6 nav-col nav-col--right">
@@ -480,7 +473,6 @@
 			openOrClose () {
 				this.isOpen = !this.isOpen
 				this.isOpenOnMinWin = false
-
 				// if (this.clientWidth >= 1200 && !this.isOpen) {
 				// 	this.openPosition = 'right'
 				// } else {
