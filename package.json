@@ -27,8 +27,8 @@
   },
   "homepage": "https://github.com/HongYangHT/vue-frame-crm#readme",
   "dependencies": {
-    "aid-elements": "^0.7.56",
-    "aid-taurus-desktop": "^0.8.30",
+    "aid-elements": "latest",
+    "aid-taurus-desktop": "latest",
     "js-base64": "^2.3.2",
     "lodash.throttle": "^4.1.1",
     "query-string": "^5.0.1",

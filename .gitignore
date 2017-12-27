@@ -1,8 +1,8 @@
 node_modules/
-dist
+lib
 .vscode
 .idea
 .DS_Store
-dist/
+lib/
 npm-debug.log
 test/coverage
