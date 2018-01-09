@@ -431,6 +431,17 @@
 		        .then(res => {
 		          localStorage.set('access_token', res.data.access_token, res.data.expires_in * 1000)
 		          localStorage.set('refresh_token', res.data.refresh_token, Math.pow(2, 32))
+		        }).catch(res => {
+		        	if (res) {
+						    switch (res.status) {
+						      /**
+						      * 判断相关的错误，例如判断 token 失效， 或者没有登录的情况
+						      */
+						      case 401:
+						      	that.getTokenAgian()
+						      	break
+						    }
+						  }
 		        })
 					}
 				} else {
