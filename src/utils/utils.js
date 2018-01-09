@@ -1,6 +1,6 @@
 /**
  * 生成随机数的功能函数
- * @param {number} len 
+ * @param {number} len
  * @param {number} radix
  */
 export function uuid (len, radix) {
@@ -25,7 +25,7 @@ export function uuid (len, radix) {
 }
 /**
  * 获取url内的参数
- * @param {String} name 
+ * @param {String} name
  */
 export function getQuery (name) {
   let result = window.location.search.match(new RegExp('[\?\&]' + name + '=([^\&]+)', 'i'))
@@ -44,9 +44,9 @@ export function getQuery (name) {
  * @param   {String}    children的字符串
  * @return  {Array}     数组
  */
-export function transData (original, idField, pidField, childrenField) {
+export function transData (original, idField, pidField, childrenField, orderField) {
   if (original && original.length) {
-    /* 做升序处理 Array.sort()*/
+    /* 做升序处理 Array.sort() */
     original.sort((a, b) => {
       return a[idField] - b[idField]
     })
@@ -58,6 +58,7 @@ export function transData (original, idField, pidField, childrenField) {
   const id = idField
   const pid = pidField
   const children = childrenField
+  const menuOrder = orderField
   let i = 0
   let j = 0
   let len = original.length
@@ -75,13 +76,16 @@ export function transData (original, idField, pidField, childrenField) {
     if (hashVP) {
       !hashVP[children] && (hashVP[children] = [])
       hashVP[children].push(aVal)
+      hashVP[children].sort((a, b) => {
+        return a[menuOrder] - b[menuOrder]
+      })
     } else {
       result.push(aVal)
     }
   }
   /* 做升序处理 */
   result.sort((a, b) => {
-    return a[idField] - b[idField]
+    return a[menuOrder] - b[menuOrder]
   })
   return result
 }

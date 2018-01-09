@@ -9,7 +9,7 @@ export function beforeEach (to, from, next, authorization, requestInstance, cb) 
   let localStorage = new LocalStorage()
   let accessToken = localStorage.get('access_token')
   let refreshToken = localStorage.get('refresh_token')
-  let sessionTime = localStorage.get('session-time')
+  let sessionTime = localStorage.get('session_time')
   // 路由拦截 根据路由配置中meta.requireAuth判断是否需要登录
   if (to.meta.requireAuth) {
     if (accessToken && refreshToken) {
@@ -29,7 +29,7 @@ export function beforeEach (to, from, next, authorization, requestInstance, cb) 
           let time = new Date().getTime() + 30 * 60 * 1000
           localStorage.set('access_token', res.data.access_token, res.data.expires_in * 1000)
           localStorage.set('refresh_token', res.data.refresh_token, Math.pow(2, 32))
-          localStorage.set('session-time', time, 30 * 60 * 1000)
+          localStorage.set('session_time', time, 30 * 60 * 1000)
           next()
         }).catch(res => {
           let msg = {

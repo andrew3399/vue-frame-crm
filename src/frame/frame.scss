@@ -144,6 +144,10 @@
     }
 }
 
+.layout-sidebar .menu--vertical:after {
+    width: 0;
+}
+
 .layout-logo-left {
     position: relative;
     display: flex;

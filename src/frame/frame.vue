@@ -411,7 +411,7 @@
 				 */
 				let accessToken = localStorage.get('access_token')
 				let refreshToken = localStorage.get('refresh_token')
-				let sessionTime = localStorage.get('session-time')
+				let sessionTime = localStorage.get('session_time')
 				let currentTime = new Date().getTime()
 				/**
 				 * sessionTime 存在,需要重新设置sessiontime的过期时间
@@ -419,8 +419,9 @@
 				if (sessionTime) {
 					let time = new Date().getTime() + 30 * 60 * 1000
 					throttle(() => {
-						localStorage.set('session-time', time, 30 * 60 * 1000)
+						localStorage.set('session_time', time, 30 * 60 * 1000)
 					}, 5 * 1000, {leading: false, trailing: true})()
+
 					/**
 					 * accessToken 不存在，需要根据refreshToken，获取并设置accessToken、refreshToken
 					 */
@@ -464,7 +465,7 @@
 			logoutAndRemoveSession () {
 					localStorage.remove('access_token')
 					localStorage.remove('refresh_token')
-					localStorage.remove('session-time')
+					localStorage.remove('session_time')
 					window.location.href = this.authorization.logout_uri
 			},
 			closeMenuOnMinWin () {
@@ -532,7 +533,6 @@
 			},
 			/* 切换语言 */
 			handleChangeLang () {
-			    debugger
 				if (this.lang === 'EN') {
 					this.lang = '中'
 					localStorage.set('aid-language', 'en-US')
@@ -586,6 +586,129 @@
 				let path = alink.pathname.replace(/^([^\/])/,'/$1')
 				// localStorage.set('aid-path', path)
 				window.location.href = url + '?path=' + path
+			},
+			/* 用于处理401重新再发请求 */
+			// 重新获取 token
+			// 获取menu后重新如果返回401
+			getTokenAgian (cb) {
+				let that = this
+				let refreshToken = localStorage.get('refresh_token')
+				this.instance.post(this.authorization.tokenUri +
+          '?grant_type=refresh_token' + '&refresh_token=' + encodeURIComponent(refreshToken) + '&scope=read')
+        .then(res => {
+          localStorage.set('access_token', res.data.access_token, res.data.expires_in * 1000)
+          localStorage.set('refresh_token', res.data.refresh_token, Math.pow(2, 32))
+          cb && cb()
+        })
+			},
+			// 获取menu数据
+			getMenuCb () {
+				this.instance.get(this.authorization.menuUri,
+					{
+						params: {
+							language: this.lang
+						}
+					}).then(res => {
+					this.menu = transData(res.data, 'menuId', 'menuPid', 'children', 'menuOrder')
+					/**
+					 * 设置自动展开
+					 */
+					this.$nextTick(() => {
+						let route = localStorage.get('aid-path') || this.$route.path || getQuery('path') || '/'
+						let queryName = getQueryData(res.data, 'menuId', 'menuPid', decodeURIComponent(route), 'menuName')
+						this.queryActiveMenu = queryName.name
+						this.queryOpenName = queryName.names
+						let routeArr2 = ['/res', '/cust', '/order', '/acct', '/']
+						let querys = localStorage.get('query-key')
+						if (route && !routeArr2.includes(decodeURIComponent(path))) {
+							let query = JSON.parse(querys)
+							this.$router.push({ path: decodeURIComponent(route), query: query })
+							localStorage.remove('aid-path')
+							localStorage.remove('query-key')
+						}
+					})
+					/**
+					 * 先找出这一条数据，并将其 menuName 组成一个数组
+					 */
+				}).catch(res => {
+					/**
+					 * 处理相关错误的问题
+					 */
+					if (res) {
+				    switch (res.status) {
+				      /**
+				      * 判断相关的错误，例如判断 token 失效， 或者没有登录的情况
+				      */
+				      case 401:
+				      	/**
+				      	 * 增加错误判断，避免无限刷新
+				      	 */
+				      	// let invalidCount = localStorage.get('token-invalid')
+				      	// localStorage.set('token-invalid', parseInt(invalidCount) + 1)
+				      	let that = this
+					      let title = this.$t('frame.systemInfo')
+					      let content = this.$t('frame.systemInfoContent')
+					      this.$Modal.warning({
+	                title: title,
+	                content: content,
+	                onOk: () => {
+						      	let accessToken = localStorage.get('access_token')
+							  		let refreshToken = localStorage.get('refresh_token')
+							  		if (!accessToken || !refreshToken) return
+						        let msg = {
+						          client_id: that.authorization.client_id,
+						          redirect_uri: encodeURIComponent(that.authorization.redirect_uri),
+						          state: uuid(6, 16)
+						        }
+						        window.location.href = that.authorization.authorizeUri + '?client_id=' + msg.client_id + '&redirect_uri=' + msg.redirect_uri + '&response_type=code&scope=read&state=' + msg.state
+	                }
+	              })
+				        break
+				    }
+				  }
+				})
+			},
+			getbulletinListCb () {
+				this.instance.get(this.authorization.bulletinListUri,
+					{
+						params: {
+							pageNo: 1,
+							pageSize: 10
+						}
+					}).then(res => {
+					this.notices = res.data.result
+				}).catch(res => {
+					/**
+					 * 处理相关错误的问题
+					 */
+					if (res) {
+				    switch (res.status) {
+				      /**
+				      * 判断相关的错误，例如判断 token 失效， 或者没有登录的情况
+				      */
+				      case 401:
+				      	let that = this
+					      let title = this.$t('frame.systemInfo')
+					      let content = this.$t('frame.systemInfoContent')
+					      this.$Modal.warning({
+	                title: title,
+	                content: content,
+	                onOk: () => {
+						      	let accessToken = localStorage.get('access_token')
+							  		let refreshToken = localStorage.get('refresh_token')
+							  		if (!accessToken || !refreshToken) return
+						        let msg = {
+						          client_id: that.authorization.client_id,
+						          redirect_uri: encodeURIComponent(that.authorization.redirect_uri),
+						          state: uuid(6, 16)
+						        }
+						        window.location.href = that.authorization.authorizeUri + '?client_id=' + msg.client_id + '&redirect_uri=' + msg.redirect_uri + '&response_type=code&scope=read&state=' + msg.state
+	                }
+	              })
+				        break
+				    }
+				  }
+				})
 			},
 			...mapMutations([
 				'setInstance',
@@ -641,7 +764,7 @@
 						language: fetchLang.data
 					}
 				}).then(res => {
-				this.menu = transData(res.data, 'menuId', 'menuPid', 'children')
+				this.menu = transData(res.data, 'menuId', 'menuPid', 'children', 'menuOrder')
 				/**
 				 * 设置自动展开
 				 */
@@ -677,7 +800,7 @@
 			      	 */
 			      	// let invalidCount = localStorage.get('token-invalid')
 			      	// localStorage.set('token-invalid', parseInt(invalidCount) + 1)
-			      	let that = this
+			      	/* let that = this
 				      let title = this.$t('frame.systemInfo')
 				      let content = this.$t('frame.systemInfoContent')
 				      this.$Modal.warning({
@@ -694,7 +817,9 @@
 					        }
 					        window.location.href = that.authorization.authorizeUri + '?client_id=' + msg.client_id + '&redirect_uri=' + msg.redirect_uri + '&response_type=code&scope=read&state=' + msg.state
                 }
-              })
+              }) */
+              // 第一次请求主动获取token
+			      	that.getTokenAgian(that.getbulletinListCb)
 			        break
 			    }
 			  }
@@ -719,7 +844,7 @@
 			      * 判断相关的错误，例如判断 token 失效， 或者没有登录的情况
 			      */
 			      case 401:
-			      	let that = this
+			      	/* let that = this
 				      let title = this.$t('frame.systemInfo')
 				      let content = this.$t('frame.systemInfoContent')
 				      this.$Modal.warning({
@@ -736,7 +861,9 @@
 					        }
 					        window.location.href = that.authorization.authorizeUri + '?client_id=' + msg.client_id + '&redirect_uri=' + msg.redirect_uri + '&response_type=code&scope=read&state=' + msg.state
                 }
-              })
+              }) */
+              // 第一次请求主动获取token
+              that.getTokenAgian(that.getMenuCb)
 			        break
 			    }
 			  }
