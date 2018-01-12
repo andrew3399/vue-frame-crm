@@ -427,7 +427,11 @@
 					 */
 					if (!accessToken) {
 						that.instance.post(that.authorization.tokenUri +
-		          '?grant_type=refresh_token' + '&refresh_token=' + encodeURIComponent(refreshToken) + '&scope=read')
+		          '?grant_type=refresh_token' + '&refresh_token=' + encodeURIComponent(refreshToken) + '&scope=read', {
+            headers: {
+              Authorization: 'Basic ' + Base64.encode(that.authorization.client_id + ':' + that.authorization.clientSecret)
+            }
+          })
 		        .then(res => {
 		          localStorage.set('access_token', res.data.access_token, res.data.expires_in * 1000)
 		          localStorage.set('refresh_token', res.data.refresh_token, Math.pow(2, 32))
@@ -599,7 +603,11 @@
 				let that = this
 				let refreshToken = localStorage.get('refresh_token')
 				this.instance.post(this.authorization.tokenUri +
-          '?grant_type=refresh_token' + '&refresh_token=' + encodeURIComponent(refreshToken) + '&scope=read')
+          '?grant_type=refresh_token' + '&refresh_token=' + encodeURIComponent(refreshToken) + '&scope=read', {
+            headers: {
+              Authorization: 'Basic ' + Base64.encode(that.authorization.client_id + ':' + that.authorization.clientSecret)
+            }
+          })
         .then(res => {
           localStorage.set('access_token', res.data.access_token, res.data.expires_in * 1000)
           localStorage.set('refresh_token', res.data.refresh_token, Math.pow(2, 32))
