@@ -449,12 +449,6 @@
 					alink.href = window.location.href
 					let path = alink.pathname.replace(/^([^\/])/,'/$1')
 					localStorage.set('aid-path', decodeURIComponent(path))
-					// let msg = {
-		   //      client_id: that.authorization.client_id,
-		   //      redirect_uri: encodeURIComponent(window.location.href),
-		   //      state: uuid(6, 16)
-		   //    }
-		   //    window.location.href = that.authorization.authorizeUri + '?client_id=' + msg.client_id + '&redirect_uri=' + msg.redirect_uri + '&response_type=code&scope=read&state=' + msg.state
 					that.logoutAndRemoveSession()
 				}
 			},
