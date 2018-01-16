@@ -170,7 +170,7 @@
 	    		</div>
 	    		<div class="slipbox__body">
 	    			<slot name="slipbox-body">
-			    		<t-tabs>
+			    		<t-tabs v-model="tabs">
 					      <t-tab-panel :label="$t('frame.sysInform')" name="tab-1">
 					      	<div class="notice-wrap" v-for="(item, index) in notices" :class="{'notice-active': isActive === index}" @click="handleNoticeClick(index, item)">
 					      		<span class="nw-l"><t-tag state="info">info</t-tag></span>
@@ -342,7 +342,8 @@
         notices: [],
         queryActiveMenu: '',
         queryOpenName: [],
-        lang: 'EN'
+        lang: 'EN',
+        tabs: 'tab-1'
 			}
 		},
 		computed: {
@@ -427,17 +428,17 @@
 					 */
 					if (!accessToken) {
 						that.instance.post(that.authorization.tokenUri +
-		          '?grant_type=refresh_token' + '&refresh_token=' + encodeURIComponent(refreshToken) + '&scope=read', {
+		          '?grant_type=refresh_token' + '&refresh_token=' + encodeURIComponent(refreshToken) + '&scope=read', '', {
             headers: {
               Authorization: 'Basic ' + Base64.encode(that.authorization.client_id + ':' + that.authorization.clientSecret)
             }
           })
 		        .then(res => {
 		          localStorage.set('access_token', res.data.access_token, res.data.expires_in * 1000)
-		          localStorage.set('refresh_token', res.data.refresh_token, Math.pow(2, 32))
+		          // localStorage.set('refresh_token', res.data.refresh_token, Math.pow(2, 32))
 		        }).catch(res => {
-		        	if (res) {
-						    switch (res.status) {
+		        	if (res && res.response) {
+						    switch (res.response.status) {
 						      /**
 						      * 判断相关的错误，例如判断 token 失效， 或者没有登录的情况
 						      */
@@ -559,8 +560,8 @@
 					/**
 					 * 处理相关错误的问题
 					 */
-					if (res) {
-				    switch (res.status) {
+					if (res && res.response) {
+				    switch (res.response.status) {
 				      /**
 				     	 * 判断相关的错误，例如判断 token 失效， 或者没有登录的情况
 				       */
@@ -590,11 +591,37 @@
 			},
 			/* 跳出当前域，并将其 path 保存下来 */
 			handleOtherRegin (url) {
-				let alink = document.createElement('a')
-				alink.href = url
-				let path = alink.pathname.replace(/^([^\/])/,'/$1')
-				// localStorage.set('aid-path', path)
-				window.location.href = url + '?path=' + path
+				let accessToken = localStorage.get('access_token')
+				let that = this
+
+				if (!accessToken) {
+					that.instance.post(that.authorization.tokenUri +
+	          '?grant_type=refresh_token' + '&refresh_token=' + encodeURIComponent(refreshToken) + '&scope=read', '', {
+          headers: {
+            Authorization: 'Basic ' + Base64.encode(that.authorization.client_id + ':' + that.authorization.clientSecret)
+          }
+	        }).then(res => {
+	          localStorage.set('access_token', res.data.access_token, res.data.expires_in * 1000)
+	          // localStorage.set('refresh_token', res.data.refresh_token, Math.pow(2, 32))
+						let alink = document.createElement('a')
+						alink.href = url
+						let path = alink.pathname.replace(/^([^\/])/,'/$1')
+						// localStorage.set('aid-path', path)
+						window.location.href = url + '?path=' + path
+	        }).catch(res => {
+	        	let alink = document.createElement('a')
+						alink.href = url
+						let path = alink.pathname.replace(/^([^\/])/,'/$1')
+						// localStorage.set('aid-path', path)
+						window.location.href = url + '?path=' + path
+	        })
+				} else {
+					let alink = document.createElement('a')
+					alink.href = url
+					let path = alink.pathname.replace(/^([^\/])/,'/$1')
+					// localStorage.set('aid-path', path)
+					window.location.href = url + '?path=' + path
+				}
 			},
 			/* 用于处理401重新再发请求 */
 			// 重新获取 token
@@ -603,14 +630,14 @@
 				let that = this
 				let refreshToken = localStorage.get('refresh_token')
 				this.instance.post(this.authorization.tokenUri +
-          '?grant_type=refresh_token' + '&refresh_token=' + encodeURIComponent(refreshToken) + '&scope=read', {
+          '?grant_type=refresh_token' + '&refresh_token=' + encodeURIComponent(refreshToken) + '&scope=read', '', {
             headers: {
               Authorization: 'Basic ' + Base64.encode(that.authorization.client_id + ':' + that.authorization.clientSecret)
             }
           })
         .then(res => {
           localStorage.set('access_token', res.data.access_token, res.data.expires_in * 1000)
-          localStorage.set('refresh_token', res.data.refresh_token, Math.pow(2, 32))
+          // localStorage.set('refresh_token', res.data.refresh_token, Math.pow(2, 32))
           cb && cb()
         })
 			},
@@ -647,8 +674,8 @@
 					/**
 					 * 处理相关错误的问题
 					 */
-					if (res) {
-				    switch (res.status) {
+					if (res && res.response) {
+				    switch (res.response.status) {
 				      /**
 				      * 判断相关的错误，例如判断 token 失效， 或者没有登录的情况
 				      */
@@ -694,8 +721,8 @@
 					/**
 					 * 处理相关错误的问题
 					 */
-					if (res) {
-				    switch (res.status) {
+					if (res && res.response) {
+				    switch (res.response.status) {
 				      /**
 				      * 判断相关的错误，例如判断 token 失效， 或者没有登录的情况
 				      */
@@ -802,8 +829,8 @@
 				/**
 				 * 处理相关错误的问题
 				 */
-				if (res) {
-			    switch (res.status) {
+				if (res && res.response) {
+			    switch (res.response.status) {
 			      /**
 			      * 判断相关的错误，例如判断 token 失效， 或者没有登录的情况
 			      */
@@ -851,8 +878,8 @@
 				/**
 				 * 处理相关错误的问题
 				 */
-				if (res) {
-			    switch (res.status) {
+				if (res && res.response) {
+			    switch (res.response.status) {
 			      /**
 			      * 判断相关的错误，例如判断 token 失效， 或者没有登录的情况
 			      */

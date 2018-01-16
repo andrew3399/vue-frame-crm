@@ -49,20 +49,35 @@ export function beforeEach (to, from, next, authorization, requestInstance, cb) 
            * 如果生效，且accessToken 失效，
            * 需要重新获取accessToken
            */
-          requestInstance.post(authorization.tokenUri + '?grant_type=refresh_token' + '&refresh_token=' + refreshToken + '&scope=read', {
+          requestInstance.post(authorization.tokenUri + '?grant_type=refresh_token' + '&refresh_token=' + refreshToken + '&scope=read', '', {
             headers: {
               Authorization: 'Basic ' + Base64.encode(authorization.client_id + ':' + authorization.clientSecret)
             }
           }).then(res => {
             localStorage.set('access_token', res.data.access_token, res.data.expires_in * 1000)
-            localStorage.set('refresh_token', res.data.refresh_token, Math.pow(2, 32))
+            // localStorage.set('refresh_token', res.data.refresh_token, Math.pow(2, 32))
           }).catch(res => {
-            let msg = {
-              client_id: authorization.client_id,
-              redirect_uri: encodeURIComponent(authorization.redirect_uri),
-              state: uuid(6, 16)
+            if (res && res.response) {
+              switch (res.response.status) {
+                case 401:
+                  requestInstance.post(authorization.tokenUri + '?grant_type=refresh_token' + '&refresh_token=' + refreshToken + '&scope=read', '', {
+                    headers: {
+                      Authorization: 'Basic ' + Base64.encode(authorization.client_id + ':' + authorization.clientSecret)
+                    }
+                  }).then(res => {
+                    localStorage.set('access_token', res.data.access_token, res.data.expires_in * 1000)
+                    // localStorage.set('refresh_token', res.data.refresh_token, Math.pow(2, 32))
+                  }).catch(res => {
+                    let msg = {
+                      client_id: authorization.client_id,
+                      redirect_uri: encodeURIComponent(authorization.redirect_uri),
+                      state: uuid(6, 16)
+                    }
+                    window.location.href = authorization.authorizeUri + '?client_id=' + msg.client_id + '&redirect_uri=' + msg.redirect_uri + '&response_type=code&scope=read&state=' + msg.state
+                  })
+                  break
+              }
             }
-            window.location.href = authorization.authorizeUri + '?client_id=' + msg.client_id + '&redirect_uri=' + msg.redirect_uri + '&response_type=code&scope=read&state=' + msg.state
           })
         } else {
           let msg = {
