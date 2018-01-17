@@ -190,7 +190,7 @@
     		<div class="layout-main--content">
         	<router-view></router-view>
 	        <div class="pager-footer">
-	        	<p>©️ 2017 China Mobile International Limited. All rights reserved.</p>
+	        	<p>{{pagerFooter}}</p>
 	        </div>
         </div>
       </div>
@@ -362,6 +362,10 @@
 			auth () {
 				this.setAuthorization(this.authorization)
 				return this.authorization
+			},
+			pagerFooter () {
+				let year = new Date().getFullYear()
+				return `©️ ${year} China Mobile International Limited. All rights reserved.`
 			}
 		},
 		directives: {
