@@ -596,9 +596,11 @@
 			/* 跳出当前域，并将其 path 保存下来 */
 			handleOtherRegin (url) {
 				let accessToken = localStorage.get('access_token')
+				let sessionTime = localStorage.get('session_time')
+				let refreshToken = localStorage.get('refresh_token')
 				let that = this
 
-				if (!accessToken) {
+				if (sessionTime && !accessToken) {
 					that.instance.post(that.authorization.tokenUri +
 	          '?grant_type=refresh_token' + '&refresh_token=' + encodeURIComponent(refreshToken) + '&scope=read', '', {
           headers: {
