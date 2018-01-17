@@ -13,6 +13,7 @@ export default {
     title: 'Notice List',
     listDetail: 'Notice Detail',
     systemInfo: 'System Info',
-    systemInfoContent: 'Your token is invalid, please try login again'
+    systemInfoContent: 'Your token is invalid, please try login again',
+    pagerFooter: 'China Mobile International Limited. All rights reserved.'
   }
 }

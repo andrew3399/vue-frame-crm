@@ -13,6 +13,7 @@ export default {
     title: '消息列表',
     listDetail: '消息详情',
     systemInfo: '系统消息',
-    systemInfoContent: '您的token已失效，请尝试重新登录！'
+    systemInfoContent: '您的token已失效，请尝试重新登录！',
+    pagerFooter: '中国移动国际有限公司 版权所有'
   }
 }

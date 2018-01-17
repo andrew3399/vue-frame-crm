@@ -365,7 +365,7 @@
 			},
 			pagerFooter () {
 				let year = new Date().getFullYear()
-				return `©️ ${year} China Mobile International Limited. All rights reserved.`
+				return `©️${year} ` + this.$t('frame.pagerFooter')
 			}
 		},
 		directives: {
