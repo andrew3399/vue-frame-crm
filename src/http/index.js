@@ -20,6 +20,7 @@ let localStorage = new LocalStorage()
 export function requestInterceptor (config, authorization, tokenUri) {
   let accessToken = localStorage.get('access_token')
   let refreshToken = localStorage.get('refresh_token')
+  let sessionTime = localStorage.get('session_time')
   // let sessionTime = localStorage.get('session-time')
   if (accessToken && refreshToken) {
     if (config.url && config.url.indexOf(tokenUri) !== -1) {
@@ -33,12 +34,16 @@ export function requestInterceptor (config, authorization, tokenUri) {
     if (code && state) {
       config.headers.Authorization = 'Basic ' + Base64.encode(authorization.client_id + ':' + authorization.clientSecret)
     } else {
-      let msg = {
-        client_id: authorization.client_id,
-        redirect_uri: encodeURIComponent(authorization.redirect_uri),
-        state: uuid(6, 16)
+      if (sessionTime && !accessToken) {
+        config.headers.Authorization = 'Basic ' + Base64.encode(authorization.client_id + ':' + authorization.clientSecret)
+      } else {
+        let msg = {
+          client_id: authorization.client_id,
+          redirect_uri: encodeURIComponent(authorization.redirect_uri),
+          state: uuid(6, 16)
+        }
+        window.location.href = authorization.authorizeUri + '?client_id=' + msg.client_id + '&redirect_uri=' + msg.redirect_uri + '&response_type=code&scope=read&state=' + msg.state
       }
-      window.location.href = authorization.authorizeUri + '?client_id=' + msg.client_id + '&redirect_uri=' + msg.redirect_uri + '&response_type=code&scope=read&state=' + msg.state
     }
   }
 

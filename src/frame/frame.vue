@@ -764,7 +764,7 @@
 		async created () {
 			/* 用于监测传过来的path */
 			let path = getQuery('path') || this.$route.path
-			let routeArr = ['/res', '/cust', '/order', '/acct', '/']
+			let routeArr = ['/res', '/cust', '/order', '/acct', '/rpt', '/']
 			if (path && !routeArr.includes(decodeURIComponent(path))) {
 				localStorage.set('aid-path', decodeURIComponent(path))
 			}
@@ -819,7 +819,7 @@
 					let queryName = getQueryData(res.data, 'menuId', 'menuPid', decodeURIComponent(route), 'menuName')
 					this.queryActiveMenu = queryName.name
 					this.queryOpenName = queryName.names
-					let routeArr2 = ['/res', '/cust', '/order', '/acct', '/']
+					let routeArr2 = ['/res', '/cust', '/order', '/acct', '/rpt', '/']
 					let querys = localStorage.get('query-key')
 					if (route && !routeArr2.includes(decodeURIComponent(path))) {
 						let query = JSON.parse(querys)
