@@ -19,6 +19,12 @@ export default new Router({
           path: '/notice',
           name: 'notice',
           component: require('../src/views/notice.vue')
+        },
+          // 修改密码
+        {
+          path: '/change',
+          name: 'change',
+          component: require('../src/views/change.vue')
         }
       ]
     }

@@ -14,6 +14,20 @@ export default {
     listDetail: 'Notice Detail',
     systemInfo: 'System Info',
     systemInfoContent: 'Your token is invalid, please try login again',
-    pagerFooter: 'China Mobile International Limited. All rights reserved.'
+    pagerFooter: 'China Mobile International Limited. All rights reserved.',
+    changeTitle: 'Change Password',
+    accountId: 'Account Id',
+    oldPsd: 'Old Password',
+    newPsd: 'New Password',
+    confirmNew: 'Confirm New',
+    mobileNum: 'Mobile Number',
+    psdRule: 'Password Rules',
+    rule1: 'The length of new password must be more than five',
+    rule2: 'Password can include three of the follow three types:',
+    rule3: 'Upper case letters from A to Z',
+    rule4: 'case letters from A to Z',
+    rule5: 'numbers from 0 to 9',
+    rule6: 'password is effectively in 90 days',
+    submit: 'Submit'
   }
 }

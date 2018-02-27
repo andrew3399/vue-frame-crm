@@ -21,7 +21,7 @@
 
 .enquiries-title {
     width: 100%;
-    padding: 15px 0 0 15px;
+    padding: 0px 0 0 15px;
     font-size: 16px;
     color: #455155;
 }
@@ -30,7 +30,9 @@
     float: left;
     margin: 9px 10px 0 0;
     height: 8px;
-    border-left: 3px solid #8DC31E;
+    width: 8px;
+    background: #8DC31E;
+    border: 1px solid #8DC31E;
 }
 
 .enquiries-form {
@@ -145,4 +147,72 @@
 
 .dropdown__menu {
     margin: 0!important;
+}
+
+.text-40{
+    height: 40px;
+    line-height: 40px;
+}
+.mb-20{
+    margin-bottom: 20px;
+}
+.free-tips-wrap{
+    width: 80%;
+    height: auto;
+    background-color: #f8faf8;
+    padding: 20px 0px;
+
+    .free-tips-cnt{
+
+        padding: 0px 40px;
+        line-height: 30px;
+        .cnt-fst{
+            color:#455155;
+            opacity: 0.6;
+        }
+        .cnt-scd{
+            color: #8fc320;
+        }
+        .tips-content{
+            font-size: 16px;
+            font-weight: bold;
+        }
+        .tips-para{
+            margin-top: 30px;
+        }
+        .tips-num{
+            width:20px;
+            height: 20px;
+            border: 1px solid #8fc320;
+            border-radius: 50%;
+            text-align: center;
+            color: #8fc320;
+            line-height: 17px;
+            display: inline-block;
+            font-style: normal;
+            margin-right: 5px;
+        }
+        .ml-25{
+            margin-left: 25px;
+        }
+        .mb-10{
+            margin-bottom: 10px;
+        }
+        .mb-5{
+            margin-bottom: 5px!important;
+        }
+    }
+}
+.bottom-button{
+    height: 80px;
+    line-height: 80px;
+    text-align: center;
+    border-top: 1px solid #dce2e4;
+    margin-top: 20px;
+}
+.mt-15{
+    margin-top: 15px;
+}
+.mt-20{
+    margin-top: 20px;
 }
