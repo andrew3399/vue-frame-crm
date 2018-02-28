@@ -28,6 +28,7 @@ export default {
     rule4: 'case letters from A to Z',
     rule5: 'numbers from 0 to 9',
     rule6: 'password is effectively in 90 days',
-    submit: '提交'
+    submit: '提交',
+    check: '新密码不一致'
   }
 }

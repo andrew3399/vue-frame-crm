@@ -22,7 +22,8 @@
                     <t-form :model="formRight" :rules="ruleFormLabel" label-position="right" :label-span="4" class="mt-20">
                         <t-form-item :label="$t('frame.accountId')">
                             <div class="text-40">
-                                {{$t('frame.mobileNum')}}
+                                <!--{{$t('frame.mobileNum')}}-->
+                                {{ formRight.staffName }}
                             </div>
                         </t-form-item>
                         <t-form-item :label="$t('frame.oldPsd')" prop="input1">
@@ -58,10 +59,12 @@
     </div>
 </template>
 <script>
+    import { mapState } from 'vuex'
     export default {
         data(){
             return {
               formRight: {
+                staffName: '',
                 input1: '',
                 input2: '',
                 input3: '',
@@ -79,7 +82,49 @@
               }
             }
         },
-        methods: {}
+        computed: {
+            ...mapState({
+                instance: state => state.storeModule.instance,
+                authorization: state => state.storeModule.authorization
+            })
+        },
+        mounted(){
+            this.queryStaff();
+        },
+        methods: {
+            //查询
+            queryStaff(){
+                debugger
+                this.instance.get(this.authorization.getStaffName,{}).then(function(res){
+                    debugger
+                    this.formRight.staffName = res.data.result;
+                },function(){
+                    debugger
+                    this.$Message.warning(this.$t('frame.warning'))
+                })
+                // debugger
+                // this.instance.get(this.authorization.bulletinByIdUri, {
+                // }).then(res => {
+                //     this.bullet = res.data
+                //     this.bullet.bulletinContent = res.data.bulletinContent.replace(/(\\n)/g, '')
+                // }).catch(res => {
+                //     this.$Message.warning(this.$t('frame.warning'))
+                // })
+            },
+            //提交
+            submit(){
+                let that = this;
+                if(this.input2 != this.input3){
+                    this.$Message.warning(this.$t('frame.check'))
+                    return;
+                }
+                this.instance.post(this.authorization.changePWD,this.formRight).then(function(res){
+
+                },function(){
+                    this.$Message.warning(this.$t('frame.warning'))
+                })
+            }
+        }
     }
 </script>
 <style lang="scss" scoped>

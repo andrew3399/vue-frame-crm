@@ -14,5 +14,13 @@ export default [
     meta: {
       requireAuth: true
     }
+  },
+  {
+    path: 'change',
+    name: 'change',
+    component: require('../views/change.vue'),
+    meta: {
+      requireAuth: true
+    }
   }
 ]

@@ -20,7 +20,7 @@ export default new Router({
           name: 'notice',
           component: require('../src/views/notice.vue')
         },
-          // 修改密码
+        // 修改密码
         {
           path: '/change',
           name: 'change',
