@@ -25,9 +25,12 @@ export default {
     rule1: 'The length of new password must be more than five',
     rule2: 'Password can include three of the follow three types:',
     rule3: 'Upper case letters from A to Z',
-    rule4: 'case letters from A to Z',
+    rule4: 'case letters from a to z',
     rule5: 'numbers from 0 to 9',
     rule6: 'password is effectively in 90 days',
-    submit: 'Submit'
+    submit: 'Submit',
+    check: 'New password is not consistent with the confirmed password',
+    inputNull: 'Input cannot be empty',
+    btn_yes: 'OK'
   }
 }

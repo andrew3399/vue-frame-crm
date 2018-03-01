@@ -151,8 +151,10 @@
 								        <span class="sub-text" v-if="item.name">{{item.name}}</span>
 								      </a>
 								      <span v-else>
-								      	<t-icon :type="item.icon" v-if="item.icon"></t-icon>
-								        <span class="sub-text" v-if="item.name">{{item.name}}</span>
+										  <a href="javascript:;" target="_self" @click="toChangePWD()">
+											<t-icon :type="item.icon" v-if="item.icon"></t-icon>
+											<span class="sub-text" v-if="item.name">{{item.name}}</span>
+										  </a>
 								      </span>
 					        	</template>
 		    					</t-menu-item>
@@ -482,6 +484,10 @@
 					localStorage.remove('session_time')
 					window.location.href = this.authorization.logout_uri
 			},
+            /* 到修改密码 */
+            toChangePWD () {
+                this.$router.push({ name: 'change' })
+            },
 			closeMenuOnMinWin () {
 				this.isOpenOnMinWin = true
 			},

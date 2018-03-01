@@ -20,16 +20,16 @@
             <div class="row">
                 <div class="col-6">
                     <t-form :model="formRight" :rules="ruleFormLabel" label-position="right" :label-span="4" class="mt-20">
-                        <t-form-item :label="$t('frame.accountId')">
+                        <t-form-item :label="$t('frame.accountId')" >
                             <div class="text-40">
                                 <!--{{$t('frame.mobileNum')}}-->
                                 {{ formRight.staffName }}
                             </div>
                         </t-form-item>
-                        <t-form-item :label="$t('frame.oldPsd')" prop="input1">
+                        <t-form-item :label="$t('frame.oldPsd')" prop="input1" style="margin-bottom:25px;">
                             <t-input v-model="formRight.input1" style="width: 214px"></t-input>
                         </t-form-item>
-                        <t-form-item :label="$t('frame.newPsd')" prop="input2">
+                        <t-form-item :label="$t('frame.newPsd')" prop="input2" style="margin-bottom:25px;">
                             <t-input v-model="formRight.input2" style="width: 214px"></t-input>
                         </t-form-item>
                         <t-form-item :label="$t('frame.confirmNew')" prop="input3">
@@ -53,9 +53,50 @@
                 </div>
             </div>
             <div class="bottom-button">
-                <t-button type="primary" @click="submit">{{$t('frame.submit')}}</t-button>
+                <t-button type="primary" @click="submit" :disabled="formRight.staffName == ''?true:false">{{$t('frame.submit')}}</t-button>
             </div>
         </div>
+
+        <!-- 错误弹框 -->
+        <div class="warning-modal" v-show="showModal">
+            <div class="warning-modal-backdrop"></div>
+            <div class="warning-modal">
+                <div class="warning-modal-dialog warning-tips">
+                    <div class="warning-modal-content">
+                        <div class="warning-icon">
+                            <i :class="alertClass"></i>
+                        </div>
+                        <div class="waring-cnt">
+                            <p><span>{{resultContent}}</span></p>
+                        </div>
+                        <div class="waring-btn" @click="handleOk">
+                            <span class="yes">{{$t('cmi.agent_detail.btn_yes')}}</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 成功弹框 -->
+        <div class="warning-modal" v-show="showSuccessModal">
+            <div class="warning-modal-backdrop"></div>
+            <div class="warning-modal">
+                <div class="warning-modal-dialog warning-tips">
+                    <div class="warning-modal-content">
+                        <div class="warning-icon">
+                            <i class="aid aid-check-circle-outline"></i>
+                        </div>
+                        <div class="waring-cnt">
+                            <p><span>{{resultSuccessContent}}</span></p>
+                        </div>
+                        <div class="waring-btn" @click="handleSuccessOk">
+                            <span class="yes">{{$t('cmi.agent_detail.btn_yes')}}</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
     </div>
 </template>
 <script>
@@ -71,15 +112,24 @@
               },
               ruleFormLabel: {
                 input1: [
-                  {required: false, message: 'input不能为空', trigger: 'blur'}
+                  {required: true, message: this.$t('frame.inputNull'), trigger: 'blur'}
                 ],
                 input2: [
-                  {required: false, message: 'input不能为空', trigger: 'blur'}
+                  {required: true, message: this.$t('frame.inputNull'), trigger: 'blur'}
                 ],
                 input3: [
-                  {required: false, message: 'input不能为空', trigger: 'blur'}
+                  {required: true, message: this.$t('frame.inputNull'), trigger: 'blur'}
                 ]
-              }
+              },
+              alertClass: 'aid aid-alert-circle-outline',
+              //弹框
+              showModal: false,
+              //弹框内容
+              resultContent:'',
+              //成功弹框
+              showSuccessModal: false,
+              //成功弹框内容
+              resultSuccessContent:'',
             }
         },
         computed: {
@@ -89,41 +139,76 @@
             })
         },
         mounted(){
-            this.queryStaff();
+            /**
+             * 等待首次加载生效
+             */
+            setTimeout(() => {
+                this.queryStaff();
+            }, 300)
         },
         methods: {
             //查询
             queryStaff(){
-                debugger
-                this.instance.get(this.authorization.getStaffName,{}).then(function(res){
-                    debugger
-                    this.formRight.staffName = res.data.result;
-                },function(){
-                    debugger
-                    this.$Message.warning(this.$t('frame.warning'))
+                let that = this;
+                this.$nextTick(() => {
+                    this.instance.get(this.authorization.getStaffName, {}).then(res => {
+                        that.formRight.staffName = res.data;
+                    }).catch(res => {
+                        that.makeAlert(that.$t('frame.warning'));
+                    })
                 })
-                // debugger
-                // this.instance.get(this.authorization.bulletinByIdUri, {
-                // }).then(res => {
-                //     this.bullet = res.data
-                //     this.bullet.bulletinContent = res.data.bulletinContent.replace(/(\\n)/g, '')
-                // }).catch(res => {
-                //     this.$Message.warning(this.$t('frame.warning'))
-                // })
             },
             //提交
             submit(){
                 let that = this;
-                if(this.input2 != this.input3){
-                    this.$Message.warning(this.$t('frame.check'))
+                if(this.formRight.input1 == null || this.formRight.input1 == ""){
+                    this.makeAlert(this.$t('frame.inputNull'))
                     return;
                 }
-                this.instance.post(this.authorization.changePWD,this.formRight).then(function(res){
-
+                if(this.formRight.input2 == null || this.formRight.input2 == ""){
+                    this.makeAlert(this.$t('frame.inputNull'))
+                    return;
+                }
+                if(this.formRight.input3 == null || this.formRight.input3 == ""){
+                    this.makeAlert(this.$t('frame.inputNull'))
+                    return;
+                }
+                if(this.input2 != this.input3){
+                    this.makeAlert(this.$t('frame.check'))
+                    return;
+                }
+                this.instance.get(this.authorization.changePWD,{
+                    params: {
+                        'input1':this.formRight.input1,
+                        'input2':this.formRight.input2,
+                        'input3':this.formRight.input3,
+                    }
+                }).then(function(res){
+                    if(res != null && res.data.resultCode == '000000'){
+                        that.showSuccessModal = true;
+                        that.resultSuccessContent = res.data.resultMessage;
+                    }else if(res != null && res.data.resultCode == '999999'){
+                        that.makeAlert(that.$t('frame.warning'));
+                    }else{
+                        that.makeAlert(res.data.resultMessage);
+                    }
                 },function(){
-                    this.$Message.warning(this.$t('frame.warning'))
+                    that.makeAlert(that.$t('frame.warning'));
                 })
-            }
+            },
+            //弹框
+            makeAlert(msg){
+                this.showModal = true;
+                this.resultContent = msg;
+            },
+            //取消弹框
+            handleOk(){
+                this.showModal = false;
+            },
+            //成功后跳转页面
+            handleSuccessOk(){
+                this.showSuccessModal = false;
+            },
         }
     }
 </script>
