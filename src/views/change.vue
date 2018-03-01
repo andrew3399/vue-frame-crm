@@ -27,13 +27,13 @@
                             </div>
                         </t-form-item>
                         <t-form-item :label="$t('frame.oldPsd')" prop="input1" style="margin-bottom:25px;">
-                            <t-input v-model="formRight.input1" style="width: 214px"></t-input>
+                            <t-input type="password"  v-model="formRight.input1" style="width: 214px"></t-input>
                         </t-form-item>
                         <t-form-item :label="$t('frame.newPsd')" prop="input2" style="margin-bottom:25px;">
-                            <t-input v-model="formRight.input2" style="width: 214px"></t-input>
+                            <t-input type="password"  v-model="formRight.input2" style="width: 214px"></t-input>
                         </t-form-item>
                         <t-form-item :label="$t('frame.confirmNew')" prop="input3">
-                            <t-input v-model="formRight.input3" style="width: 214px"></t-input>
+                            <t-input type="password"  v-model="formRight.input3" style="width: 214px"></t-input>
                         </t-form-item>
                     </t-form>
                 </div>
@@ -187,8 +187,6 @@
                     if(res != null && res.data.resultCode == '000000'){
                         that.showSuccessModal = true;
                         that.resultSuccessContent = res.data.resultMessage;
-                    }else if(res != null && res.data.resultCode == '999999'){
-                        that.makeAlert(that.$t('frame.warning'));
                     }else{
                         that.makeAlert(res.data.resultMessage);
                     }
