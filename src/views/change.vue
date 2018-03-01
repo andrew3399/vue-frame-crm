@@ -70,7 +70,7 @@
                             <p><span>{{resultContent}}</span></p>
                         </div>
                         <div class="waring-btn" @click="handleOk">
-                            <span class="yes">{{$t('cmi.agent_detail.btn_yes')}}</span>
+                            <span class="yes">{{$t('frame.btn_yes')}}</span>
                         </div>
                     </div>
                 </div>
@@ -90,7 +90,7 @@
                             <p><span>{{resultSuccessContent}}</span></p>
                         </div>
                         <div class="waring-btn" @click="handleSuccessOk">
-                            <span class="yes">{{$t('cmi.agent_detail.btn_yes')}}</span>
+                            <span class="yes">{{$t('frame.btn_yes')}}</span>
                         </div>
                     </div>
                 </div>
