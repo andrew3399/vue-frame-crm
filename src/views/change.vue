@@ -38,7 +38,7 @@
                     </t-form>
                 </div>
                 <div class="col-6">
-                    <div class="free-tips-wrap">
+                    <div class="free-tips-wrap change-tips-wrap">
                         <div class="free-tips-cnt">
                             <p class="tips-content ml-25 mb-10">{{$t('frame.psdRule')}}</p>
                             <p><i class="tips-num mb-10">1</i>{{$t('frame.rule1')}}</p>
