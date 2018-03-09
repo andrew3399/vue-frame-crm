@@ -3,10 +3,9 @@
 	<!--面包屑star-->
 	<div class="bread-crumbs">
 		<div class="row">
-			<div class="col-xs-12 col-sm-12 col-md-6 col-lg-6 col-xl-6">
+			<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12 col-xl-12">
 				<t-breadcrumb separator=">">
-					<t-breadcrumb-item href="/">{{$t('frame.home')}}</t-breadcrumb-item>
-					<t-breadcrumb-item>{{$t('frame.listDetail')}}</t-breadcrumb-item>
+					<t-breadcrumb-item href="/">{{$t('frame.home')}}</t-breadcrumb-item> > <span style="margin-left: 15px;">{{$t('frame.listDetail')}}</span>
 				</t-breadcrumb>
 			</div>
 		</div>
