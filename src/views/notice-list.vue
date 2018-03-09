@@ -12,7 +12,7 @@
 		</div>
 	</div>
     <!--面包屑 end-->
-    <div class="enquiries mt-10" style="padding:0px 0px 20px 0px;">
+    <div class="enquiries mt-10" style="padding:20px 0px 20px 0px;">
         <div class="enquiries-title">
             <span></span>{{$t('frame.title')}}
         </div>

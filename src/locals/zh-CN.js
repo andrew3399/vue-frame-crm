@@ -31,6 +31,7 @@ export default {
     submit: '提交',
     check: '新密码与确认密码不一致',
     inputNull: '输入框不能为空',
-    btn_yes: '确定'
+    btn_yes: '确定',
+    change_psd: '修改密码'
   }
 }

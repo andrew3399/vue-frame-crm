@@ -31,6 +31,7 @@ export default {
     submit: 'Submit',
     check: 'New password is not consistent with the confirmed password',
     inputNull: 'Input cannot be empty',
-    btn_yes: 'OK'
+    btn_yes: 'OK',
+    change_psd: 'Change Password'
   }
 }

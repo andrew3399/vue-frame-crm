@@ -151,10 +151,26 @@
 								        <span class="sub-text" v-if="item.name">{{item.name}}</span>
 								      </a>
 								      <span v-else>
-										  <a href="javascript:;" target="_self" @click="toChangePWD()">
-											<t-icon :type="item.icon" v-if="item.icon"></t-icon>
-											<span class="sub-text" v-if="item.name">{{item.name}}</span>
-										  </a>
+										  <!--<a href="javascript:;" target="_self" @click="toChangePWD()">-->
+											<!--<t-icon :type="item.icon" v-if="item.icon"></t-icon>-->
+											<!--<span class="sub-text" v-if="item.name">{{item.name}}</span>-->
+										  <!--</a>-->
+										<t-dropdown>
+                                            <t-badge class="ml-4">
+                                                <t-icon :type="item.icon" v-if="item.icon"></t-icon>
+                                                <t-icon type="arrow-down-drop" size="20"></t-icon>
+                                            </t-badge>
+                                            <t-dropdown-menu slot="list" class="cl-frame-dropdown" >
+                                                <t-dropdown-item>
+                                                    <t-icon type="account-circle"  ></t-icon>
+                                                    1323408{{item.name}}
+                                                </t-dropdown-item>
+                                                <t-dropdown-item v-on:on-click="toChangePWD()">
+                                                    <t-icon type="lock-unlocked"  ></t-icon>
+                                                    {{$t('frame.change_psd')}}
+                                                </t-dropdown-item>
+                                            </t-dropdown-menu>
+										</t-dropdown>
 								      </span>
 					        	</template>
 		    					</t-menu-item>
@@ -955,5 +971,5 @@
 	}
 </script>
 <style lang="scss">
-	@import './frame.scss'
+	@import './frame.scss';
 </style>
