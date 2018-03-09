@@ -23,7 +23,7 @@ export default {
     mobileNum: '手机号码',
     psdRule: '密码规则',
     rule1: '6位或以上长度',
-    rule2: '包含来自以下四个类别中的两类:',
+    rule2: '包含来自以下三类:',
     rule3: '大写英文字母（从 A 到 Z）',
     rule4: '小写英文字母（从 a 到 z）',
     rule5: '10 个基本数字（从 0 到 9）',

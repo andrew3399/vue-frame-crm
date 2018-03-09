@@ -8,7 +8,23 @@
     width: 100%;
     display: inline-block;
 }
-
+.notice-bread-crumb{
+    width: 100%;
+    a{
+        color: #48524f;
+        font-size: 14px;
+        display: inline-block;
+    }
+    a:hover{
+        color: #8fc320;
+    }
+    .ml-18{
+        margin-left: 18px;
+    }
+    .mr-20{
+        margin-right: 20px;
+    }
+}
 .enquiries {
     margin-top: 10px;
     padding: 15px;

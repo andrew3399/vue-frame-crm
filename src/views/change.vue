@@ -46,7 +46,6 @@
                             <p class="ml-25 mb-5">{{$t('frame.rule3')}}</p>
                             <p class="ml-25 mb-5">{{$t('frame.rule4')}}</p>
                             <p class="ml-25 mb-5">{{$t('frame.rule5')}}</p>
-                            <p class="ml-25 mb-5">{{$t('frame.rule6')}}</p>
                         </div>
                     </div>
 
