@@ -163,7 +163,7 @@
                                             <t-dropdown-menu slot="list" class="cl-frame-dropdown" >
                                                 <t-dropdown-item>
                                                     <t-icon type="account-circle"  ></t-icon>
-                                                    1323408{{item.name}}
+                                                    {{staffName}}
                                                 </t-dropdown-item>
                                                 <t-dropdown-item v-on:on-click="toChangePWD()">
                                                     <t-icon type="lock-unlocked"  ></t-icon>
@@ -345,6 +345,7 @@
 		},
 		data () {
 			return {
+                staffName:'',
 				isOpen: true,
 				isOpenOnMinWin: true,
 				openPosition: 'down',
@@ -502,6 +503,8 @@
 			},
             /* 到修改密码 */
             toChangePWD () {
+                // window.location.href="/cust/"
+				window.location.reload();
                 this.$router.push({ name: 'change' })
             },
 			closeMenuOnMinWin () {
@@ -778,6 +781,17 @@
 				  }
 				})
 			},
+            //查询
+            queryStaff(){
+                let that = this;
+                this.$nextTick(() => {
+                    this.instance.get(this.authorization.getStaffName, {}).then(res => {
+                        that.staffName = res.data;
+                    }).catch(res => {
+                        that.makeAlert(that.$t('frame.warning'));
+                    })
+                })
+            },
 			...mapMutations([
 				'setInstance',
 				'setAuthorization'
@@ -938,6 +952,7 @@
 			})
 		},
 		mounted () {
+            this.queryStaff();
 			/* 设置 */
 			this.$nextTick(() => {
 				this.setInstance(this.instance)
