@@ -30,10 +30,10 @@
                             <t-input type="password"  v-model="formRight.input1" style="width: 214px"></t-input>
                         </t-form-item>
                         <t-form-item :label="$t('frame.newPsd')" prop="input2" style="margin-bottom:25px;">
-                            <t-input type="password"  v-model="formRight.input2" style="width: 214px"></t-input>
+                            <t-input type="password"  v-model="formRight.input2" style="width: 214px" maxlength="20"></t-input>
                         </t-form-item>
                         <t-form-item :label="$t('frame.confirmNew')" prop="input3">
-                            <t-input type="password"  v-model="formRight.input3" style="width: 214px"></t-input>
+                            <t-input type="password"  v-model="formRight.input3" style="width: 214px" maxlength="20"></t-input>
                         </t-form-item>
                     </t-form>
                 </div>

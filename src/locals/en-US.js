@@ -22,7 +22,7 @@ export default {
     confirmNew: 'Confirm New',
     mobileNum: 'Mobile Number',
     psdRule: 'Password Rules',
-    rule1: 'The length of new password must be more than five',
+    rule1: 'The length of new password must be more than seven',
     rule2: 'Password can include three of the follow three types:',
     rule3: 'Upper case letters from A to Z',
     rule4: 'case letters from a to z',
