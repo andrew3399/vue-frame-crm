@@ -9,9 +9,10 @@
 #### 编译和发布
 1. npm run build 进行编译和打包
 2. 切换到当前项目目录
-3. npm login
-4. 修改package.json的版本号
-5. npm publish
+3. 切换npm源到npm源（https://registry.npmjs.org/）: 只针对有自身源的情况
+4. npm login
+5. 修改package.json的版本号
+6. npm publish
 
 #### Useage
 
