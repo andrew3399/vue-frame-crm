@@ -1,18 +1,6 @@
 <template>
 <div class="crm-wrapper">
-	<!--面包屑star-->
-	<div class="bread-crumbs">
-		<div class="row">
-			<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12 col-xl-12">
-				<!--<t-breadcrumb separator=">">-->
-					<!--<t-breadcrumb-item href="/" style="width: 50px;">{{$t('frame.home')}}</t-breadcrumb-item> > <span style="margin-left: 15px;">{{$t('frame.listDetail')}}</span>-->
-				<!--</t-breadcrumb>-->
-				<div class="notice-bread-crumb"><a class="mr-20" href="/">{{$t('frame.home')}}</a> > <a class="ml-18" href="javascript:void(0)">{{$t('frame.listDetail')}}</a></div>
-			</div>
-		</div>
-	</div>
-    <!--面包屑 end-->
-	<div class="enquiries mt-10">
+	<div class="enquiries">
 		<p class="text-center">{{bullet.bulletinTitle}}</p>
 		<div class="text-left text-in" v-html="bullet.bulletinContent"></div>
 		<p class="text-right">{{bullet.bulletinPublisher}}</p>

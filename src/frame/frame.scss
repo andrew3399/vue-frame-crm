@@ -1,5 +1,10 @@
 @import '~aid-elements/src/aid/variable';
-
+.crm-wrapper{
+  padding: 0px 15px 15px 15px!important;
+}
+.cmi-bread-crumbs-wrap{
+  padding: 10px 0px 0px 15px;
+}
 .cl-frame-dropdown{
     .dropdown__menu, .select__menu{
         border-radius: inherit;
@@ -10,6 +15,10 @@
     .dropdown__item i, .select__item i, .select__tips i{
         margin-right:0.625rem;
     }
+}
+.unclick{
+  cursor: not-allowed!important;
+  color: #48524f!important;
 }
 .layout-sidebar,
 .layout-content {
