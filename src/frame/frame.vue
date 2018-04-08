@@ -135,7 +135,7 @@
                 </slot>
             </div>
         </div>
-        <div class="layout-content">
+        <div class="layout-content layout-delete-dot">
             <div class="layout-nav navbar navbar-expand-lg bg-white align-items-center layout-nav--top">
                 <div class="row nav-row">
                     <div class="col col-6 nav-col">
@@ -190,8 +190,9 @@
                                                 <!--<span class="sub-text" v-if="item.name">{{item.name}}</span>-->
                                                 <!--</a>-->
 										<t-dropdown>
-                                            <t-badge class="ml-4">
+                                            <t-badge class="ml-4" style="margin-left:0!important;">
                                                 <t-icon :type="item.icon" v-if="item.icon"></t-icon>
+                                                {{staffName}}
                                                 <t-icon type="arrow-down-drop" size="20"></t-icon>
                                             </t-badge>
                                             <t-dropdown-menu slot="list" class="cl-frame-dropdown">
@@ -237,7 +238,7 @@
 										  <p class="nw-r-time">{{$t('frame.expiryDate')}}：{{item.activeTime | format}} {{$t('frame.to')}} {{item.inactiveTime | format}}</p>
 									  </span>
                                     </div>
-                                    <p class="notice__loading"><a href="javascript:;" target="_self"
+                                    <p class="notice__loading" v-if="notices.length > 0 "><a href="javascript:;" target="_self"
                                                                   @click="loadingMore">{{$t('frame.loadingMore')}}</a>
                                     </p>
                                 </t-tab-panel>

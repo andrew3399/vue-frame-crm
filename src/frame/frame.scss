@@ -5,6 +5,12 @@
 .cmi-bread-crumbs-wrap{
   padding: 10px 0px 0px 15px;
 }
+.layout-delete-dot{
+    .badge.badge--danger, .avatar__dot, .avatar--danger .avatar__dot{
+        display: none;
+    }
+}
+
 .cl-frame-dropdown{
     .dropdown__menu, .select__menu{
         border-radius: inherit;
