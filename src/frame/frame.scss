@@ -9,6 +9,15 @@
     .badge.badge--danger, .avatar__dot, .avatar--danger .avatar__dot{
         display: none;
     }
+    .menu .menu__item:first-child{
+        padding: 0px;
+    }
+    .menu .menu__item:nth-child(2){
+        padding: 0px 0px 0px 15px;
+    }
+    .menu .menu__item:nth-child(3){
+        padding: 0px 15px 0px 10px;;
+    }
 }
 
 .cl-frame-dropdown{
