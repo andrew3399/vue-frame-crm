@@ -1,3 +1,4 @@
+import 'babel-polyfill'
 import Vue from 'vue'
 
 import taurus from 'aid-taurus-desktop'
@@ -5,6 +6,7 @@ import taurus from 'aid-taurus-desktop'
 import VueI18n from 'vue-i18n'
 
 import { TFrame, locals } from '../src'
+import store from './store'
 
 // import { TFrame } from '../src'
 // import { TFrame } from '../lib/frame.js'
@@ -39,6 +41,7 @@ Vue.use(taurus, {
 })
 
 new Vue({
+  store,
   router,
   i18n,
   render (h) {
