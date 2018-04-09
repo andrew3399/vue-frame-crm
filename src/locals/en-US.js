@@ -1,5 +1,9 @@
 export default {
   frame: {
+      list_title: 'Notice List',
+      list_tag_top: 'Top',
+      list_tag_emergency: 'Emergency',
+      list_tag_important: 'Important',
     sysInform: 'System Informs',
     loadingMore: 'Loading more ...',
     doc: 'Detail docs',
