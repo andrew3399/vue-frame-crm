@@ -1,20 +1,20 @@
 <template>
     <div class="crm-wrapper">
         <!-- 面包屑start -->
-        <div class="bread-crumbs mt-10">
+        <!-- <div class="bread-crumbs mt-10">
             <div class="row">
                 <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12 col-xl-12">
-                    <t-breadcrumb separator=">">
+                    <t-breadcrumb separator=">"> -->
                         <!--<t-breadcrumb-item href="/">{{$t('cmi.notice.title')}}-->
                         <!--</t-breadcrumb-item>-->
-                        <t-breadcrumb-item href="/">{{$t('cmi.notice.sub_title')}}</t-breadcrumb-item>
+                        <!-- <t-breadcrumb-item href="/">{{$t('cmi.notice.sub_title')}}</t-breadcrumb-item>
                         <t-breadcrumb-item>{{$t('cmi.notice.main_title')}}</t-breadcrumb-item>
                     </t-breadcrumb>
                 </div>
             </div>
-        </div>
+        </div> -->
         <!-- 面包屑end -->
-        <div class="enquiries mt-10" style="padding: 0;">
+        <div class="enquiries mt-10" style="padding:0px 0px 15px 0px;">
             <!-- 标题 star-->
             <div class="notice-list-title" >
                 <div class="d-flex justify-content-between">
@@ -38,7 +38,7 @@
                     <div class="text-right content-time"><span>{{item.bulletinPublisher}}</span>{{item.createTimeString}}</div>
                 </div>
             </div>
-            <div class="notice-pager mt-10" style="margin-top: 20px;">
+            <div class="notice-pager mt-10" style="margin: 20px 0px 5px 0px !important;">
                 <t-pager :total="total" :page-size="pageSize" :sizer-range="sizerRange" @on-change="handleOnPagerChange" @on-size-change="handleOnPagerSizeChange" show-elevator show-sizer></t-pager>
             </div>
         </div>

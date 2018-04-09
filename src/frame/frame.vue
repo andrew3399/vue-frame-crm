@@ -192,15 +192,13 @@
 										<t-dropdown>
                                             <t-badge class="ml-4" style="margin-left:0!important;">
                                                 <t-icon :type="item.icon" v-if="item.icon"></t-icon>
-                                                <!--{{staffName}}-->
-                                                {{formRight.staffName}}
+                                                {{staffName}}
                                                 <t-icon type="arrow-down-drop" size="20"></t-icon>
                                             </t-badge>
                                             <t-dropdown-menu slot="list" class="cl-frame-dropdown">
                                                 <t-dropdown-item>
                                                     <t-icon type="account-circle"></t-icon>
-                                                    <!--{{staffName}}-->
-                                                    {{formRight.staffName}}
+                                                    {{staffName}}
                                                 </t-dropdown-item>
                                                 <t-dropdown-item v-on:on-click="toChangePWD()">
                                                     <t-icon type="lock-unlocked"></t-icon>
@@ -403,10 +401,7 @@
         },
         data() {
             return {
-                formRight:{
-                    staffName: '',
-                    staffNo: '',
-                },
+                staffName: '',
                 isOpen: true,
                 isOpenOnMinWin: true,
                 openPosition: 'down',
@@ -855,7 +850,7 @@
                 let that = this;
                 this.$nextTick(() => {
                     this.instance.get(this.authorization.getStaffName, {}).then(res => {
-                        that.formRight = res.data;
+                        that.staffName = res.data;
                     }).catch(res => {
                         that.makeAlert(that.$t('frame.warning'));
                     })
