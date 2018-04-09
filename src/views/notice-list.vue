@@ -161,3 +161,6 @@
         }
     }
 </script>
+<style lang="scss" scoped>
+	@import './notice.scss'
+</style>
