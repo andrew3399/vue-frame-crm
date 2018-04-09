@@ -23,7 +23,7 @@
                         <t-form-item :label="$t('frame.accountId')" >
                             <div class="text-40">
                                 <!--{{$t('frame.mobileNum')}}-->
-                                {{ formRight.staffName }}
+                                {{ formRight.staffNo }}
                             </div>
                         </t-form-item>
                         <t-form-item :label="$t('frame.oldPsd')" prop="input1" style="margin-bottom:25px;">
@@ -105,6 +105,7 @@
             return {
               formRight: {
                 staffName: '',
+                  staffNo: '',
                 input1: '',
                 input2: '',
                 input3: '',
@@ -149,9 +150,11 @@
             //查询
             queryStaff(){
                 let that = this;
+                this.formRight.input1 = '';
                 this.$nextTick(() => {
                     this.instance.get(this.authorization.getStaffName, {}).then(res => {
-                        that.formRight.staffName = res.data;
+                        // that.formRight.staffName = res.data;
+                        that.formRight = res.data;
                     }).catch(res => {
                         that.makeAlert(that.$t('frame.warning'));
                     })
