@@ -34,7 +34,7 @@ export default {
     btn_yes: '确定',
     change_psd: '修改密码'
   },
-  cmi: {
+  notice_local: {
     notice: {
       create_success:'新增公告成功',
       create_erromessge:'新增公告失败',
