@@ -358,11 +358,11 @@
             /**
              * 渲染menu菜单
              * {
-			 * 	menuIcon, 一级菜单的右侧icon的type，对应的是aidesign的图标库
-			 * 	name, 当前菜单的名称
-			 * 	path, 路由的path对象
-			 * 	link  非本项目的链接
-			 * }
+             *  menuIcon, 一级菜单的右侧icon的type，对应的是aidesign的图标库
+             *  name, 当前菜单的名称
+             *  path, 路由的path对象
+             *  link  非本项目的链接
+             * }
              */
             menuList: {
                 type: Array,
@@ -373,10 +373,10 @@
             /**
              * 渲染头部menu
              * {
-			 * 	type, 'icon'| 'dropdown' | 'avatar'
-			 * 	icon, 图标icon的type，对应的是aidesign的图标库
-			 * 	children, 如果是dropdown时需要提供dropdownitem
-			 * }
+             *  type, 'icon'| 'dropdown' | 'avatar'
+             *  icon, 图标icon的type，对应的是aidesign的图标库
+             *  children, 如果是dropdown时需要提供dropdownitem
+             * }
              */
             navs: {
                 type: Array,
@@ -583,9 +583,9 @@
                 this.isOpen = !this.isOpen
                 this.isOpenOnMinWin = false
                 // if (this.clientWidth >= 1200 && !this.isOpen) {
-                // 	this.openPosition = 'right'
+                //  this.openPosition = 'right'
                 // } else {
-                // 	this.openPosition = 'down'
+                //  this.openPosition = 'down'
                 // }
                 if (this.clientWidth >= 1200) {
                     this.openPosition = this.openPosition === 'down' ? 'right' : 'down'
@@ -758,7 +758,7 @@
                         let queryName = getQueryData(res.data, 'menuId', 'menuPid', decodeURIComponent(route), 'menuName')
                         this.queryActiveMenu = queryName.name
                         this.queryOpenName = queryName.names
-                        let routeArr2 = ['/res', '/cust', '/order', '/acct', '/']
+                        let routeArr2 = ['/res', '/cust', '/order', '/acct', '/rpt', '/prod', '/odp', '/base', '/']
                         let querys = localStorage.get('query-key')
                         if (route && !routeArr2.includes(decodeURIComponent(path))) {
                             let query = JSON.parse(querys)
@@ -869,7 +869,8 @@
         async created() {
             /* 用于监测传过来的path */
             let path = getQuery('path') || this.$route.path
-            let routeArr = ['/res', '/cust', '/order', '/acct', '/rpt', '/']
+            debugger
+            let routeArr = ['/res', '/cust', '/order', '/acct', '/rpt', '/prod', '/odp', '/base', '/']
             if (path && !routeArr.includes(decodeURIComponent(path))) {
                 localStorage.set('aid-path', decodeURIComponent(path))
             }
@@ -924,7 +925,7 @@
                     let queryName = getQueryData(res.data, 'menuId', 'menuPid', decodeURIComponent(route), 'menuName')
                     this.queryActiveMenu = queryName.name
                     this.queryOpenName = queryName.names
-                    let routeArr2 = ['/res', '/cust', '/order', '/acct', '/rpt', '/']
+                    let routeArr2 = ['/res', '/cust', '/order', '/acct', '/rpt', '/prod', '/odp', '/base', '/']
                     let querys = localStorage.get('query-key')
                     if (route && !routeArr2.includes(decodeURIComponent(path))) {
                         let query = JSON.parse(querys)
