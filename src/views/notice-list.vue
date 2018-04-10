@@ -5,10 +5,10 @@
             <div class="row">
                 <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12 col-xl-12">
                     <t-breadcrumb separator=">"> -->
-                        <!--<t-breadcrumb-item href="/">{{$t('cmi.notice.title')}}-->
+                        <!--<t-breadcrumb-item href="/">{{$t('notice_local.notice.title')}}-->
                         <!--</t-breadcrumb-item>-->
-                        <!-- <t-breadcrumb-item href="/">{{$t('cmi.notice.sub_title')}}</t-breadcrumb-item>
-                        <t-breadcrumb-item>{{$t('cmi.notice.main_title')}}</t-breadcrumb-item>
+                        <!-- <t-breadcrumb-item href="/">{{$t('notice_local.notice.sub_title')}}</t-breadcrumb-item>
+                        <t-breadcrumb-item>{{$t('notice_local.notice.main_title')}}</t-breadcrumb-item>
                     </t-breadcrumb>
                 </div>
             </div>
@@ -19,7 +19,7 @@
             <div class="notice-list-title" >
                 <div class="d-flex justify-content-between">
                     <div>
-                        <span class="span"></span>{{$t('cmi.notice.list_title')}}
+                        <span class="span"></span>{{$t('notice_local.notice.list_title')}}
                     </div>
                     <div>
                         <t-input  icon="magnify" icon-placement="right" @click.native="handleChooseRole" v-model="bulletinTitle"></t-input>
@@ -29,9 +29,9 @@
             <div class="notice-manage-wrap"  v-for="item in items" @click="navToDetail(item)">
                 <div class="notice-manage-content">
                     <div class="content-title">
-                        <t-tag state='warning' v-if="parseInt(item.topFlag) === 1">{{$t('cmi.notice.list_tag_top')}}</t-tag>
-                        <t-tag state='success'v-if="parseInt(item.bulletinLevel) === 3">{{$t('cmi.notice.list_tag_emergency')}}</t-tag>
-                        <t-tag state='info'v-if="parseInt(item.bulletinLevel) === 2">{{$t('cmi.notice.list_tag_important')}}</t-tag>
+                        <t-tag state='warning' v-if="parseInt(item.topFlag) === 1">{{$t('notice_local.notice.list_tag_top')}}</t-tag>
+                        <t-tag state='success'v-if="parseInt(item.bulletinLevel) === 3">{{$t('notice_local.notice.list_tag_emergency')}}</t-tag>
+                        <t-tag state='info'v-if="parseInt(item.bulletinLevel) === 2">{{$t('notice_local.notice.list_tag_important')}}</t-tag>
                         <span>{{item.bulletinTitle}}</span>
                     </div>
                     <p>{{item.bulletinContent}}</p>

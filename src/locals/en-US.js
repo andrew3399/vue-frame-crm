@@ -38,7 +38,7 @@ export default {
     btn_yes: 'OK',
     change_psd: 'Change Password'
   },
-  cmi:{
+  notice_local:{
     notice: {
       one_select:'You can only manipulate one piece of data',
       create_success:'New Bulletin Success',
