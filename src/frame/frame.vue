@@ -4,11 +4,11 @@
         <div :class="['layout-sidebar',{'layout-sidebar--folded': isOpen === false},{'show': isOpenOnMinWin === false}]">
             <div class="layout-logo-left">
                 <slot name="frame-header">
-					<span v-if="logoRouter">
-						<router-link :to="logoRouter">
-			        <img :src="img" alt="" class="layout-logo-img"/>
-			        <img :src="imgMin" alt="" class="layout-logo-min-img"/>
-		        </router-link>
+					<span >
+						<!--<router-link >-->
+                            <img :src="img" alt="" class="layout-logo-img"/>
+                            <img :src="imgMin" alt="" class="layout-logo-min-img"/>
+                        <!--</router-link>-->
 					</span>
                     <span v-else>
 	        	<img :src="img" alt="" class="layout-logo-img"/>
@@ -252,7 +252,7 @@
             <div class="layout-main">
                 <div class="layout-main--content">
                     <div class="bread-crumbs cmi-bread-crumbs-wrap" v-if="breadcrumbArr">
-                        <div class="row">
+                        <div class="row ml-0 mr-0">
                             <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12 col-xl-12">
                                 <t-breadcrumb separator=">" >
                                     <t-breadcrumb-item v-for="(item, $idx) in breadcrumbArr" :key="$idx"
@@ -340,14 +340,14 @@
                 type: String
             },
             // logo 路由
-            logoRouter: {
-                type: Object,
-                default: () => {
-                    return {
-                        path: '/'
-                    }
-                }
-            },
+            // logoRouter: {
+            //     type: Object,
+            //     default: () => {
+            //         return {
+            //             path: '/'
+            //         }
+            //     }
+            // },
             // 当前展开的menu
             activeMenu: {
                 type: [String, Number]
