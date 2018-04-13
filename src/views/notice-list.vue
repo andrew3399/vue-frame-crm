@@ -34,7 +34,7 @@
                         <t-tag state='info'v-if="parseInt(item.bulletinLevel) === 2">{{$t('notice_local.notice.list_tag_important')}}</t-tag>
                         <span>{{item.bulletinTitle}}</span>
                     </div>
-                    <p>{{item.bulletinContent}}</p>
+                    <div v-html="item.bulletinContent"></div>
                     <div class="text-right content-time"><span>{{item.bulletinPublisher}}</span>{{item.createTimeString}}</div>
                 </div>
             </div>
