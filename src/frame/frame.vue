@@ -5,7 +5,7 @@
             <div class="layout-logo-left">
                 <slot name="frame-header">
 					<span >
-						<!--<router-link >-->
+						<!--<router-link :to="logoRouter">-->
                             <img :src="img" alt="" class="layout-logo-img"/>
                             <img :src="imgMin" alt="" class="layout-logo-min-img"/>
                         <!--</router-link>-->
@@ -253,7 +253,7 @@
                 <div class="layout-main--content">
                     <div class="bread-crumbs cmi-bread-crumbs-wrap" v-if="breadcrumbArr">
                         <div class="row ml-0 mr-0">
-                            <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12 col-xl-12">
+                            <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12 col-xl-12 pl-0">
                                 <t-breadcrumb separator=">" >
                                     <t-breadcrumb-item v-for="(item, $idx) in breadcrumbArr" :key="$idx"
                                                        :class="($idx == 0 || $idx == breadcrumbArr.length - 1) ? 'unclick' : ''"
