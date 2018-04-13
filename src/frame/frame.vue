@@ -287,6 +287,7 @@
     import QueryString from 'query-string'
     // import EventHub from '../eventHub'
     // let sessionStorage = new SessionStorage ()
+    //test
     let localStorage = new LocalStorage()
 
     let timeout = null
