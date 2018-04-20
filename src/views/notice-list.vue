@@ -26,7 +26,7 @@
                     </div>
                 </div>
             </div>
-            <div class="notice-manage-wrap"  v-for="item in items" @click="navToDetail(item)">
+            <div class="notice-manage-wrap"  v-if="total!=0" v-for="item in items" @click="navToDetail(item)">
                 <div class="notice-manage-content">
                     <div class="content-title">
                         <t-tag state='warning' v-if="parseInt(item.topFlag) === 1">{{$t('notice_local.notice.list_tag_top')}}</t-tag>
@@ -117,11 +117,12 @@
                         this.total = data.count
                         this.pageSize = data.pageSize
                         this.pageNo = data.pageNo
-                        if (data.result && data.result.length) {
+                        this.items = data.result
+                     /*   if (data.result && data.result.length) {
                             this.items = data.result.sort((a,b) => {
                                 return parseInt(a.topFlag) - parseInt(b.topFlag)
                             })
-                        }
+                        }*/
                     }).catch(res => {
                         this.$Message.warning(this.$t('frame.warning'))
                     })
