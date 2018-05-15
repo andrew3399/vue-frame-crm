@@ -4,16 +4,16 @@
         <div :class="['layout-sidebar',{'layout-sidebar--folded': isOpen === false},{'show': isOpenOnMinWin === false}]">
             <div class="layout-logo-left">
                 <slot name="frame-header">
-					<span >
-						<!--<router-link :to="logoRouter">-->
+                    <span >
+                        <!--<router-link :to="logoRouter">-->
                             <img :src="img" alt="" class="layout-logo-img"/>
                             <img :src="imgMin" alt="" class="layout-logo-min-img"/>
                         <!--</router-link>-->
-					</span>
+                    </span>
                     <span v-else>
-	        	<img :src="img" alt="" class="layout-logo-img"/>
-						<img :src="imgMin" alt="" class="layout-logo-min-img"/>
-					</span>
+                <img :src="img" alt="" class="layout-logo-img"/>
+                        <img :src="imgMin" alt="" class="layout-logo-min-img"/>
+                    </span>
                 </slot>
                 <a href="javascript:;" class="d-none d-xl-block thumb-icon" v-if="showMenu">
                     <t-icon type="menu" class="text-xxl text-black" @click.native="openOrClose"></t-icon>
@@ -166,16 +166,16 @@
                                     </t-submenu>
                                     <t-menu-item :name="x" v-else>
                                         <t-badge dot state="danger" v-if="item.icon === 'bell' && count">
-		    							<span @click="showSlipbox">
-				    						<t-icon :type="item.icon" v-if="item.icon"></t-icon>
-							        	<span class="sub-text" v-if="item.name">{{item.name}}</span>
-						        	</span>
+                                        <span @click="showSlipbox">
+                                            <t-icon :type="item.icon" v-if="item.icon"></t-icon>
+                                        <span class="sub-text" v-if="item.name">{{item.name}}</span>
+                                    </span>
                                         </t-badge>
                                         <template v-else-if="item.icon === 'bell'">
-					        		<span @click="showSlipbox">
-						        		<t-icon :type="item.icon" v-if="item.icon"></t-icon>
-							        	<span class="sub-text" v-if="item.name">{{item.name}}</span>
-							        </span>
+                                    <span @click="showSlipbox">
+                                        <t-icon :type="item.icon" v-if="item.icon"></t-icon>
+                                        <span class="sub-text" v-if="item.name">{{item.name}}</span>
+                                    </span>
                                         </template>
                                         <template v-else>
                                             <a href="javascript:;" target="_self"
@@ -185,11 +185,11 @@
                                                 <span class="sub-text" v-if="item.name">{{item.name}}</span>
                                             </a>
                                             <span v-else>
-										  <!--<a href="javascript:;" target="_self" @click="toChangePWD()">-->
+                                          <!--<a href="javascript:;" target="_self" @click="toChangePWD()">-->
                                                 <!--<t-icon :type="item.icon" v-if="item.icon"></t-icon>-->
                                                 <!--<span class="sub-text" v-if="item.name">{{item.name}}</span>-->
                                                 <!--</a>-->
-										<t-dropdown>
+                                        <t-dropdown>
                                             <t-badge class="ml-4" style="margin-left:0!important;">
                                                 <t-icon :type="item.icon" v-if="item.icon"></t-icon>
                                                 <!--{{staffName}}-->
@@ -207,8 +207,8 @@
                                                     {{$t('frame.change_psd')}}
                                                 </t-dropdown-item>
                                             </t-dropdown-menu>
-										</t-dropdown>
-								      </span>
+                                        </t-dropdown>
+                                      </span>
                                         </template>
                                     </t-menu-item>
                                 </template>
@@ -236,9 +236,9 @@
                                          @click="handleNoticeClick(index, item)">
                                         <span class="nw-l"><t-tag state="info">info</t-tag></span>
                                         <span class="nw-r">
-										  <p class="nw-r-title">{{item.bulletinTitle}}</p>
-										  <p class="nw-r-time">{{$t('frame.expiryDate')}}：{{item.activeTime | format}} {{$t('frame.to')}} {{item.inactiveTime | format}}</p>
-									  </span>
+                                          <p class="nw-r-title">{{item.bulletinTitle}}</p>
+                                          <p class="nw-r-time">{{$t('frame.expiryDate')}}：{{item.activeTime | format}} {{$t('frame.to')}} {{item.inactiveTime | format}}</p>
+                                      </span>
                                     </div>
                                     <p class="notice__loading" v-if="notices.length > 0 "><a href="javascript:;" target="_self"
                                                                   @click="loadingMore">{{$t('frame.loadingMore')}}</a>
@@ -870,8 +870,7 @@
         async created() {
             /* 用于监测传过来的path */
             let path = getQuery('path') || this.$route.path
-            debugger
-            let routeArr = ['/res', '/cust', '/order', '/acct', '/rpt', '/prod', '/odp', '/base', '/']
+            let routeArr = ['/res', '/cust', '/order', '/acct', '/rpt', '/prod', '/odp', '/provision', '/base', '/']
             if (path && !routeArr.includes(decodeURIComponent(path))) {
                 localStorage.set('aid-path', decodeURIComponent(path))
             }
@@ -926,7 +925,7 @@
                     let queryName = getQueryData(res.data, 'menuId', 'menuPid', decodeURIComponent(route), 'menuName')
                     this.queryActiveMenu = queryName.name
                     this.queryOpenName = queryName.names
-                    let routeArr2 = ['/res', '/cust', '/order', '/acct', '/rpt', '/prod', '/odp', '/base', '/']
+                    let routeArr2 = ['/res', '/cust', '/order', '/acct', '/rpt', '/prod', '/odp', '/provision', '/base', '/']
                     let querys = localStorage.get('query-key')
                     if (route && !routeArr2.includes(decodeURIComponent(path))) {
                         let query = JSON.parse(querys)
@@ -1023,7 +1022,6 @@
             })
         },
         mounted() {
-            console.log(this.$store.state.storeModule.breadcrumbArr)
             this.queryStaff();
             /* 设置 */
             this.$nextTick(() => {
