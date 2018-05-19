@@ -30,10 +30,10 @@
                             <t-input type="password"  v-model="formRight.input1" style="width: 214px"></t-input>
                         </t-form-item>
                         <t-form-item :label="$t('frame.newPsd')" prop="input2" style="margin-bottom:25px;">
-                            <t-input type="password"  v-model="formRight.input2" style="width: 214px" maxlength="20"></t-input>
+                            <t-input type="password"  v-model="formRight.input2" style="width: 214px" :maxlength="20"></t-input>
                         </t-form-item>
                         <t-form-item :label="$t('frame.confirmNew')" prop="input3">
-                            <t-input type="password"  v-model="formRight.input3" style="width: 214px" maxlength="20"></t-input>
+                            <t-input type="password"  v-model="formRight.input3" style="width: 214px" :maxlength="20"></t-input>
                         </t-form-item>
                     </t-form>
                 </div>
@@ -42,10 +42,13 @@
                         <div class="free-tips-cnt">
                             <p class="tips-content ml-25 mb-10">{{$t('frame.psdRule')}}</p>
                             <p><i class="tips-num mb-10">1</i>{{$t('frame.rule1')}}</p>
-                            <p><i class="tips-num mb-10">2</i>{{$t('frame.rule2')}}</p>
+                            <p><i class="tips-num mb-10">2</i>{{$t('frame.rule7')}}</p>
+                            <p><i class="tips-num mb-10">3</i>{{$t('frame.rule6')}}</p>
+                            <p><i class="tips-num mb-10">4</i>{{$t('frame.rule2')}}</p>
                             <p class="ml-25 mb-5">{{$t('frame.rule3')}}</p>
                             <p class="ml-25 mb-5">{{$t('frame.rule4')}}</p>
                             <p class="ml-25 mb-5">{{$t('frame.rule5')}}</p>
+                            <p class="ml-25 mb-5">{{$t('frame.rule8')}}</p>
                         </div>
                     </div>
 
@@ -103,33 +106,33 @@
     export default {
         data(){
             return {
-              formRight: {
-                staffName: '',
-                  staffNo: '',
-                input1: '',
-                input2: '',
-                input3: '',
-              },
-              ruleFormLabel: {
-                input1: [
-                  {required: true, message: this.$t('frame.inputNull'), trigger: 'blur'}
-                ],
-                input2: [
-                  {required: true, message: this.$t('frame.inputNull'), trigger: 'blur'}
-                ],
-                input3: [
-                  {required: true, message: this.$t('frame.inputNull'), trigger: 'blur'}
-                ]
-              },
-              alertClass: 'aid aid-alert-circle-outline',
-              //弹框
-              showModal: false,
-              //弹框内容
-              resultContent:'',
-              //成功弹框
-              showSuccessModal: false,
-              //成功弹框内容
-              resultSuccessContent:'',
+                formRight: {
+                    staffName: '',
+                    staffNo: '',
+                    input1: '',
+                    input2: '',
+                    input3: '',
+                },
+                ruleFormLabel: {
+                    input1: [
+                        {required: true, message: this.$t('frame.inputNull'), trigger: 'blur'}
+                    ],
+                    input2: [
+                        {required: true, message: this.$t('frame.inputNull'), trigger: 'blur'}
+                    ],
+                    input3: [
+                        {required: true, message: this.$t('frame.inputNull'), trigger: 'blur'}
+                    ]
+                },
+                alertClass: 'aid aid-alert-circle-outline',
+                //弹框
+                showModal: false,
+                //弹框内容
+                resultContent:'',
+                //成功弹框
+                showSuccessModal: false,
+                //成功弹框内容
+                resultSuccessContent:'',
             }
         },
         computed: {
