@@ -1,9 +1,9 @@
 export default {
   frame: {
-      list_title: 'Notice List',
-      list_tag_top: 'Top',
-      list_tag_emergency: 'Emergency',
-      list_tag_important: 'Important',
+    list_title: 'Notice List',
+    list_tag_top: 'Top',
+    list_tag_emergency: 'Emergency',
+    list_tag_important: 'Important',
     sysInform: 'System Informs',
     loadingMore: 'Loading more ...',
     doc: 'Detail docs',
@@ -38,20 +38,20 @@ export default {
     btn_yes: 'OK',
     change_psd: 'Change Password'
   },
-  notice_local:{
+  notice_local: {
     notice: {
-      one_select:'You can only manipulate one piece of data',
-      create_success:'New Bulletin Success',
-      create_erromessge:'New Bulletin Fail',
-      update_success:'Update Bulletin Success',
-      update_erromessge:'Update Bulletin Fail',
-      logout_success:'Successful Logout',
-      logout_fail:'The Logout Is Not Successful',
-      verify_time:'The Effective Time Must Be Less Than The Failure Time',
-      logout_erromessge:'The Logout Operation Cannot Be Performed',
-      update_erromessge:'Unable To Modify Operation',
-      qry_erromessge:'Query Operation Failed',
-      logout_erromessge_select:'Please Select Operation Information.',
+      one_select: 'You can only manipulate one piece of data',
+      create_success: 'New Bulletin Success',
+      create_erromessge: 'New Bulletin Fail',
+      update_success: 'Update Bulletin Success',
+      update_erromessge: 'Update Bulletin Fail',
+      logout_success: 'Successful Logout',
+      logout_fail: 'The Logout Is Not Successful',
+      verify_time: 'The Effective Time Must Be Less Than The Failure Time',
+      logout_erromessge: 'The Logout Operation Cannot Be Performed',
+      update_erromessge: 'Unable To Modify Operation',
+      qry_erromessge: 'Query Operation Failed',
+      logout_erromessge_select: 'Please Select Operation Information.',
       title: 'home',
       sub_title: 'System Management ',
       main_title: 'Notice Management',
@@ -63,7 +63,7 @@ export default {
       query_new: 'New',
       tab_id: 'Notice ID',
       tab_title: 'Title',
-        logout_btn: 'LogOut',
+      logout_btn: 'LogOut',
       tab_level: 'Notice Level',
       tab_range: 'Publish Range',
       tab_state: 'State',
@@ -90,7 +90,7 @@ export default {
       list_title: 'Notice List',
       list_tag_top: 'Top',
       list_tag_emergency: 'Emergency',
-      list_tag_important: 'Important',
-    },
+      list_tag_important: 'Important'
+    }
   }
 }
