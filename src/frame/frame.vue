@@ -4,13 +4,13 @@
         <div :class="['layout-sidebar',{'layout-sidebar--folded': isOpen === false},{'show': isOpenOnMinWin === false}]">
             <div class="layout-logo-left">
                 <slot name="frame-header">
-                    <span >
+                    <!-- <span v-if> -->
                         <!--<router-link :to="logoRouter">-->
-                            <img :src="img" alt="" class="layout-logo-img"/>
-                            <img :src="imgMin" alt="" class="layout-logo-min-img"/>
+                            <!-- <img :src="img" alt="" class="layout-logo-img"/> -->
+                            <!-- <img :src="imgMin" alt="" class="layout-logo-min-img"/> -->
                         <!--</router-link>-->
-                    </span>
-                    <span v-else>
+                    <!-- </span> -->
+                    <span >
                 <img :src="img" alt="" class="layout-logo-img"/>
                         <img :src="imgMin" alt="" class="layout-logo-min-img"/>
                     </span>
