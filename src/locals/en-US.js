@@ -94,5 +94,17 @@ export default {
       list_tag_emergency: 'Emergency',
       list_tag_important: 'Important',
     },
+  },
+  handle_local: {
+    handle: {
+      order_title: 'order title',
+      applicant: 'applicant',
+      application_date: 'application date',
+      query_btn: 'query',
+      application_form_title: 'application form title',
+      operation: 'operation',
+      unHandle: 'unHandle',
+      handle: 'handle',
+    }
   }
 }

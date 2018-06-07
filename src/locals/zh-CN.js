@@ -84,5 +84,17 @@ export default {
       list_tag_emergency: '紧急',
       list_tag_important: '重要',
     },
+  },
+  handle_local: {
+    handle: {
+      order_title: '工单标题',
+      applicant: '申请人',
+      application_date: '申请日期',
+      query_btn: '查询',
+      application_form_title: '申请单标题',
+      operation: '操作',
+      unHandle: '代办',
+      handle: '已办',
+    }
   }
 }

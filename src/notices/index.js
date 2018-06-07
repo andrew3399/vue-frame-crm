@@ -22,5 +22,21 @@ export default [
     meta: {
       requireAuth: true
     }
+  },
+  {
+    path: 'unHandle',
+    name: 'unHandle',
+    component: require('../views/unHandle.vue'),
+    meta: {
+      requireAuth: true
+    }
+  },
+  {
+    path: 'handle',
+    name: 'handle',
+    component: require('../views/handle.vue'),
+    meta: {
+      requireAuth: true
+    }
   }
 ]
