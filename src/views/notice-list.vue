@@ -14,6 +14,73 @@
             </div>
         </div> -->
         <!-- 面包屑end -->
+        <div class="row">
+            <div class="col-6">
+                <div class="enquiries notice-state-wrap">
+                    <!-- 标题 star-->
+                    <div class="enquiries-title">
+                        <span></span>{{$t('handle_local.handle.unHandle')}}
+                    </div>
+                    <!-- 标题 end-->
+                   <div class="notice-manage-wrap" v-for="item in handleItems">
+                        <!-- <div class="row notice-state-content">
+                            <div class="col-12 row mb8">
+                                <div class="col-6 text-left">已办流程标题</div>
+                                <div class="col-6 text-right"> 2018-05-14</div>
+                            </div>
+                            <div class="col-12 row mb8">
+                                <div class="col-6 text-left">已办流程标题</div>
+                                <div class="col-6 text-right"> 2018-05-14</div>
+                            </div>
+                        </div> -->
+
+                        <div class="notice-manage-content" @click="jumpToApproval(item.extAttr.formKey)">
+                            <div class="text-left content-title">
+                                <span>{{item.title}}</span>
+                            </div>
+                            <!-- <div v-html="item.bulletinContent"></div> -->
+                            <div class="text-right content-time">{{item.workflowCreateDate}}</div>
+                        </div>
+                   </div>
+                    <div class="d-flex flex-row-reverse mt-10">
+                        <t-button @click="jumpToUnHandle">more</t-button>
+                    </div>
+                </div>
+            </div>
+             <div class="col-6">
+                  <div class="enquiries notice-state-wrap">
+                    <!-- 标题 star-->
+                    <div class="enquiries-title">
+                        <span></span>{{$t('handle_local.handle.handle')}}
+                    </div>
+                    <!-- 标题 end-->
+                     <div class="notice-manage-wrap" v-for="item in unHandleItems">
+                        <!-- <div class="row notice-state-content">
+                            <div class="col-12 row mb8">
+                                <div class="col-6 text-left">已办流程标题</div>
+                                <div class="col-6 text-right"> 2018-05-14</div>
+                            </div>
+                            <div class="col-12 row mb8">
+                                <div class="col-6 text-left">已办流程标题</div>
+                                <div class="col-6 text-right"> 2018-05-14</div>
+                            </div>
+                        </div> -->
+
+                        <div class="notice-manage-content" @click="jumpToApproval(item.extAttr.formKey)">
+                            <div class="text-left content-title">
+                                <span>{{item.title}}</span>
+                            </div>
+                            <!-- <div v-html="item.bulletinContent"></div> -->
+                            <div class="text-right content-time">{{item.workflowCreateDate}}</div>
+                        </div>
+                       
+                    </div>
+                    <div class="d-flex flex-row-reverse mt-10">
+                        <t-button @click="jumpToHandle">more</t-button>
+                    </div>
+                </div>
+             </div>
+        </div>
         <div class="enquiries mt-10" style="padding:0px 0px 15px 0px;">
             <!-- 标题 star-->
             <div class="notice-list-title" >
@@ -28,14 +95,14 @@
             </div>
             <div class="notice-manage-wrap"  v-if="total!=0" v-for="item in items" @click="navToDetail(item)">
                 <div class="notice-manage-content">
-                    <div class="content-title">
+                    <div class="text-left content-title">
                         <t-tag state='warning' v-if="parseInt(item.topFlag) === 1">{{$t('notice_local.notice.list_tag_top')}}</t-tag>
                         <t-tag state='success'v-if="parseInt(item.bulletinLevel) === 3">{{$t('notice_local.notice.list_tag_emergency')}}</t-tag>
                         <t-tag state='info'v-if="parseInt(item.bulletinLevel) === 2">{{$t('notice_local.notice.list_tag_important')}}</t-tag>
                         <span>{{item.bulletinTitle}}</span>
                     </div>
-                    <div v-html="item.bulletinContent"></div>
-                    <div class="text-right content-time"><span>{{item.bulletinPublisher}}</span>{{item.createTimeString}}</div>
+                    <!-- <div v-html="item.bulletinContent"></div> -->
+                    <div class="text-right content-time">{{item.createTimeString}}</div>
                 </div>
             </div>
             <div class="notice-pager mt-10" style="margin: 20px 0px 5px 0px !important;">
@@ -52,10 +119,24 @@
             return {
                 bulletinTitle:'',
                 total: 0,
-                pageSize: 10,
+                pageSize: 5,
                 sizerRange: [10, 15, 20, 50],
                 pageNo: 1,
-                items: []
+                items: [],
+                handleItems: [],
+                unHandleItems: [],
+                fromItem:{
+                    pageNum:1,
+                    pageSize:5,
+                    lang:'',
+                    title:"",
+                    applyStaffId:"",
+                    taskStaffId:"100000000",
+                    applyTime:"",
+                    queneId:"HAMWA",
+                    stationId:"23232",
+                    formKey:"",            
+                 }
             }
         },
         filters: {
@@ -96,6 +177,12 @@
                 // this.$router.push({ path: `notice/${item.bulletinId}` })
                 // this.$router.push({ path: '/notice', query: { bulletinId: item.bulletinId } })
             },
+            jumpToUnHandle(){
+                this.$router.push({ name: 'unHandle'})
+            },
+            jumpToHandle(){
+                this.$router.push({ name: 'handle'})
+            },
             handleOnPagerChange (item) {
                 this.pageNo = item
                 this.getBulletinList()
@@ -128,6 +215,64 @@
                     })
                 })
             },
+            getUnHandleList(){
+                let that = this
+                this.instance.get(this.authorization.queryUnhandle, {
+                    params: {
+                            taskStaffId:that.fromItem.taskStaffId,
+                            stationId:that.fromItem.stationId,
+                            queneId:that.fromItem.queneId,
+                            pageNum: that.fromItem.pageNum,
+                            pageSize: that.fromItem.pageSize,
+                            title:that.fromItem.title,
+                            lang:that.fromItem.lang,
+                            applyStaffId:that.fromItem.applyStaffId,
+                            applyTime:that.fromItem.applyTime
+                        }
+                }).then(ret => {
+                    // console.log(JSON.stringify(ret.data))
+
+
+                    // that.total = ret.data.result.count
+                    that.handleItems = ret.data.result.result
+                    // that.fromItem.formKey = ret.data.result.result.extAttr.formKey
+
+
+                    //if()
+
+                }).catch(ret => {
+                        this.$Message.warning(this.$t('frame.warning'))
+                })
+            },
+            getHandleList(){
+                 let that = this
+                this.instance.get(this.authorization.queryHandle, {
+                    params: {
+                            taskStaffId:that.fromItem.taskStaffId,
+                            stationId:that.fromItem.stationId,
+                            queneId:that.fromItem.queneId,
+                            pageNum: that.fromItem.pageNum,
+                            pageSize: that.fromItem.pageSize,
+                            title:that.fromItem.title,
+                            lang:that.fromItem.lang,
+                            applyStaffId:that.fromItem.applyStaffId,
+                            applyTime:that.fromItem.applyTime
+                        }
+                }).then(ret => {
+                    // console.log(JSON.stringify(ret.data))
+
+
+                    // that.total = ret.data.result.count
+                    that.unHandleItems = ret.data.result.result
+                    // that.fromItem.formKey = ret.data.result.result.extAttr.formKey
+
+
+                    //if()
+
+                }).catch(ret => {
+                        this.$Message.warning(this.$t('frame.warning'))
+                })
+            },
             handleChooseRole(bulletinTitle){
                 this.$nextTick(() => {
                     this.instance.get(this.authorization.bulletinListUri, {
@@ -150,6 +295,14 @@
                         this.$Message.warning(this.$t('frame.warning'))
                     })
                 })
+            },
+            jumpToApproval(formKey){
+                // console.log(JSON.stringify(formKey))
+                var formkey1 = formKey
+                var url1 = "http://10.19.10.87:18080"
+                var url = url1.concat(formkey1);
+                // console.log(url)
+                window.open(url);
             }
         },
         mounted () {
@@ -158,6 +311,8 @@
              */
             setTimeout(() => {
                 this.getBulletinList()
+                this.getUnHandleList()
+                this.getHandleList()
             }, 300)
         }
     }

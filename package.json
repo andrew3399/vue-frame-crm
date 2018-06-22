@@ -1,12 +1,12 @@
 {
   "name": "vue-frame-crm",
-  "version": "0.0.84",
+  "version": "0.0.85",
   "description": "vue components for crm system",
   "main": "lib/frame.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "clean": "rimraf lib",
-    "dev": "webpack-dev-server --inline --hot --port 9000 --config build/webpack.dev.js --open",
+    "dev": "webpack-dev-server --inline --hot --port 8000 --config build/webpack.dev.js --open",
     "release": "cross-env NODE_ENV=production webpack --config build/webpack.min.js",
     "release-all": "cross-env NODE_ENV=production webpack --config build/webpack.lib.js",
     "release-esm": "cross-env NODE_ENV=production webpack --config build/webpack.esm.js",

@@ -4,13 +4,13 @@
         <div :class="['layout-sidebar',{'layout-sidebar--folded': isOpen === false},{'show': isOpenOnMinWin === false}]">
             <div class="layout-logo-left">
                 <slot name="frame-header">
-                    <span >
+                    <!-- <span v-if> -->
                         <!--<router-link :to="logoRouter">-->
-                            <img :src="img" alt="" class="layout-logo-img"/>
-                            <img :src="imgMin" alt="" class="layout-logo-min-img"/>
+                            <!-- <img :src="img" alt="" class="layout-logo-img"/> -->
+                            <!-- <img :src="imgMin" alt="" class="layout-logo-min-img"/> -->
                         <!--</router-link>-->
-                    </span>
-                    <span v-else>
+                    <!-- </span> -->
+                    <span >
                 <img :src="img" alt="" class="layout-logo-img"/>
                         <img :src="imgMin" alt="" class="layout-logo-min-img"/>
                     </span>
@@ -707,21 +707,35 @@
                         let alink = document.createElement('a')
                         alink.href = url
                         let path = alink.pathname.replace(/^([^\/])/, '/$1')
+                        if(url.indexOf('?') > -1){
+                            window.location.href = url + '&path=' + path
+                        }else{
+                            window.location.href = url + '?path=' + path
+                        }
                         // localStorage.set('aid-path', path)
-                        window.location.href = url + '?path=' + path
+                        //window.location.href = url + '?path=' + path
                     }).catch(res => {
                         let alink = document.createElement('a')
                         alink.href = url
                         let path = alink.pathname.replace(/^([^\/])/, '/$1')
+                        if(url.indexOf('?') > -1){
+                            window.location.href = url + '&path=' + path
+                        }else{
+                            window.location.href = url + '?path=' + path
+                        }
                         // localStorage.set('aid-path', path)
-                        window.location.href = url + '?path=' + path
+                      //  window.location.href = url + '?path=' + path
                     })
                 } else {
                     let alink = document.createElement('a')
                     alink.href = url
                     let path = alink.pathname.replace(/^([^\/])/, '/$1')
                     // localStorage.set('aid-path', path)
-                    window.location.href = url + '?path=' + path
+                    if (url.indexOf('?') > -1) {
+                        window.location.href = url + '&path=' + path
+                    } else {
+                        window.location.href = url + '?path=' + path
+                    }
                 }
             },
             /* 用于处理401重新再发请求 */
