@@ -730,8 +730,13 @@
                     let alink = document.createElement('a')
                     alink.href = url
                     let path = alink.pathname.replace(/^([^\/])/, '/$1')
+                    if(url.indexOf('?')>0){
+                        window.location.href = url + '&path=' + path
+                    }else{
+                        window.location.href = url + '?path=' + path
+                    }
                     // localStorage.set('aid-path', path)
-                    window.location.href = url + '?path=' + path
+                   // window.location.href = url + '?path=' + path
                 }
             },
             /* 用于处理401重新再发请求 */
