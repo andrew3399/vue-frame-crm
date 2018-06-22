@@ -730,7 +730,6 @@
                     let alink = document.createElement('a')
                     alink.href = url
                     let path = alink.pathname.replace(/^([^\/])/, '/$1')
-                    // localStorage.set('aid-path', path)
                     if (url.indexOf('?') > -1) {
                         window.location.href = url + '&path=' + path
                     } else {
