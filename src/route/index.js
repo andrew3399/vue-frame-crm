@@ -26,7 +26,7 @@ export function beforeEach (to, from, next, authorization, requestInstance, cb) 
   }
     // 路由拦截 根据路由配置中meta.requireAuth判断是否需要登录
   if (to.meta.requireAuth) {
-    if (accessToken && refreshToken) {
+    if (accessToken && refreshToken && sessionTime) {
       next()
     } else {
       let code = getQuery('code')
@@ -76,21 +76,21 @@ export function beforeEach (to, from, next, authorization, requestInstance, cb) 
               switch (res.response.status) {
                 case 401:
                   requestInstance.post(authorization.tokenUri + '?grant_type=refresh_token' + '&refresh_token=' + refreshToken + '&scope=read', '', {
-                      headers: {
-                          Authorization: 'Basic ' + Base64.encode(authorization.client_id + ':' + authorization.clientSecret)
-                        }
-                    }).then(res => {
-                        localStorage.set('access_token', res.data.access_token, res.data.expires_in * 1000)
+                    headers: {
+                      Authorization: 'Basic ' + Base64.encode(authorization.client_id + ':' + authorization.clientSecret)
+                    }
+                  }).then(res => {
+                    localStorage.set('access_token', res.data.access_token, res.data.expires_in * 1000)
                                         // localStorage.set('refresh_token', res.data.refresh_token, Math.pow(2, 32))
-                        next()
-                      }).catch(res => {
-                          let msg = {
-                              client_id: authorization.client_id,
-                              redirect_uri: encodeURIComponent(authorization.redirect_uri),
-                              state: uuid(6, 16)
-                            }
-                          window.location.href = authorization.authorizeUri + '?client_id=' + msg.client_id + '&redirect_uri=' + msg.redirect_uri + '&response_type=code&scope=read&state=' + msg.state
-                        })
+                    next()
+                  }).catch(res => {
+                    let msg = {
+                      client_id: authorization.client_id,
+                      redirect_uri: encodeURIComponent(authorization.redirect_uri),
+                      state: uuid(6, 16)
+                    }
+                    window.location.href = authorization.authorizeUri + '?client_id=' + msg.client_id + '&redirect_uri=' + msg.redirect_uri + '&response_type=code&scope=read&state=' + msg.state
+                  })
                   break
               }
             }
