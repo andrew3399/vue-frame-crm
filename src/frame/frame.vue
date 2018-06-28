@@ -258,7 +258,7 @@
                                     <t-breadcrumb-item v-for="(item, $idx) in breadcrumbArr" :key="$idx"
                                                        :class="($idx == 0 || $idx == breadcrumbArr.length - 1) ? 'unclick' : ''"
                                                        :href="($idx == 0 || $idx == breadcrumbArr.length - 1) ? '' : item.menuUrl">
-                                        {{lang === 'EN' ? item.menuDesc : item.menuName}}
+                                        {{lang === 'EN' ? item.menuEnName : item.menuName}}
                                     </t-breadcrumb-item>
                                 </t-breadcrumb>
                             </div>
