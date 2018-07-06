@@ -25,11 +25,11 @@ export default new Router({
           name: 'change',
           component: require('../src/views/change.vue')
         },
-        {
-          path: '/unHandle',
-          name: 'unHandle',
-          component: require('../src/views/unHandle.vue')
-        }
+        // {
+        //   path: '/unHandle',
+        //   name: 'unHandle',
+        //   component: require('../src/views/unHandle.vue')
+        // }
       ]
     }
   ]

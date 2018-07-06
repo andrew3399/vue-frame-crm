@@ -14,15 +14,15 @@
             </div>
         </div> -->
         <!-- 面包屑end -->
-        <div class="row">
+        <!-- <div class="row">
             <div class="col-6">
-                <div class="enquiries notice-state-wrap">
+                <div class="enquiries notice-state-wrap"> -->
                     <!-- 标题 star-->
-                    <div class="enquiries-title">
+                    <!-- <div class="enquiries-title">
                         <span></span>{{$t('handle_local.handle.unHandle')}}
-                    </div>
+                    </div> -->
                     <!-- 标题 end-->
-                   <div class="notice-manage-wrap" v-for="item in handleItems">
+                   <!-- <div class="notice-manage-wrap" v-for="item in handleItems"> -->
                         <!-- <div class="row notice-state-content">
                             <div class="col-12 row mb8">
                                 <div class="col-6 text-left">已办流程标题</div>
@@ -34,27 +34,27 @@
                             </div>
                         </div> -->
 
-                        <div class="notice-manage-content" @click="jumpToApproval(item.extAttr.formKey)">
+                        <!-- <div class="notice-manage-content" @click="jumpToApproval(item.extAttr.formKey)">
                             <div class="text-left content-title">
                                 <span>{{item.title}}</span>
-                            </div>
+                            </div> -->
                             <!-- <div v-html="item.bulletinContent"></div> -->
-                            <div class="text-right content-time">{{item.workflowCreateDate}}</div>
+                            <!-- <div class="text-right content-time">{{item.workflowCreateDate}}</div>
                         </div>
                    </div>
                     <div class="d-flex flex-row-reverse mt-10">
                         <t-button @click="jumpToUnHandle">more</t-button>
                     </div>
                 </div>
-            </div>
-             <div class="col-6">
-                  <div class="enquiries notice-state-wrap">
+            </div> -->
+             <!-- <div class="col-6">
+                  <div class="enquiries notice-state-wrap"> -->
                     <!-- 标题 star-->
-                    <div class="enquiries-title">
+                    <!-- <div class="enquiries-title">
                         <span></span>{{$t('handle_local.handle.handle')}}
-                    </div>
+                    </div> -->
                     <!-- 标题 end-->
-                     <div class="notice-manage-wrap" v-for="item in unHandleItems">
+                     <!-- <div class="notice-manage-wrap" v-for="item in unHandleItems"> -->
                         <!-- <div class="row notice-state-content">
                             <div class="col-12 row mb8">
                                 <div class="col-6 text-left">已办流程标题</div>
@@ -66,12 +66,12 @@
                             </div>
                         </div> -->
 
-                        <div class="notice-manage-content" @click="jumpToApproval(item.extAttr.formKey)">
+                        <!-- <div class="notice-manage-content" @click="jumpToApproval(item.extAttr.formKey)">
                             <div class="text-left content-title">
                                 <span>{{item.title}}</span>
-                            </div>
+                            </div> -->
                             <!-- <div v-html="item.bulletinContent"></div> -->
-                            <div class="text-right content-time">{{item.workflowCreateDate}}</div>
+                            <!-- <div class="text-right content-time">{{item.workflowCreateDate}}</div>
                         </div>
                        
                     </div>
@@ -80,7 +80,7 @@
                     </div>
                 </div>
              </div>
-        </div>
+        </div> -->
         <div class="enquiries mt-10" style="padding:0px 0px 15px 0px;">
             <!-- 标题 star-->
             <div class="notice-list-title" >
