@@ -18,7 +18,17 @@ export function beforeEach (to, from, next, authorization, requestInstance, cb) 
       'params': to.params
     }).then(function (ret) {
       if (ret.data.success) {
-                // router.app.$store.state.breadcrumbArr = ret.data.result
+        let parthMenuArray = ret.data.result
+        if (parthMenuArray != null && parthMenuArray.length > 0 && authorization.getStaffMenuFunc !== undefined) {
+          let currentMenu = parthMenuArray[parthMenuArray.length - 1]
+          requestInstance.post(authorization.getStaffMenuFunc, {
+            menuId: currentMenu.menuId
+          }).then(function (res) {
+            if (res != null && res !== '') {
+              store.state.staffMenuFunc = res
+            }
+          })
+        }
         store.state.breadcrumbArr.splice(0, store.state.breadcrumbArr.length)
         store.state.breadcrumbArr = ret.data.result
       }
