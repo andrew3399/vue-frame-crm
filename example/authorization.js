@@ -10,7 +10,7 @@ export default {
   bulletinByIdUri: '/api/getBulletinById', // 获取消息详情的接口，是测试机地址，生产环境需要将其改成正式环境地址
   changePWD: '/api/changePWD',
   getStaffName: '/api/getStaffName',
-  getStaffMenuFunc: '/api/v1/getStaffMenueFunc',
+  // getStaffMenuFunc: '/api/v1/getStaffMenueFunc',
   // queryUnhandle: '/api/unHandleQuery',
   // queryHandle:'/api/handleQuery',
 }

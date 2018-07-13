@@ -25,7 +25,7 @@ export function beforeEach (to, from, next, authorization, requestInstance, cb) 
             menuId: currentMenu.menuId
           }).then(function (res) {
             if (res != null && res !== '') {
-              store.state.staffMenuFunc = res
+              store.state.staffMenuFunc = res.data
             }
           })
         }
