@@ -486,8 +486,30 @@
 //            goRoute(path){
 //                this.$router.push({name: path})
 //            },
-
-            /* 消息点击触发 */
+          getParentMenu(){
+            let that  = this
+            this.instance.post(this.authorization.parentMenuUri, {
+              url: this.$route.path,
+              params: this.$route.params
+            }).then(function (ret) {
+              if (ret.data.success) {
+                let parthMenuArray = ret.data.result
+                if (parthMenuArray != null && parthMenuArray.length > 0 && that.authorization.getStaffMenuFunc !== undefined) {
+                  let currentMenu = parthMenuArray[parthMenuArray.length - 1]
+                  that.instance.post(that.authorization.getStaffMenuFunc, {
+                    menuId: currentMenu.menuId
+                  }).then(function (res) {
+                    if (res != null && res !== '') {
+                      that.$store.state.staffMenuFunc = res.data
+                    }
+                  })
+                }
+                that.$store.state.storeModule.breadcrumbArr = []
+                that.$store.state.storeModule.breadcrumbArr = ret.data.result
+              }
+            })
+          },
+          /* 消息点击触发 */
             handleNoticeClick(index, item) {
                 this.isActive = index
                 // this.hideSlideWrapSlip = false
@@ -711,7 +733,11 @@
                         if(url.indexOf('?') > -1){
                             window.location.href = url + '&path=' + path
                         }else{
+                          if (path.indexOf('/rpt/views') > 0){
+                            window.location.href = url
+                          } else {
                             window.location.href = url + '?path=' + path
+                          }
                         }
                         // localStorage.set('aid-path', path)
                         //window.location.href = url + '?path=' + path
@@ -722,7 +748,11 @@
                         if(url.indexOf('?') > -1){
                             window.location.href = url + '&path=' + path
                         }else{
-                            window.location.href = url + '?path=' + path
+                            if (path.indexOf('/rpt/views') > 0){
+                              window.location.href = url
+                            } else {
+                              window.location.href = url + '?path=' + path
+                            }
                         }
                         // localStorage.set('aid-path', path)
                       //  window.location.href = url + '?path=' + path
@@ -734,7 +764,11 @@
                     if (url.indexOf('?') > -1) {
                         window.location.href = url + '&path=' + path
                     } else {
+                      if (path.indexOf('/rpt/views') > 0){
+                        window.location.href = url
+                      } else {
                         window.location.href = url + '?path=' + path
+                      }
                     }
                 }
             },
@@ -1053,6 +1087,7 @@
             } else {
                 that.showMenu = true
             }
+            that.getParentMenu()
             window.addEventListener('resize', () => {
                 let clientWidth = document.body.clientWidth || document.body.offsetWidth
                 that.clientWidth = clientWidth
