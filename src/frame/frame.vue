@@ -482,6 +482,12 @@
                 return Format('yyyy/MM/dd')
             }
         },
+        watch: {
+          '$route'(to,form){
+            // 监听路由变化情况，切换对应的面包屑信息
+            this.getParentMenu()
+          }
+        },
         methods: {
 //            goRoute(path){
 //                this.$router.push({name: path})
@@ -500,7 +506,7 @@
                     menuId: currentMenu.menuId
                   }).then(function (res) {
                     if (res != null && res !== '') {
-                      that.$store.state.staffMenuFunc = res.data
+                      that.$store.state.storeModule.staffMenuFunc = res.data
                     }
                   })
                 }
