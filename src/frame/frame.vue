@@ -1075,6 +1075,9 @@
                 }
             })
         },
+        beforeMount(){
+            this.getParentMenu()
+        },
         mounted() {
             this.queryStaff();
             /* 设置 */
@@ -1093,7 +1096,7 @@
             } else {
                 that.showMenu = true
             }
-            that.getParentMenu()
+            
             window.addEventListener('resize', () => {
                 let clientWidth = document.body.clientWidth || document.body.offsetWidth
                 that.clientWidth = clientWidth
