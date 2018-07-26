@@ -1,7 +1,7 @@
 <template>
     <div class="layout layout--one-screen bg-gray-lightest-5">
         <div :class="['menu-backdrop d-xl-none',{'show': isOpenOnMinWin === false}]" @click="closeMenuOnMinWin"></div>
-        <div :class="['layout-sidebar',{'layout-sidebar--folded': isOpen === false},{'show': isOpenOnMinWin === false}]">
+        <div :class="['layout-sidebar',{'layout-sidebar--folded': isOpen === false},{'show': isOpenOnMinWin === false}]"  v-if="showMenuHead === '1' || showMenuHead === '3'">
             <div class="layout-logo-left">
                 <slot name="frame-header">
                     <!-- <span v-if> -->
@@ -135,8 +135,23 @@
                 </slot>
             </div>
         </div>
-        <div class="layout-content layout-delete-dot">
-            <div class="layout-nav navbar navbar-expand-lg bg-white align-items-center layout-nav--top">
+        <div :class="['layout-content', 'layout-delete-dot',{'hidenMenu': showMenuHead !== '1' && showMenuHead !== '3'}]">
+            <div class="bg-white pt-10" style="padding-bottom: 10px;" v-if="staffMpMenu">
+                <div>
+                    <span class="bg-primary" style="color: white">
+                        {{lang === 'EN' ? staffMpMenu.mpNameus : staffMpMenu.mpNamecn}}
+                    </span>
+                </div>
+                <div class="tab-menu" v-if="showMenuHead === '4'">
+                    <t-button-group>
+                        <t-button type="outline-primary" style="cursor: pointer;" v-for="staffMenu in staffMpMenu.menulist" @click="changeStaffMpMenu(staffMenu.menuUrl)">
+                            {{lang === 'EN'? staffMenu.menuEnName : staffMenu.menuName}}
+                        </t-button>
+                    </t-button-group>
+                </div>
+            </div>
+
+            <div class="layout-nav navbar navbar-expand-lg bg-white align-items-center layout-nav--top"  v-if="showMenuHead === '1' || showMenuHead === '2'">
                 <div class="row nav-row">
                     <div class="col col-6 nav-col">
                         <a href="javascript:;" class="d-xm-block thumb-icon" v-show="!showMenu">
@@ -220,7 +235,7 @@
                     </div>
                 </div>
             </div>
-            <div class="slipbox__container" v-clickout-side="handleClickoutSide">
+            <div :class="slipbox__container" v-clickout-side="handleClickoutSide">
                 <div class="slipbox__content" :class="[{'close': hideSlip}]">
                     <div class="slipbox__close" @click="hideSlipbox">
                         <a href="javascript:;" target="_self">
@@ -249,9 +264,9 @@
                     </div>
                 </div>
             </div>
-            <div class="layout-main">
+            <div :class="['layout-main',{'hidenNavTop': showMenuHead === '5'},{'showMoreNav': showMenuHead === '4'}]">
                 <div class="layout-main--content">
-                    <div class="bread-crumbs cmi-bread-crumbs-wrap" v-if="breadcrumbArr">
+                    <div class="bread-crumbs cmi-bread-crumbs-wrap" v-if="breadcrumbArr && showMenuHead !== '4'">
                         <div class="row ml-0 mr-0">
                             <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12 col-xl-12 pl-0">
                                 <t-breadcrumb separator=">" >
@@ -339,6 +354,10 @@
             },
             imgMin: {
                 type: String
+            },
+            showMenuHead: {
+                type: String,
+                default: '1'
             },
             // logo 路由
             // logoRouter: {
@@ -432,6 +451,9 @@
                 debugger
                 return this.$store.state.storeModule.breadcrumbArr
             },
+            staffMpMenu(){
+                return this.$store.state.storeModule.staffMpMenu
+            },
             treeData() {
                 if (this.menuList && this.menuList.length) {
                     return this.menuList
@@ -492,6 +514,29 @@
 //            goRoute(path){
 //                this.$router.push({name: path})
 //            },
+          changeStaffMpMenu(url){
+            if (url.indexOf('?') > -1){
+              url = url + "&showMenuHead=4"
+            } else{
+              url = url + "?showMenuHead=4"
+            }
+            this.$router.push(url)
+          },
+          //ESOP集成涉及的菜单列表信息获取
+          getStaffMpMenue(){
+            let that = this
+            let pathParams = this.$route.query
+            if (pathParams != null && pathParams != '' && pathParams.mpId != undefined
+                && pathParams.mpId != null && pathParams.mpId != ''
+                && this.authorization.getStaffMpMenue != undefined){
+                this.mpId = pathParams.mpId
+                this.instance.post(this.authorization.getStaffMpMenue,{
+                  mpId: pathParams.mpId
+                }).then(function(ret){
+                  that.$store.state.storeModule.staffMpMenu = ret.data
+                })
+            }
+          },
           getParentMenu(){
             let that  = this
             this.instance.post(this.authorization.parentMenuUri, {
@@ -1077,6 +1122,7 @@
         },
         beforeMount(){
             this.getParentMenu()
+            this.getStaffMpMenue()
         },
         mounted() {
             this.queryStaff();
@@ -1096,7 +1142,7 @@
             } else {
                 that.showMenu = true
             }
-            
+
             window.addEventListener('resize', () => {
                 let clientWidth = document.body.clientWidth || document.body.offsetWidth
                 that.clientWidth = clientWidth
