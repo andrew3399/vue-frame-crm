@@ -136,9 +136,9 @@
             </div>
         </div>
         <div :class="['layout-content', 'layout-delete-dot',{'hidenMenu': showMenuHead !== '1' && showMenuHead !== '3'}]">
-            <div class="bg-white pt-10" style="padding-bottom: 10px;" v-if="staffMpMenu">
-                <div>
-                    <span class="bg-primary" style="color: white">
+            <div class="bg-white pt-10" style="padding-bottom: 10px;" v-if="showMenuHead === '4'">
+                <div class="bg-primary pl-10" style="color: white">
+                    <span >
                         {{lang === 'EN' ? staffMpMenu.mpNameus : staffMpMenu.mpNamecn}}
                     </span>
                 </div>
@@ -280,7 +280,7 @@
                         </div>
                     </div>
                     <router-view></router-view>
-                    <div class="pager-footer">
+                    <div class="pager-footer" v-if="showMenuHead !== '4' && showMenuHead !== '5'">
                     <p>{{pagerFooter}}</p>
                     </div>
                 </div>
@@ -525,6 +525,7 @@
           //ESOP集成涉及的菜单列表信息获取
           getStaffMpMenue(){
             let that = this
+            let routePath = this.$route.path
             let pathParams = this.$route.query
             if (pathParams != null && pathParams != '' && pathParams.mpId != undefined
                 && pathParams.mpId != null && pathParams.mpId != ''
@@ -533,7 +534,24 @@
                 this.instance.post(this.authorization.getStaffMpMenue,{
                   mpId: pathParams.mpId
                 }).then(function(ret){
-                  that.$store.state.storeModule.staffMpMenu = ret.data
+                  console.log(ret)
+                  if (ret.status === 200 && ret.data != null){
+                    that.$store.state.storeModule.staffMpMenu = ret.data
+                    let menuList = ret.data.menulist
+                    if (menuList.length > 0) {
+                       let defaultMenu = menuList[0]
+                        let menuUrl = defaultMenu.menuUrl
+                      if (menuUrl.indexOf('/') > -1){
+                         let menuRoutePath = menuUrl.substring(0,menuUrl.lastIndexOf("/"));
+                         if (routePath.indexOf(menuRoutePath) > -1){
+                           if(that.showMenuHead === '4' ){
+                             that.changeStaffMpMenu(menuUrl)
+                           }
+                         }
+                      }
+                    }
+                  }
+                  // if (ret.data)
                 })
             }
           },
@@ -1009,72 +1027,74 @@
             }
 
             // 获取menu数据
-            this.instance.get(this.authorization.menuUri,
+            if(this.showMenuHead !== '4' && this.showMenuHead !== '5'){
+              this.instance.get(this.authorization.menuUri,
                 {
-                    params: {
-                        language: fetchLang.data
-                    }
+                  params: {
+                    language: fetchLang.data
+                  }
                 }).then(res => {
                 this.menu = transData(res.data, 'menuId', 'menuPid', 'children', 'menuOrder')
                 /**
                  * 设置自动展开
                  */
                 this.$nextTick(() => {
-                    let route = localStorage.get('aid-path') || this.$route.path || getQuery('path') || '/'
-                    let queryName = getQueryData(res.data, 'menuId', 'menuPid', decodeURIComponent(route), 'menuName')
-                    this.queryActiveMenu = queryName.name
-                    this.queryOpenName = queryName.names
-                    let routeArr2 = ['/res', '/cust', '/order', '/acct', '/rpt', '/prod', '/odp', '/provision', '/base', '/']
-                    let querys = localStorage.get('query-key')
-                    if (route && !routeArr2.includes(decodeURIComponent(path))) {
-                        let query = JSON.parse(querys)
-                        this.$router.push({path: decodeURIComponent(route), query: query})
-                        localStorage.remove('aid-path')
-                        localStorage.remove('query-key')
-                    }
+                  let route = localStorage.get('aid-path') || this.$route.path || getQuery('path') || '/'
+                  let queryName = getQueryData(res.data, 'menuId', 'menuPid', decodeURIComponent(route), 'menuName')
+                  this.queryActiveMenu = queryName.name
+                  this.queryOpenName = queryName.names
+                  let routeArr2 = ['/res', '/cust', '/order', '/acct', '/rpt', '/prod', '/odp', '/provision', '/base', '/']
+                  let querys = localStorage.get('query-key')
+                  if (route && !routeArr2.includes(decodeURIComponent(path))) {
+                    let query = JSON.parse(querys)
+                    this.$router.push({path: decodeURIComponent(route), query: query})
+                    localStorage.remove('aid-path')
+                    localStorage.remove('query-key')
+                  }
                 })
                 /**
                  * 先找出这一条数据，并将其 menuName 组成一个数组
                  */
-            }).catch(res => {
+              }).catch(res => {
                 /**
                  * 处理相关错误的问题
                  */
                 if (res && res.response) {
-                    switch (res.response.status) {
-                        /**
-                         * 判断相关的错误，例如判断 token 失效， 或者没有登录的情况
-                         */
-                        case 401:
-                            /**
-                             * 增加错误判断，避免无限刷新
-                             */
-                            // let invalidCount = localStorage.get('token-invalid')
-                            // localStorage.set('token-invalid', parseInt(invalidCount) + 1)
-                            /* let that = this
-                            let title = this.$t('frame.systemInfo')
-                            let content = this.$t('frame.systemInfoContent')
-                            this.$Modal.warning({
-                      title: title,
-                      content: content,
-                      onOk: () => {
-                                    let accessToken = localStorage.get('access_token')
-                                        let refreshToken = localStorage.get('refresh_token')
-                                        if (!accessToken || !refreshToken) return
-                                  let msg = {
-                                    client_id: that.authorization.client_id,
-                                    redirect_uri: encodeURIComponent(that.authorization.redirect_uri),
-                                    state: uuid(6, 16)
-                                  }
-                                  window.location.href = that.authorization.authorizeUri + '?client_id=' + msg.client_id + '&redirect_uri=' + msg.redirect_uri + '&response_type=code&scope=read&state=' + msg.state
-                      }
-                    }) */
-                            // 第一次请求主动获取token
-                            that.getTokenAgian(that.getbulletinListCb)
-                            break
-                    }
+                  switch (res.response.status) {
+                    /**
+                     * 判断相关的错误，例如判断 token 失效， 或者没有登录的情况
+                     */
+                    case 401:
+                      /**
+                       * 增加错误判断，避免无限刷新
+                       */
+                      // let invalidCount = localStorage.get('token-invalid')
+                      // localStorage.set('token-invalid', parseInt(invalidCount) + 1)
+                      /* let that = this
+                      let title = this.$t('frame.systemInfo')
+                      let content = this.$t('frame.systemInfoContent')
+                      this.$Modal.warning({
+                title: title,
+                content: content,
+                onOk: () => {
+                              let accessToken = localStorage.get('access_token')
+                                  let refreshToken = localStorage.get('refresh_token')
+                                  if (!accessToken || !refreshToken) return
+                            let msg = {
+                              client_id: that.authorization.client_id,
+                              redirect_uri: encodeURIComponent(that.authorization.redirect_uri),
+                              state: uuid(6, 16)
+                            }
+                            window.location.href = that.authorization.authorizeUri + '?client_id=' + msg.client_id + '&redirect_uri=' + msg.redirect_uri + '&response_type=code&scope=read&state=' + msg.state
                 }
-            })
+              }) */
+                      // 第一次请求主动获取token
+                      that.getTokenAgian(that.getbulletinListCb)
+                      break
+                  }
+                }
+              })
+            }
 
             /* 获取10个最新的消息列表 */
             this.instance.get(this.authorization.bulletinListUri,
@@ -1126,6 +1146,7 @@
         },
         mounted() {
             this.queryStaff();
+
             /* 设置 */
             this.$nextTick(() => {
                 this.setInstance(this.instance)
