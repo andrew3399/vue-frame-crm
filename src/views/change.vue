@@ -103,6 +103,9 @@
 </template>
 <script>
     import { mapState } from 'vuex'
+    import LocalStorage from '../utils/localStorage.js'
+
+    let localStorage = new LocalStorage()
     export default {
         data(){
             return {
@@ -163,6 +166,12 @@
                     })
                 })
             },
+            logoutAndRemoveSession() {
+                localStorage.remove('access_token')
+                localStorage.remove('refresh_token')
+                localStorage.remove('session_time')
+                window.location.href = this.authorization.logout_uri
+            },
             //提交
             submit(){
                 let that = this;
@@ -211,6 +220,7 @@
             //成功后跳转页面
             handleSuccessOk(){
                 this.showSuccessModal = false;
+                this.logoutAndRemoveSession()
             },
         }
     }
