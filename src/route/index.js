@@ -50,10 +50,10 @@ export function beforeEach (to, from, next, authorization, requestInstance, cb) 
         requestInstance.post(authorization.tokenUri + '?code=' + code + '&state=' + state +
                     '&grant_type=authorization_code' + '&client_id=' + authorization.client_id + '&redirect_uri=' + encodeURIComponent(authorization.redirect_uri))
                     .then(res => {
-                      let time = new Date().getTime() + 30 * 60 * 1000
+                      let time = new Date().getTime() + 8 * 60 * 60 * 1000
                       localStorage.set('access_token', res.data.access_token, res.data.expires_in * 1000)
                       localStorage.set('refresh_token', res.data.refresh_token, Math.pow(2, 32))
-                      localStorage.set('session_time', time, 30 * 60 * 1000)
+                      localStorage.set('session_time', time, 8 * 60 * 60 * 1000)
                       next()
                     }).catch(res => {
                       let msg = {
