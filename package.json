@@ -1,6 +1,6 @@
 {
   "name": "vue-frame-crm",
-  "version": "0.0.97",
+  "version": "1.0.00",
   "description": "vue components for crm system",
   "main": "lib/frame.js",
   "scripts": {

@@ -603,9 +603,9 @@
                  * sessionTime 存在,需要重新设置sessiontime的过期时间
                  */
                 if (sessionTime) {
-                    let time = new Date().getTime() + 30 * 60 * 1000
+                    let time = new Date().getTime() + 8 * 60 * 60 * 1000
                     throttle(() => {
-                        localStorage.set('session_time', time, 30 * 60 * 1000)
+                        localStorage.set('session_time', time, 8 * 60 * 60 * 1000)
                     }, 5 * 1000, {leading: false, trailing: true})()
 
                     /**
