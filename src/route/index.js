@@ -47,8 +47,11 @@ export function beforeEach (to, from, next, authorization, requestInstance, cb) 
                  *  oauth2
                  */
                 // cb(code, state, next, localStorage, uuid(6, 16))
+                let locationHref = window.location.href
+                locationHref = locationHref.replace('code=' + code + '&state=' + state, '');
+                locationHref = locationHref.substring(0,locationHref.length - 1)
         requestInstance.post(authorization.tokenUri + '?code=' + code + '&state=' + state +
-                    '&grant_type=authorization_code' + '&client_id=' + authorization.client_id + '&redirect_uri=' + encodeURIComponent(authorization.redirect_uri))
+                    '&grant_type=authorization_code' + '&client_id=' + authorization.client_id + '&redirect_uri=' + encodeURIComponent(locationHref))
                     .then(res => {
                       let time = new Date().getTime() + 8 * 60 * 60 * 1000
                       localStorage.set('access_token', res.data.access_token, res.data.expires_in * 1000)
@@ -58,7 +61,7 @@ export function beforeEach (to, from, next, authorization, requestInstance, cb) 
                     }).catch(res => {
                       let msg = {
                         client_id: authorization.client_id,
-                        redirect_uri: encodeURIComponent(authorization.redirect_uri),
+                        redirect_uri: encodeURIComponent(window.location.href),
                         state: uuid(6, 16)
                       }
                       window.location.href = authorization.authorizeUri + '?client_id=' + msg.client_id + '&redirect_uri=' + msg.redirect_uri + '&response_type=code&scope=read&state=' + msg.state
@@ -96,7 +99,7 @@ export function beforeEach (to, from, next, authorization, requestInstance, cb) 
                   }).catch(res => {
                     let msg = {
                       client_id: authorization.client_id,
-                      redirect_uri: encodeURIComponent(authorization.redirect_uri),
+                      redirect_uri: encodeURIComponent(window.location.href),
                       state: uuid(6, 16)
                     }
                     window.location.href = authorization.authorizeUri + '?client_id=' + msg.client_id + '&redirect_uri=' + msg.redirect_uri + '&response_type=code&scope=read&state=' + msg.state
@@ -108,7 +111,7 @@ export function beforeEach (to, from, next, authorization, requestInstance, cb) 
         } else {
           let msg = {
             client_id: authorization.client_id,
-            redirect_uri: encodeURIComponent(authorization.redirect_uri),
+            redirect_uri: encodeURIComponent(window.location.href),
             state: uuid(6, 16)
           }
           window.location.href = authorization.authorizeUri + '?client_id=' + msg.client_id + '&redirect_uri=' + msg.redirect_uri + '&response_type=code&scope=read&state=' + msg.state
