@@ -35,6 +35,9 @@ export function beforeEach (to, from, next, authorization, requestInstance, cb) 
   //   })
   // }
     // 路由拦截 根据路由配置中meta.requireAuth判断是否需要登录
+  let locationHref = 'http://localhost:8080/mks?code=ihMYfW&code=GGruhS&state=8C180F&state=4B44FA';
+  locationHref = locationHref.replace(/[?]{0,}code=\w*[&]{0,}/g, '');
+  locationHref = locationHref.replace(/state=\w*[&]{0,}/g, '');
   if (to.meta.requireAuth) {
     if (accessToken && refreshToken && sessionTime) {
       next()
@@ -47,9 +50,7 @@ export function beforeEach (to, from, next, authorization, requestInstance, cb) 
                  *  oauth2
                  */
                 // cb(code, state, next, localStorage, uuid(6, 16))
-                let locationHref = window.location.href
-                locationHref = locationHref.replace('code=' + code + '&state=' + state, '');
-                locationHref = locationHref.substring(0,locationHref.length - 1)
+
         requestInstance.post(authorization.tokenUri + '?code=' + code + '&state=' + state +
                     '&grant_type=authorization_code' + '&client_id=' + authorization.client_id + '&redirect_uri=' + encodeURIComponent(locationHref))
                     .then(res => {
@@ -61,7 +62,7 @@ export function beforeEach (to, from, next, authorization, requestInstance, cb) 
                     }).catch(res => {
                       let msg = {
                         client_id: authorization.client_id,
-                        redirect_uri: encodeURIComponent(window.location.href),
+                        redirect_uri: encodeURIComponent(locationHref),
                         state: uuid(6, 16)
                       }
                       window.location.href = authorization.authorizeUri + '?client_id=' + msg.client_id + '&redirect_uri=' + msg.redirect_uri + '&response_type=code&scope=read&state=' + msg.state
@@ -99,7 +100,7 @@ export function beforeEach (to, from, next, authorization, requestInstance, cb) 
                   }).catch(res => {
                     let msg = {
                       client_id: authorization.client_id,
-                      redirect_uri: encodeURIComponent(window.location.href),
+                      redirect_uri: encodeURIComponent(locationHref),
                       state: uuid(6, 16)
                     }
                     window.location.href = authorization.authorizeUri + '?client_id=' + msg.client_id + '&redirect_uri=' + msg.redirect_uri + '&response_type=code&scope=read&state=' + msg.state
@@ -111,7 +112,7 @@ export function beforeEach (to, from, next, authorization, requestInstance, cb) 
         } else {
           let msg = {
             client_id: authorization.client_id,
-            redirect_uri: encodeURIComponent(window.location.href),
+            redirect_uri: encodeURIComponent(locationHref),
             state: uuid(6, 16)
           }
           window.location.href = authorization.authorizeUri + '?client_id=' + msg.client_id + '&redirect_uri=' + msg.redirect_uri + '&response_type=code&scope=read&state=' + msg.state
