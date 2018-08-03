@@ -35,7 +35,7 @@ export function beforeEach (to, from, next, authorization, requestInstance, cb) 
   //   })
   // }
     // 路由拦截 根据路由配置中meta.requireAuth判断是否需要登录
-  let locationHref = 'http://localhost:8080/mks?code=ihMYfW&code=GGruhS&state=8C180F&state=4B44FA';
+  let locationHref = window.location.href;
   locationHref = locationHref.replace(/[?]{0,}code=\w*[&]{0,}/g, '');
   locationHref = locationHref.replace(/state=\w*[&]{0,}/g, '');
   if (to.meta.requireAuth) {
