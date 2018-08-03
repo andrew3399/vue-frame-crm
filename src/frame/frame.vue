@@ -443,16 +443,18 @@
                 queryActiveMenu: '',
                 queryOpenName: [],
                 lang: 'EN',
-                tabs: 'tab-1'
+                tabs: 'tab-1',
+              staffMpMenu:{
+                mpNameus: '',
+                mpNamecn: '',
+                menulist: []
+              },
             }
         },
         computed: {
             breadcrumbArr(){
                 debugger
                 return this.$store.state.storeModule.breadcrumbArr
-            },
-            staffMpMenu(){
-                return this.$store.state.storeModule.staffMpMenu
             },
             treeData() {
                 if (this.menuList && this.menuList.length) {
@@ -505,9 +507,14 @@
             }
         },
         watch: {
-          '$route'(to,form){
+          '$route'(to,from){
             // 监听路由变化情况，切换对应的面包屑信息
-            this.getParentMenu()
+            if (this.showMenuHead != 4){
+              this.getParentMenu()
+            }
+            if (this.showMenuHead != 4 && this.showMenuHead != 5){
+              this.getMenuCb()
+            }
           }
         },
         methods: {
@@ -520,7 +527,14 @@
             } else{
               url = url + "?showMenuHead=4"
             }
+            if(this.mpId != ''){
+              url = url + "&mpId=" + this.mpId
+            }
+            let routePath = this.$route.matched[0].path
             this.$router.push(url)
+            if (url.indexOf(routePath) == -1){
+              this.$router.go(0)
+            }
           },
           //ESOP集成涉及的菜单列表信息获取
           getStaffMpMenue(){
@@ -537,6 +551,7 @@
                   console.log(ret)
                   if (ret.status === 200 && ret.data != null){
                     that.$store.state.storeModule.staffMpMenu = ret.data
+                    that.staffMpMenu = ret.data
                     let menuList = ret.data.menulist
                     if (menuList.length > 0) {
                        let defaultMenu = menuList[0]
@@ -874,6 +889,7 @@
                     this.$nextTick(() => {
                         let route = localStorage.get('aid-path') || this.$route.path || getQuery('path') || '/'
                         let queryName = getQueryData(res.data, 'menuId', 'menuPid', decodeURIComponent(route), 'menuName')
+                        console.log('queryName:   ' + queryName)
                         this.queryActiveMenu = queryName.name
                         this.queryOpenName = queryName.names
                         let routeArr2 = ['/res', '/cust', '/order', '/acct', '/rpt', '/prod', '/odp', '/base', '/']
@@ -913,9 +929,10 @@
                                         let accessToken = localStorage.get('access_token')
                                         let refreshToken = localStorage.get('refresh_token')
                                         if (!accessToken || !refreshToken) return
+                                        let uri = that.authorization.redirect_uri
                                         let msg = {
                                             client_id: that.authorization.client_id,
-                                            redirect_uri: encodeURIComponent(that.authorization.redirect_uri),
+                                            redirect_uri: encodeURIComponent(uri),
                                             state: uuid(6, 16)
                                         }
                                         window.location.href = that.authorization.authorizeUri + '?client_id=' + msg.client_id + '&redirect_uri=' + msg.redirect_uri + '&response_type=code&scope=read&state=' + msg.state
@@ -955,11 +972,12 @@
                                         let accessToken = localStorage.get('access_token')
                                         let refreshToken = localStorage.get('refresh_token')
                                         if (!accessToken || !refreshToken) return
-                                        let msg = {
-                                            client_id: that.authorization.client_id,
-                                            redirect_uri: encodeURIComponent(that.authorization.redirect_uri),
-                                            state: uuid(6, 16)
-                                        }
+                                      let uri = that.authorization.redirect_uri
+                                      let msg = {
+                                        client_id: that.authorization.client_id,
+                                        redirect_uri: encodeURIComponent(uri),
+                                        state: uuid(6, 16)
+                                      }
                                         window.location.href = that.authorization.authorizeUri + '?client_id=' + msg.client_id + '&redirect_uri=' + msg.redirect_uri + '&response_type=code&scope=read&state=' + msg.state
                                     }
                                 })
@@ -991,7 +1009,8 @@
             if (path && !routeArr.includes(decodeURIComponent(path))) {
                 localStorage.set('aid-path', decodeURIComponent(path))
             }
-
+            console.log('11111111111111111111')
+            console.log(this.showMenuHead)
             /**
              * 获取所有URL query 并存储
              */
@@ -1096,49 +1115,33 @@
               })
             }
 
-            /* 获取10个最新的消息列表 */
-            this.instance.get(this.authorization.bulletinListUri,
+            if(this.showMenuHead !== '4'){
+              /* 获取10个最新的消息列表 */
+              this.instance.get(this.authorization.bulletinListUri,
                 {
-                    params: {
-                        pageNo: 1,
-                        pageSize: 10
-                    }
+                  params: {
+                    pageNo: 1,
+                    pageSize: 10
+                  }
                 }).then(res => {
                 this.notices = res.data.result
-            }).catch(res => {
+              }).catch(res => {
                 /**
                  * 处理相关错误的问题
                  */
                 if (res && res.response) {
-                    switch (res.response.status) {
-                        /**
-                         * 判断相关的错误，例如判断 token 失效， 或者没有登录的情况
-                         */
-                        case 401:
-                            /* let that = this
-                            let title = this.$t('frame.systemInfo')
-                            let content = this.$t('frame.systemInfoContent')
-                            this.$Modal.warning({
-                      title: title,
-                      content: content,
-                      onOk: () => {
-                                    let accessToken = localStorage.get('access_token')
-                                        let refreshToken = localStorage.get('refresh_token')
-                                        if (!accessToken || !refreshToken) return
-                                  let msg = {
-                                    client_id: that.authorization.client_id,
-                                    redirect_uri: encodeURIComponent(that.authorization.redirect_uri),
-                                    state: uuid(6, 16)
-                                  }
-                                  window.location.href = that.authorization.authorizeUri + '?client_id=' + msg.client_id + '&redirect_uri=' + msg.redirect_uri + '&response_type=code&scope=read&state=' + msg.state
-                      }
-                    }) */
-                            // 第一次请求主动获取token
-                            that.getTokenAgian(that.getMenuCb)
-                            break
-                    }
+                  switch (res.response.status) {
+                    /**
+                     * 判断相关的错误，例如判断 token 失效， 或者没有登录的情况
+                     */
+                    case 401:
+                      // 第一次请求主动获取token
+                      that.getTokenAgian(that.getMenuCb)
+                      break
+                  }
                 }
-            })
+              })
+            }
         },
         beforeMount(){
             this.getParentMenu()
