@@ -41,6 +41,13 @@ export default {
     currency: 'Currency',
     cancel: 'Cancel',
 
+    HKD: 'Hong Kong Dollar',
+    USD: 'U.S. Dollar',
+    EUR: 'Euro',
+    SGD: 'Singapore Dollar',
+    GBP: 'British Pound',
+    CNY: 'Chinese Yuan',
+
     accountId: 'Account Id',
     oldPsd: 'Old Password',
     newPsd: 'New Password',
@@ -61,6 +68,11 @@ export default {
     btn_yes: 'OK',
     change_psd: 'Change Password'
   },
+  promotion: {
+    cancel: 'Cancel',
+    ok: 'OK'
+  },
+
   notice_local: {
     notice: {
       one_select: 'You can only manipulate one piece of data',

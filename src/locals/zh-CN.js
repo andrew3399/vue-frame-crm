@@ -36,6 +36,13 @@ export default {
     currency: '币种',
     cancel: '取消',
 
+    HKD: '港币 HKD',
+    USD: '美元 USD',
+    EUR: '欧元 EUR',
+    SGD: '新加坡元 SGD',
+    GBP: '英镑 GBP',
+    CNY: '中国人民币 CNY',
+
     personalTitle: '个人信息',
     accountId: '用户ID',
     oldPsd: '旧密码',
@@ -56,6 +63,19 @@ export default {
     inputNull: '输入框不能为空',
     btn_yes: '确定',
     change_psd: '修改密码'
+  },
+  promotion: {
+    cancel: '取消',
+    ok: '确定'
+  },
+  message: {
+    modify_success: '修改成功',
+    modify_fail: '修改失败',
+    save_success: '保存成功',
+    save_fail: '保存失败',
+    del_success: '删除成功',
+    del_partner_sure: '您确定要删除此合作伙伴吗？',
+    del_chl_sure: '您确定要删除此渠道信息吗？'
   },
   notice_local: {
     notice: {
@@ -118,4 +138,5 @@ export default {
       handle: '已办'
     }
   }
+
 }
