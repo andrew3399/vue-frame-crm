@@ -107,7 +107,7 @@
                         <t-form-item :label="$t('frame.department')" class="mb-20" prop="department"  label-span="220px">
                             <div class="row">
                                 <div class="col-8 pr-0">
-                                    <t-input  v-model="formRight.department"></t-input>
+                                    <t-input  v-model="formRight.department" disabled></t-input>
                                 </div>
                             </div>
                         </t-form-item>
@@ -121,7 +121,7 @@
                                 <div class="col-8 pr-0">
                                     <t-select v-model="formRight.currency" clearable>
                                         <t-option :value="option.value" v-for="option in currencyList" :key="option.value">
-                                            {{option.label}}
+                                            {{formRight.lang.indexOf('zh')!=-1 ? (option.label_zh?option.label_zh:option.label):option.label}}
                                         </t-option>
                                     </t-select>
                                 </div>
@@ -230,6 +230,8 @@
     data(){
       return {
         formRight: {
+          lang:'',
+          level:'',
           firstName: '',
           lastName: '',
           alias: '',
@@ -247,32 +249,7 @@
           postCode: '',
           streetAddress: ''
         },
-        currencyList:[
-          {
-            label:this.$t("frame.HKD"),
-            value:'HKD'
-          },
-          {
-            label:this.$t("frame.USD"),
-            value:'USD'
-          },
-          {
-            label:this.$t("frame.EUR"),
-            value:'EUR'
-          },
-          {
-            label:this.$t("frame.SGD"),
-            value:'SGD'
-          },
-          {
-            label:this.$t("frame.GBP"),
-            value:'GBP'
-          },
-          {
-            label:this.$t("frame.CNY"),
-            value:'CNY'
-          },
-        ],
+        currencyList:[],
         ruleFormLabel: {
           lastName: [
             {required: true, message: this.$t('frame.inputNull'), trigger: 'blur'}
@@ -307,19 +284,38 @@
        * 初始化
        */
       init(){
-        console.log('personal init')
         let that = this;
         this.$nextTick(() => {
-          console.log(that)
-          console.log(that.$parent.authorization)
+          this.aid_language = storage.get('aid-language');
+          // console.log(that.$parent.authorization)
           if (that.$parent.authorization != undefined && that.$parent.authorization.personalInfoInit != undefined) {
-            that.$parent.instance.post(that.$parent.authorization.personalInfoInit).then(function (ret) {
-              console.log("=======" + ret.data.result)
-              that.email = ret.data.result.EMAIL;
-              that.firstName = ret.data.result.First_Name;
-              that.lastName = ret.data.result.Last_Name;
+            that.$parent.instance.post(that.$parent.authorization.getCurrency).then(function (ret) {
+              that.currencyList = ret.data.result.courrencyLevel;
             })
+
+            that.$parent.instance.post(that.$parent.authorization.personalInfoInit).then(function (ret) {
+              that.formRight.firstName = ret.data.sysStaffVos.result[0].firstName;
+              that.formRight.lastName = ret.data.sysStaffVos.result[0].lastName;
+              that.formRight.email = ret.data.sysStaffVos.result[0].email;
+              that.formRight.alias = ret.data.sysStaffVos.result[0].staffNameEn;
+              that.formRight.staffNO = ret.data.sysStaffVos.result[0].staffNo;
+              that.formRight.nickname = ret.data.sysStaffVos.result[0].staffName;
+              that.formRight.phone = ret.data.sysStaffVos.result[0].officePhone;
+              that.formRight.mobile = ret.data.sysStaffVos.result[0].contactTel;
+              that.formRight.fax = ret.data.sysStaffVos.result[0].fax;
+              that.formRight.department = ret.data.sysStaffVos.result[0].departName;
+              that.formRight.countryRegion = ret.data.sysStaffVos.result[0].contactCountry;
+              that.formRight.stateProvince = ret.data.sysStaffVos.result[0].contactProvince;
+              that.formRight.city = ret.data.sysStaffVos.result[0].contactCity;
+              that.formRight.postCode = ret.data.sysStaffVos.result[0].postcode;
+              that.formRight.streetAddress = ret.data.sysStaffVos.result[0].address;
+              that.formRight.currency = ret.data.sysStaffVos.result[0].currencyCode;
+
+
+            })
+
           }
+
         })
       },
       /**
@@ -329,11 +325,10 @@
         let that = this
         this.$refs[ 'formRight' ].validate((valid) => {
           if (valid) {
-            this.$crm.post(services.personal.PERSONAL_UPDATA+'?language='+that.formRight.aid_language, {
-              "operFlag":'C',
-              "businessHallVO": this.formRight,
+            that.$parent.$cmi.put(that.$parent.authorization.personalInfoUpdate, {
+              "vo": this.formRight,
             }).then(ret => {
-              // console.log(JSON.stringify(ret.data))
+              console.log(JSON.stringify(ret.data)+"211212121222121")
               if (ret != null && ret.data.success) {
                 that.messageModal( false, that.$t('message.save_success'),
                   function () {
@@ -344,25 +339,7 @@
                   that.modalMessage = ret.data.resultMessage;
               }
             })
-            // }else{
-            //   let formItem = this.formItem
-            //   // formItem.language = this.formItem.language
-            //   this.$crm.put(services.agent.AGENT_SAVE+'?language='+that.formItem.aid_language, {
-            //     "operFlag":'U',
-            //     "businessHallVO": formItem,
-            //   }).then(ret => {
-            //     // console.log(JSON.stringify(ret.data))
-            //     if (ret != null && ret.data.success) {
-            //       that.messageModal(true, 'aid aid-check-circle-outline', false, that.$t('cmi.agent.message.modify_success'),
-            //         function () {
-            //           that.$router.push({ name:'cmi-agent-management'});
-            //         });
-            //     } else {
-            //       that.modal = true,
-            //         that.modalMessage = ret.data.resultMessage;
-            //     }
-            //   })
-            // }
+
           }
         })
       },
@@ -374,14 +351,35 @@
       },
     },
     mounted(){
+      this.formRight.lang = storage.get('aid-language');
       /**
        * 等待首次加载生效
        */
       setTimeout(() => {
         this.init();
       }, 300)
-
+    },
+    /**
+     * 自定义的通用信息提示框
+     * @param isShow 是否显示提示框
+     * @param msgIcon 提示图标
+     * @param isShowCancle 是否显示取消按钮
+     * @param msg 提示信息
+     * @param handleOk 确定后回调函数
+     */
+    messageModal(isShow, msgIcon, isShowCancle, msg, handleOk) {
+      this.msgModalObj = {
+        isShow: isShow,
+        msgIcon: msgIcon,
+        isShowCancle: isShowCancle,
+        msg: msg,
+        handleClose: () => {
+          this.msgModalObj.isShow = false
+        },
+        handleOk: handleOk
+      }
     }
+
   }
 </script>
 
