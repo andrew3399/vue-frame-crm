@@ -391,6 +391,9 @@
             })
 
             that.$parent.instance.post(that.$parent.authorization.personalInfoInit).then(function (ret) {
+              debugger
+              // console.log(JSON.stringify(ret.data))
+              // console.log(ret.data.sysStaffVos.result[0].contactCountry)
               that.formRight.chnlId = ret.data.sysStaffVos.result[0].chnlId;
               that.formRight.departId = ret.data.sysStaffVos.result[0].departId;
               that.formRight.firstName = ret.data.sysStaffVos.result[0].firstName;
@@ -434,6 +437,7 @@
                 that.modalMessage =that.$t('message.modify_success');
                 that.flag= true;
                 that.errorTipFlag = false;
+
               } else {
                 that.oneModal = true;
                 that.modalMessage =that.$t('message.modify_fail');
@@ -449,7 +453,7 @@
        * 取消
        */
       cancel(){
-        console.log(this.$router)
+        // console.log(this.$router)
         this.$router.push(this.$router.history.current.matched[0])
        // this.$router.push({name: '/cust'});
       },
@@ -458,6 +462,7 @@
           this.oneModal = false
         }else{
           this.oneModal = false
+          this.$router.push(this.$router.history.current.matched[0])
         }
       },
       handleClose(){

@@ -215,7 +215,7 @@
                                                 <t-dropdown-item v-on:on-click="toPersonalInfo()">
                                                     <t-icon type="account-circle"></t-icon>
                                                     <!--{{staffName}}-->
-                                                    {{formRight.staffName}}
+                                                    {{$t('frame.personalTitle')}}
                                                 </t-dropdown-item>
                                                 <t-dropdown-item v-on:on-click="toChangePWD()">
                                                     <t-icon type="lock-unlocked"></t-icon>
