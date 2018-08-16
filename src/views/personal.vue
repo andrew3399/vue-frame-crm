@@ -5,7 +5,7 @@
             <div class="row">
                 <div class="col-xs-12 col-sm-12 col-md-6 col-lg-6 col-xl-6">
                     <t-breadcrumb separator=">">
-                        <t-breadcrumb-item href="/">{{$t('frame.mySettings')}}</t-breadcrumb-item>
+                        <t-breadcrumb-item href="/">{{$t('frame.home')}}</t-breadcrumb-item>
                         <t-breadcrumb-item>{{$t('frame.personalTitle')}}</t-breadcrumb-item>
                     </t-breadcrumb>
                 </div>
