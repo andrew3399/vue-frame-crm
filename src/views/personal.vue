@@ -103,6 +103,10 @@
                             </div>
                         </t-form-item>
                     </div>
+
+                </div>
+                <!--选择框币种-->
+                <div class="row">
                     <div class="col-xs-12 col-sm-12 col-md-6 col-lg-6 col-xl-6">
                         <t-form-item :label="$t('frame.department')" class="mb-20" prop="department"  label-span="220px">
                             <div class="row">
@@ -112,9 +116,6 @@
                             </div>
                         </t-form-item>
                     </div>
-                </div>
-                <!--选择框币种-->
-                <div class="row">
                     <div class="col-xs-12 col-sm-12 col-md-6 col-lg-6 col-xl-6">
                         <t-form-item :label="$t('frame.currency')" class="mb-20" prop="currency"  label-span="220px">
                             <div class="row">
@@ -173,7 +174,7 @@
                         <t-form-item :label="$t('frame.streetAddress')" class="mb-20" prop="streetAddress"  label-span="220px">
                             <div class="row">
                                 <div class="col-8 pr-0">
-                                    <t-input  type="textarea" v-model="formRight.streetAddress"  :autosize="{minRows: 3,maxRows: 3}" ></t-input>
+                                    <t-input :maxlength='500'  type="textarea" v-model="formRight.streetAddress"  :autosize="{minRows: 3,maxRows: 3}" ></t-input>
                                 </div>
                             </div>
                         </t-form-item>
@@ -188,33 +189,58 @@
             </t-form>
         </div>
 
-        <!-- 弹框 -->
-        <div class="warning-modal" v-show="msgModalObj.isShow">
+        <!--弹框一个按钮-->
+        <div class="warning-modal" v-show="oneModal">
             <div class="warning-modal-backdrop"></div>
             <div class="warning-modal">
                 <div class="warning-modal-dialog warning-tips">
                     <div class="warning-modal-content">
-                        <div class="warning-icon" style="padding-top: 15px">
-                            <i :class="msgModalObj.msgIcon"></i>
+                        <div class="d-flex justify-content-between">
+                            <div></div>
+
+                        </div>
+                        <div class="warning-icon">
+                            <i v-show="!flag" class="aid aid-alert-circle-outline"></i>
+                            <i v-show="flag" class="aid aid-check-circle"></i>
                         </div>
                         <div class="waring-cnt">
-                            <p style="padding: 15px"><span>{{msgModalObj.msg}}</span></p>
+                            <p><span>{{modalMessage}}</span></p>
                         </div>
-                        <div v-if="msgModalObj.isShowCancle" class="waring-btn">
-                            <span class="yes col-6" style="background-color: #999; border-bottom-right-radius: 0" @click="msgModalObj.handleClose">{{$t('promotion.cancel')}}</span>
-                            <span class="yes col-6" @click="msgModalObj.handleOk">{{$t('promotion.ok')}}</span>
-                        </div>
-                        <div v-else class="waring-btn">
-                            <span class="yes" @click="msgModalObj.handleOk">{{$t('promotion.ok')}}</span>
+                        <div class="waring-btn" @click="handleOk">
+                            <span class="yes" style="border-bottom-left-radius: 4px;">{{$t('frame.btn_yes')}}</span>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
-        <!-- 弹框 -->
-        <t-modal v-model="modal">
-            <p>{{modalMessage}}</p>
-        </t-modal>
+        <!--弹框一个按钮-->
+        <!--弹框两个按钮-->
+        <div class="warning-modal" v-show="twoModal">
+            <div class="warning-modal-backdrop"></div>
+            <div class="warning-modal">
+                <div class="warning-modal-dialog warning-tips">
+                    <div class="warning-modal-content">
+                        <div class="d-flex justify-content-between">
+                            <div></div>
+                            <!-- <div @click="handleClose">
+                                <i class="aid aid-close warning-modal-close"></i>
+                            </div> -->
+                        </div>
+                        <div class="warning-icon">
+                            <i class="aid aid-help-circle"></i>
+                        </div>
+                        <div class="waring-cnt" style="padding-bottom: 20px">
+                            <p><span>{{modalMessage}}</span></p>
+                        </div>
+                        <div class="waring-btn reject-btn">
+                            <span class="no" @click="handleClose()" >{{$t('promotion.cancel')}}</span>
+                            <span class="yes" @click="subAddPrice()" >{{$t('promotion.ok')}}</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
 
 
     </div>
@@ -229,6 +255,11 @@
     name: 'personal',
     data(){
       return {
+        flag:false,
+        oneModal:false,
+        twoModal:false,
+        modalMessage:'',
+        errorTipFlag:false,
         formRight: {
           lang:'',
           level:'',
@@ -247,23 +278,89 @@
           stateProvince: '',
           city: '',
           postCode: '',
-          streetAddress: ''
+          streetAddress: '',
+          chnlId:'',
+          departId:''
+
         },
         currencyList:[],
         ruleFormLabel: {
           lastName: [
-            {required: true, message: this.$t('frame.inputNull'), trigger: 'blur'}
+            {required: true, message: this.$t('frame.lastName') + this.$t('frame.inputNull'), trigger: 'blur'}
           ],
           alias: [
-            {required: true, message: this.$t('frame.inputNull'), trigger: 'blur'}
+            {required: true, message:  this.$t('frame.alias') + this.$t('frame.inputNull'), trigger: 'blur'}
           ],
           email: [
-            {required: true, message: this.$t('frame.inputNull'), trigger: 'blur'}
+            {
+              required: true,
+              message:  this.$t('frame.email') + this.$t('frame.inputNull'),
+              trigger: 'blur',
+              that: this,
+              validator(rule, value, callback) {
+                if (!value) {
+                  callback(rule.message);
+                } else {
+                  //验证是否是正整数
+                  let posPattern = /^[a-z0-9]+([._\\-]*[a-z0-9])*@([a-z0-9]+[-a-z0-9]*[a-z0-9]+.){1,63}[a-z0-9]+$/;
+                  let result = posPattern.test(value);
+                  if (!result) {
+                    rule.message = this.that.$t('frame.emainl') + this.that.$t("frame.emailError"),
+                      callback(rule.message);
+                  } else
+                    callback();
+                }
+              }
+            }
+          ],
+          mobile: [
+            {
+              required: false,
+              trigger: 'blur',
+              that: this,
+              validator(rule, value, callback) {
+                if (!value) {
+                  callback(rule.message);
+                } else {
+                  //验证是否是正整数
+                  let posPattern = /^[\(]\+[0-9][0-9]*[\)][0-9][0-9]*$/;
+                  let result = posPattern.test(value);
+                  if (!result) {
+                    rule.message = this.that.$t('frame.mobile') + this.that.$t("frame.mobileError"),
+                      callback(rule.message);
+                  } else
+                    callback();
+                }
+              }
+            }
+          ],
+          postCode:[
+            {
+              required: false,
+              trigger: 'blur',
+              that: this,
+              validator(rule, value, callback) {
+                if (!value) {
+                  callback(rule.message);
+                } else {
+                  //验证是否是正整数
+                  let posPattern = /^[1-9][0-9]{5}$/;
+                  let result = posPattern.test(value);
+                  if (!result) {
+                    rule.message = this.that.$t('frame.postCode') + this.that.$t("frame.emailError"),
+                      callback(rule.message);
+                  } else
+                    callback();
+                }
+              }
+            }
           ],
           currency: [
-            {required: true, message: this.$t('frame.inputNull'), trigger: 'blur'}
+            {required: true, message:  this.$t('frame.currency') + this.$t('frame.inputNull'), trigger: 'blur'}
           ]
         },
+
+
         modalMessage:"",
         //自定义模态框
         msgModalObj: {
@@ -294,6 +391,8 @@
             })
 
             that.$parent.instance.post(that.$parent.authorization.personalInfoInit).then(function (ret) {
+              that.formRight.chnlId = ret.data.sysStaffVos.result[0].chnlId;
+              that.formRight.departId = ret.data.sysStaffVos.result[0].departId;
               that.formRight.firstName = ret.data.sysStaffVos.result[0].firstName;
               that.formRight.lastName = ret.data.sysStaffVos.result[0].lastName;
               that.formRight.email = ret.data.sysStaffVos.result[0].email;
@@ -326,17 +425,22 @@
         this.$refs[ 'formRight' ].validate((valid) => {
           if (valid) {
             that.$parent.$cmi.put(that.$parent.authorization.personalInfoUpdate, {
+              "lang":this.aid_language,
               "vo": this.formRight,
             }).then(ret => {
-              console.log(JSON.stringify(ret.data)+"211212121222121")
-              if (ret != null && ret.data.success) {
-                that.messageModal( false, that.$t('message.save_success'),
-                  function () {
-                    that.$router.push({ name:'personal'});
-                  });
+              console.log(JSON.stringify(ret.data))
+              if (ret != null && "000000" == ret.data.responseHeader.resultCode) {
+                debugger
+                console.log("111111111111")
+                that.oneModal = true;
+                that.modalMessage =that.$t('message.modify_success');
+                that.flag= true;
+                that.errorTipFlag = false;
               } else {
-                that.modal = true,
-                  that.modalMessage = ret.data.resultMessage;
+                that.oneModal = true;
+                that.modalMessage =that.$t('message.modify_fail');
+                that.flag= false;
+                that.errorTipFlag = true;
               }
             })
 
@@ -347,8 +451,28 @@
        * 取消
        */
       cancel(){
-        this.$router.push({name: 'personal'});
+        console.log(this.$router)
+        this.$router.push(this.$router.history.current.matched[0])
+       // this.$router.push({name: '/cust'});
       },
+      handleOk(){
+        if(this.errorTipFlag){
+          this.oneModal = false
+        }else{
+          this.oneModal = false
+        }
+      },
+      handleClose(){
+        this.oneModal = false
+        this.twoModal = false
+        this.modalMessage = ''
+      },
+      subAddPrice(){
+        let that = this;
+        that.twoModal = false;
+        that.oneModal = false;
+      },
+
     },
     mounted(){
       this.formRight.lang = storage.get('aid-language');

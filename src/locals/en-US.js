@@ -64,9 +64,20 @@ export default {
     rule8: 'Non-alphanumeric characters (special chars)',
     submit: 'Submit',
     check: 'New password is not consistent with the confirmed password',
-    inputNull: 'Input cannot be empty',
+    inputNull: 'Cannot be empty',
     btn_yes: 'OK',
-    change_psd: 'Change Password'
+    change_psd: 'Change Password',
+    emailError: 'Format error',
+    mobileError: 'Please input using the format：(+CountryCode)Number, eg.(+86)13112345678',
+  },
+  message: {
+    modify_success: 'Modify the success',
+    modify_fail: 'Modify the failure',
+    save_success: 'Save success',
+    save_fail: 'Save failed',
+    del_success: 'Delete the success',
+    del_partner_sure: 'Are you sure you want to delete this partner？',
+    del_chl_sure: 'Are you sure you want to delete this channel information？'
   },
   promotion: {
     cancel: 'Cancel',

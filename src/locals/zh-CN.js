@@ -60,9 +60,11 @@ export default {
     rule8: '特殊字符（！@#￥%^&*）',
     submit: '提交',
     check: '新密码与确认密码不一致',
-    inputNull: '输入框不能为空',
+    inputNull: '不能为空',
     btn_yes: '确定',
-    change_psd: '修改密码'
+    change_psd: '修改密码',
+    emailError: '格式错误',
+    mobileError: '请按格式输入：(+国家代码)电话号码，如(+86)13112345678',
   },
   promotion: {
     cancel: '取消',
