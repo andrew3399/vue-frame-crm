@@ -428,10 +428,8 @@
               "lang":this.aid_language,
               "vo": this.formRight,
             }).then(ret => {
-              console.log(JSON.stringify(ret.data))
               if (ret != null && "000000" == ret.data.responseHeader.resultCode) {
                 debugger
-                console.log("111111111111")
                 that.oneModal = true;
                 that.modalMessage =that.$t('message.modify_success');
                 that.flag= true;
