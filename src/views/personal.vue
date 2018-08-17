@@ -247,7 +247,7 @@
 </template>
 
 <script>
-  import Storage from '../../src/views/localstorage.js'
+   import Storage from '../../src/views/localstorage.js'
 
   let storage = new Storage();
 
