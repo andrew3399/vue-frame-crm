@@ -62,7 +62,7 @@
                         <t-form-item :label="$t('frame.staffNO')" class="mb-20" prop="staffNO"  label-span="220px">
                             <div class="row">
                                 <div class="col-8 pr-0">
-                                    <t-input  v-model="formRight.staffNO"></t-input>
+                                    <t-input  v-model="formRight.staffNO" disabled></t-input>
                                 </div>
                             </div>
                         </t-form-item>
@@ -117,10 +117,10 @@
                         </t-form-item>
                     </div>
                     <div class="col-xs-12 col-sm-12 col-md-6 col-lg-6 col-xl-6">
-                        <t-form-item :label="$t('frame.currency')" class="mb-20" prop="currency"  label-span="220px">
+                        <t-form-item :label="$t('frame.currency')" class="mb-20" prop="currency"  label-span="220px" >
                             <div class="row">
                                 <div class="col-8 pr-0">
-                                    <t-select v-model="formRight.currency" clearable>
+                                    <t-select v-model="formRight.currency" clearable >
                                         <t-option :value="option.value" v-for="option in currencyList" :key="option.value">
                                             {{formRight.lang.indexOf('zh')!=-1 ? (option.label_zh?option.label_zh:option.label):option.label}}
                                         </t-option>
@@ -291,6 +291,9 @@
           alias: [
             {required: true, message:  this.$t('frame.alias') + this.$t('frame.inputNull'), trigger: 'blur'}
           ],
+          currency: [
+            {required: true, message:  this.$t('frame.currency') + this.$t('frame.inputNull')}
+          ],
           email: [
             {
               required: true,
@@ -355,9 +358,7 @@
               }
             }
           ],
-          currency: [
-            {required: true, message:  this.$t('frame.currency') + this.$t('frame.inputNull'), trigger: 'blur'}
-          ]
+
         },
 
 
@@ -406,13 +407,15 @@
               that.formRight.mobile = ret.data.sysStaffVos.result[0].contactTel;
               that.formRight.fax = ret.data.sysStaffVos.result[0].fax;
               that.formRight.department = ret.data.sysStaffVos.result[0].departName;
+              console.log("bz" + JSON.stringify(ret.data.sysStaffVos.result[0]))
               that.formRight.countryRegion = ret.data.sysStaffVos.result[0].contactCountry;
               that.formRight.stateProvince = ret.data.sysStaffVos.result[0].contactProvince;
               that.formRight.city = ret.data.sysStaffVos.result[0].contactCity;
               that.formRight.postCode = ret.data.sysStaffVos.result[0].postcode;
               that.formRight.streetAddress = ret.data.sysStaffVos.result[0].address;
+            if(ret.data.sysStaffVos.result[0].currencyCode != "") {
               that.formRight.currency = ret.data.sysStaffVos.result[0].currencyCode;
-
+             }
 
             })
 
