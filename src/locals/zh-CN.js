@@ -16,6 +16,34 @@ export default {
     systemInfoContent: '您的token已失效，请尝试重新登录！',
     pagerFooter: '中国移动国际有限公司 版权所有',
     changeTitle: '修改密码',
+    mySettings: '我的设置',
+
+    firstName: '名',
+    lastName: '姓',
+    alias: '别名',
+    email: '电子邮箱',
+    staffNO: '登录工号',
+    nickname: '昵称',
+    phone: '电话',
+    mobile: '手机',
+    fax: '传真',
+    department: '部门',
+    countryRegion: '国家/地区',
+    stateProvince: '州/省',
+    city: '城市',
+    postCode: '邮政编码',
+    streetAddress: '街道地址',
+    currency: '币种',
+    cancel: '取消',
+
+    HKD: '港币 HKD',
+    USD: '美元 USD',
+    EUR: '欧元 EUR',
+    SGD: '新加坡元 SGD',
+    GBP: '英镑 GBP',
+    CNY: '中国人民币 CNY',
+
+    personalTitle: '个人信息',
     accountId: '用户ID',
     oldPsd: '旧密码',
     newPsd: '新密码',
@@ -32,9 +60,24 @@ export default {
     rule8: '特殊字符（！@#￥%^&*）',
     submit: '提交',
     check: '新密码与确认密码不一致',
-    inputNull: '输入框不能为空',
+    inputNull: '不能为空',
     btn_yes: '确定',
-    change_psd: '修改密码'
+    change_psd: '修改密码',
+    emailError: '格式错误',
+    mobileError: '请按格式输入：(+国家代码)电话号码，如(+86)13112345678',
+  },
+  promotion: {
+    cancel: '取消',
+    ok: '确定'
+  },
+  message: {
+    modify_success: '修改成功',
+    modify_fail: '修改失败',
+    save_success: '保存成功',
+    save_fail: '保存失败',
+    del_success: '删除成功',
+    del_partner_sure: '您确定要删除此合作伙伴吗？',
+    del_chl_sure: '您确定要删除此渠道信息吗？'
   },
   notice_local: {
     notice: {
@@ -97,4 +140,5 @@ export default {
       handle: '已办'
     }
   }
+
 }

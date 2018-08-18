@@ -25,6 +25,12 @@ export default new Router({
           name: 'change',
           component: require('../src/views/change.vue')
         },
+        // 个人信息
+        {
+          path: '/personal',
+          name: 'personal',
+          component: require('../src/views/personal.vue')
+        }
         // {
         //   path: '/unHandle',
         //   name: 'unHandle',

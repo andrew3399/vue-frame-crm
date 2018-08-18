@@ -23,6 +23,14 @@ export default [
       requireAuth: true
     }
   },
+  {
+    path: 'personal',
+    name: 'personal',
+    component: require('../views/personal.vue'),
+    meta: {
+      requireAuth: true
+    }
+  }
   // {
   //   path: 'unHandle',
   //   name: 'unHandle',

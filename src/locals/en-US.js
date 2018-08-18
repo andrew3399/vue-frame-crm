@@ -20,6 +20,34 @@ export default {
     systemInfoContent: 'Your token is invalid, please try login again',
     pagerFooter: 'China Mobile International Limited. All rights reserved.',
     changeTitle: 'Change Password',
+    personalTitle: 'Personal Information',
+    mySettings: 'My Settings',
+
+    firstName: 'Firs tName',
+    lastName: 'Last Name',
+    alias: 'Alias',
+    email: 'Email',
+    staffNO: 'StaffNO',
+    nickname: 'Nickname',
+    phone: 'Phone',
+    mobile: 'Mobile',
+    fax: 'Fax',
+    department: 'Department',
+    countryRegion: 'Country/Region',
+    stateProvince: 'State/Province',
+    city: 'City',
+    postCode: 'PostCode',
+    streetAddress: 'Street Address',
+    currency: 'Currency',
+    cancel: 'Cancel',
+
+    HKD: 'Hong Kong Dollar',
+    USD: 'U.S. Dollar',
+    EUR: 'Euro',
+    SGD: 'Singapore Dollar',
+    GBP: 'British Pound',
+    CNY: 'Chinese Yuan',
+
     accountId: 'Account Id',
     oldPsd: 'Old Password',
     newPsd: 'New Password',
@@ -36,10 +64,26 @@ export default {
     rule8: 'Non-alphanumeric characters (special chars)',
     submit: 'Submit',
     check: 'New password is not consistent with the confirmed password',
-    inputNull: 'Input cannot be empty',
+    inputNull: 'Cannot be empty',
     btn_yes: 'OK',
-    change_psd: 'Change Password'
+    change_psd: 'Change Password',
+    emailError: 'Format error',
+    mobileError: 'Please input using the format：(+CountryCode)Number, eg.(+86)13112345678',
   },
+  message: {
+    modify_success: 'Modify the success',
+    modify_fail: 'Modify the failure',
+    save_success: 'Save success',
+    save_fail: 'Save failed',
+    del_success: 'Delete the success',
+    del_partner_sure: 'Are you sure you want to delete this partner？',
+    del_chl_sure: 'Are you sure you want to delete this channel information？'
+  },
+  promotion: {
+    cancel: 'Cancel',
+    ok: 'OK'
+  },
+
   notice_local: {
     notice: {
       one_select: 'You can only manipulate one piece of data',

@@ -212,10 +212,10 @@
                                                 <t-icon type="arrow-down-drop" size="20"></t-icon>
                                             </t-badge>
                                             <t-dropdown-menu slot="list" class="cl-frame-dropdown">
-                                                <t-dropdown-item>
+                                                <t-dropdown-item v-on:on-click="toPersonalInfo()">
                                                     <t-icon type="account-circle"></t-icon>
                                                     <!--{{staffName}}-->
-                                                    {{formRight.staffName}}
+                                                    {{$t('frame.personalTitle')}}
                                                 </t-dropdown-item>
                                                 <t-dropdown-item v-on:on-click="toChangePWD()">
                                                     <t-icon type="lock-unlocked"></t-icon>
@@ -684,6 +684,11 @@
                 window.location.reload();
                 this.$router.push({name: 'change'})
             },
+            toPersonalInfo() {
+                window.location.reload();
+                this.$router.push({name: 'personal'})
+            }
+            ,
             closeMenuOnMinWin() {
                 this.isOpenOnMinWin = true
             },
