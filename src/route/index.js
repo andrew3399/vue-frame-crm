@@ -11,29 +11,6 @@ export function beforeEach (to, from, next, authorization, requestInstance, cb) 
   let accessToken = localStorage.get('access_token')
   let refreshToken = localStorage.get('refresh_token')
   let sessionTime = localStorage.get('session_time')
-    // 面包屑信息
-  // if (to.path) {
-  //   requestInstance.post(authorization.parentMenuUri, {
-  //     'url': to.path,
-  //     'params': to.params
-  //   }).then(function (ret) {
-  //     if (ret.data.success) {
-  //       let parthMenuArray = ret.data.result
-  //       if (parthMenuArray != null && parthMenuArray.length > 0 && authorization.getStaffMenuFunc !== undefined) {
-  //         let currentMenu = parthMenuArray[parthMenuArray.length - 1]
-  //         requestInstance.post(authorization.getStaffMenuFunc, {
-  //           menuId: currentMenu.menuId
-  //         }).then(function (res) {
-  //           if (res != null && res !== '') {
-  //             store.state.staffMenuFunc = res.data
-  //           }
-  //         })
-  //       }
-  //       store.state.breadcrumbArr.splice(0, store.state.breadcrumbArr.length)
-  //       store.state.breadcrumbArr = ret.data.result
-  //     }
-  //   })
-  // }
     // 路由拦截 根据路由配置中meta.requireAuth判断是否需要登录
   let locationHref = window.location.href;
   locationHref = locationHref.replace(/[?]{0,}code=\w*[&]{0,}/g, '');

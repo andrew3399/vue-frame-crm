@@ -38,14 +38,14 @@
                                               v-else></t-avatar>
                                     <router-link :to="{ path: item1.menuUrl }"
                                                  v-if="item1.rightTag === tag && item1.menuUrl">
-                                        <span class="sub-text" :title="item1.menuName">{{item1.menuName}}</span>
+                                        <span class="sub-text" :title="lang === 'ZH'?item1.menuName:item1.menuEnName">{{lang === 'EN'?item1.menuName:item1.menuEnName}}</span>
                                     </router-link>
                                     <a href="javascript:;" @click="handleOtherRegin(item1.systemUrl + item1.menuUrl)"
                                        target="_self"
                                        v-else-if="item1.systemUrl && item1.menuUrl && item1.rightTag !== tag">
-                                        <span class="sub-text" :title="item1.menuName">{{item1.menuName}}</span>
+                                        <span class="sub-text" :title="lang === 'ZH'?item1.menuName:item1.menuEnName">{{lang === 'EN'?item1.menuName:item1.menuEnName}}</span>
                                     </a>
-                                    <span class="sub-text" :title="item1.menuName" v-else>{{item1.menuName}}</span>
+                                    <span class="sub-text" :title="lang === 'ZH'?item1.menuName:item1.menuEnName" v-else>{{lang === 'EN'?item1.menuName:item1.menuEnName}}</span>
                                 </template>
                                 <template v-for="(item2, y) in item1.children">
                                     <t-submenu v-if="item2.children && item2.children.length" :name="item2.menuName"
@@ -53,15 +53,15 @@
                                         <template slot="title">
                                             <router-link :to="{ path: item2.menuUrl}"
                                                          v-if="item2.rightTag === tag && item2.menuUrl">
-                                                <span class="sub-text" :title="item2.menuName">{{item2.menuName}}</span>
+                                                <span class="sub-text" :title="lang === 'ZH'?item2.menuName:item2.menuEnName">{{lang === 'EN'?item2.menuName:item2.menuEnName}}</span>
                                             </router-link>
                                             <a href="javascript:;"
                                                @click="handleOtherRegin(item2.systemUrl + item2.menuUrl)" target="_self"
                                                v-else-if="item2.systemUrl && item2.menuUrl && item2.rightTag !== tag">
-                                                <span class="sub-text" :title="item2.menuName">{{item2.menuName}}</span>
+                                                <span class="sub-text" :title="lang === 'ZH'?item2.menuName:item2.menuEnName">{{lang === 'EN'?item2.menuName:item2.menuEnName}}</span>
                                             </a>
-                                            <span class="sub-text" :title="item2.menuName"
-                                                  v-else>{{item2.menuName}}</span>
+                                            <span class="sub-text" :title="lang === 'ZH'?item2.menuName:item2.menuEnName"
+                                                  v-else>{{lang === 'ZH'?item2.menuName:item2.menuEnName}}</span>
                                         </template>
                                         <template v-for="(item3, z) in item2.children">
                                             <t-submenu v-if="item3.children && item3.children.length"
@@ -70,16 +70,16 @@
                                                              :key="w" @click.native="getMenu(item4)" class="sec-item">
                                                     <router-link :to="{ path: item4.menuUrl }"
                                                                  v-if="item4.rightTag === tag && item4.menuUrl">
-                                                        <span class="sub-text" :title="item4.menuName">{{item4.menuName}}</span>
+                                                        <span class="sub-text" :title="lang === 'EN'?item4.menuName:item4.menuEnName">{{lang === 'EN'?item4.menuName:item4.menuEnName}}</span>
                                                     </router-link>
                                                     <a href="javascript:;"
                                                        @click="handleOtherRegin(item4.systemUrl + item4.menuUrl)"
                                                        target="_self"
                                                        v-else-if="item4.systemUrl && item4.menuUrl && item4.rightTag !== tag">
-                                                        <span class="sub-text" :title="item4.menuName">{{item4.menuName}}</span>
+                                                        <span class="sub-text" :title="lang === 'EN'?item4.menuName:item4.menuEnName">{{lang === 'EN'?item4.menuName:item4.menuEnName}}</span>
                                                     </a>
-                                                    <span class="sub-text" :title="item4.menuName"
-                                                          v-else>{{item4.menuName}}</span>
+                                                    <span class="sub-text" :title="lang === 'EN'?item4.menuName:item4.menuEnName"
+                                                          v-else>{{lang === 'EN'?item4.menuName:item4.menuEnName}}</span>
                                                 </t-menu-item>
                                             </t-submenu>
                                             <t-menu-item :name="item3.menuName" :key="z" @click.native="getMenu(item3)"
@@ -87,31 +87,31 @@
                                                 <router-link :to="{ path: item3.menuUrl }"
                                                              v-if="item3.rightTag === tag && item3.menuUrl">
                                                     <span class="sub-text"
-                                                          :title="item3.menuName">{{item3.menuName}}</span>
+                                                          :title="lang === 'EN'?item3.menuName:item3.menuEnName">{{lang === 'EN'?item3.menuName:item3.menuEnName}}</span>
                                                 </router-link>
                                                 <a href="javascript:;"
                                                    @click="handleOtherRegin(item3.systemUrl + item3.menuUrl)"
                                                    target="_self"
                                                    v-else-if="item3.systemUrl && item3.menuUrl && item3.rightTag !== tag">
                                                     <span class="sub-text"
-                                                          :title="item3.menuName">{{item3.menuName}}</span>
+                                                          :title="lang === 'EN'?item3.menuName:item3.menuEnName">{{lang === 'EN'?item3.menuName:item3.menuEnName}}</span>
                                                 </a>
-                                                <span class="sub-text" :title="item3.menuName"
-                                                      v-else>{{item3.menuName}}</span>
+                                                <span class="sub-text" :title="lang === 'EN'?item3.menuName:item3.menuEnName"
+                                                      v-else>{{lang === 'EN'?item3.menuName:item3.menuEnName}}</span>
                                             </t-menu-item>
                                         </template>
                                     </t-submenu>
                                     <t-menu-item :name="item2.menuName" v-else>
                                         <router-link :to="{ path: item2.menuUrl }"
                                                      v-if="item2.rightTag === tag && item2.menuUrl">
-                                            <span class="sub-text" :title="item2.menuName">{{item2.menuName}}</span>
+                                            <span class="sub-text" :title="lang === 'ZH'?item2.menuName:item2.menuEnName">{{lang === 'EN'?item2.menuName:item2.menuEnName}}</span>
                                         </router-link>
                                         <a href="javascript:;"
                                            @click="handleOtherRegin(item2.systemUrl + item2.menuUrl)" target="_self"
                                            v-else-if="item2.systemUrl && item2.menuUrl && item2.rightTag !== tag">
-                                            <span class="sub-text" :title="item2.menuName">{{item2.menuName}}</span>
+                                            <span class="sub-text" :title="lang === 'ZH'?item2.menuName:item2.menuEnName">{{lang === 'EN'?item2.menuName:item2.menuEnName}}</span>
                                         </a>
-                                        <span class="sub-text" :title="item2.menuName" v-else>{{item2.menuName}}</span>
+                                        <span class="sub-text" :title="lang === 'ZH'?item2.menuName:item2.menuEnName" v-else>{{lang === 'EN'?item2.menuName:item2.menuEnName}}</span>
                                     </t-menu-item>
                                 </template>
                             </t-submenu>
@@ -121,14 +121,14 @@
                                           v-else></t-avatar>
                                 <router-link :to="{ path: item1.menuUrl }"
                                              v-if="item1.rightTag === tag && item1.menuUrl">
-                                    <span class="sub-text" :title="item1.menuName">{{item1.menuName}}</span>
+                                    <span class="sub-text" :title="lang === 'ZH'?item1.menuName:item1.menuEnName">{{lang === 'EN'?item1.menuName:item1.menuEnName}}</span>
                                 </router-link>
                                 <a href="javascript:;" @click="handleOtherRegin(item1.systemUrl + item1.menuUrl)"
                                    target="_self"
                                    v-else-if="item1.systemUrl && item1.menuUrl && item1.rightTag !== tag">
-                                    <span class="sub-text" :title="item1.menuName">{{item1.menuName}}</span>
+                                    <span class="sub-text" :title="lang === 'ZH'?item1.menuName:item1.menuEnName">{{lang === 'EN'?item1.menuName:item1.menuEnName}}</span>
                                 </a>
-                                <span class="sub-text" :title="item1.menuName" v-else>{{item1.menuName}}</span>
+                                <span class="sub-text" :title="lang === 'ZH'?item1.menuName:item1.menuEnName" v-else>{{lang === 'EN'?item1.menuName:item1.menuEnName}}</span>
                             </t-menu-item>
                         </template>
                     </t-menu>
@@ -229,8 +229,7 @@
                                 </template>
                             </t-menu>
                         </slot>
-                        <t-button type="outline-secondary" size="sm" class="btn-lang" @click="handleChangeLang">
-                            {{lang}}
+                        <t-button type="outline-secondary" v-text="lang === 'ZH'? '中' : lang" size="sm" class="btn-lang" @click="handleChangeLang">
                         </t-button>
                     </div>
                 </div>
@@ -266,7 +265,7 @@
             </div>
             <div :class="['layout-main',{'hidenNavTop': showMenuHead === '5'},{'showMoreNav': showMenuHead === '4'}]">
                 <div class="layout-main--content">
-                    <div class="bread-crumbs cmi-bread-crumbs-wrap" v-if="breadcrumbArr && showMenuHead !== '4'">
+                    <div class="bread-crumbs cmi-bread-crumbs-wrap" v-if="breadcrumbArr && showMenuHead !== '4' && showMenuHead !== '5'">
                         <div class="row ml-0 mr-0">
                             <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12 col-xl-12 pl-0">
                                 <t-breadcrumb separator=">" >
@@ -449,6 +448,7 @@
                 mpNamecn: '',
                 menulist: []
               },
+              staffMenuFuncMap: {}
             }
         },
         computed: {
@@ -512,15 +512,29 @@
             if (this.showMenuHead != 4){
               this.getParentMenu()
             }
-            if (this.showMenuHead != 4 && this.showMenuHead != 5){
-              this.getMenuCb()
-            }
           }
         },
         methods: {
-//            goRoute(path){
-//                this.$router.push({name: path})
-//            },
+          getBaseInfo(){
+            let that = this
+            if (this.authorization != undefined && this.authorization.baseInfoUrl != undefined
+                && this.authorization.baseInfoUrl != '') {
+              this.instance.post(this.authorization.baseInfoUrl,{}).then(res=>{
+                let resData = res.data;
+                localStorage.set('frame_base_info',resData)
+                that.translateBaseInfo(resData)
+              })
+            }
+          },
+          translateBaseInfo(resData){
+            this.menu = resData.staffMenue;
+            localStorage.set('menu_list',this.menu)
+            this.translateMenuInfo(this.menu);
+            this.formRight.staffName = resData.staffName
+            this.formRight.staffNO = resData.staffNo
+            this.notices = resData.bulletinList
+            this.staffMenuFuncMap = resData.staffMenuFunsMap
+          },
           changeStaffMpMenu(url){
             if (url.indexOf('?') > -1){
               url = url + "&showMenuHead=4"
@@ -532,7 +546,7 @@
             }
             let routePath = this.$route.matched[0].path
             this.$router.push(url)
-            if (url.indexOf(routePath) == -1){
+            if (url.indexOf(routePath) == -1 && this.showMenuHead === 4){
               this.$router.go(0)
             }
           },
@@ -548,7 +562,6 @@
                 this.instance.post(this.authorization.getStaffMpMenue,{
                   mpId: pathParams.mpId
                 }).then(function(ret){
-                  console.log(ret)
                   if (ret.status === 200 && ret.data != null){
                     that.$store.state.storeModule.staffMpMenu = ret.data
                     that.staffMpMenu = ret.data
@@ -566,7 +579,6 @@
                       }
                     }
                   }
-                  // if (ret.data)
                 })
             }
           },
@@ -579,14 +591,21 @@
               if (ret.data.success) {
                 let parthMenuArray = ret.data.result
                 if (parthMenuArray != null && parthMenuArray.length > 0 && that.authorization.getStaffMenuFunc !== undefined) {
+                  that.$store.state.storeModule.staffMenuFunc = []
                   let currentMenu = parthMenuArray[parthMenuArray.length - 1]
-                  that.instance.post(that.authorization.getStaffMenuFunc, {
-                    menuId: currentMenu.menuId
-                  }).then(function (res) {
-                    if (res != null && res !== '') {
-                      that.$store.state.storeModule.staffMenuFunc = res.data
-                    }
-                  })
+                  let frameBaseInfo = localStorage.get('frame_base_info')
+                  if (frameBaseInfo && frameBaseInfo != null){
+                    that.$store.state.storeModule.staffMenuFunc = frameBaseInfo.staffMenuFunsMap[currentMenu.menuId]
+                  }
+                  if (that.$store.state.storeModule.staffMenuFunc.length <= 0){
+                    that.instance.post(that.authorization.getStaffMenuFunc, {
+                      menuId: currentMenu.menuId
+                    }).then(function (res) {
+                      if (res != null && res !== '') {
+                        that.$store.state.storeModule.staffMenuFunc = res.data
+                      }
+                    })
+                  }
                 }
                 that.$store.state.storeModule.breadcrumbArr = []
                 that.$store.state.storeModule.breadcrumbArr = ret.data.result
@@ -596,12 +615,9 @@
           /* 消息点击触发 */
             handleNoticeClick(index, item) {
                 this.isActive = index
-                // this.hideSlideWrapSlip = false
                 this.hideSlip = true
                 const bulletinId = item.bulletinId
                 this.$router.push({name: 'notice', params: {bulletinId}})
-                // this.$router.push({ path: `/notice/${item.bulletinId}` })
-                // this.$router.push({ path: '/notice', query: { bulletinId: item.bulletinId } })
             },
             /* 页面存在点击操作、keyUp操作, 将sessionTime更新 */
             handleRefreshSessionTime(that) {
@@ -676,16 +692,15 @@
                 localStorage.remove('access_token')
                 localStorage.remove('refresh_token')
                 localStorage.remove('session_time')
+                localStorage.remove('menu_list')
+                localStorage.remove('frame_base_info')
                 window.location.href = this.authorization.logout_uri
             },
             /* 到修改密码 */
             toChangePWD() {
-                // window.location.href="/cust/"
-                window.location.reload();
                 this.$router.push({name: 'change'})
             },
             toPersonalInfo() {
-                window.location.reload();
                 this.$router.push({name: 'personal'})
             }
             ,
@@ -755,49 +770,20 @@
             /* 切换语言 */
             handleChangeLang() {
                 if (this.lang === 'EN') {
-                    this.lang = '中'
+                    this.lang = 'ZH'
                     localStorage.set('aid-language', 'en-US')
                     this.$i18n.locale = 'en-US'
-                } else if (this.lang === '中') {
+                } else if (this.lang === 'ZH') {
                     this.lang = 'EN'
                     localStorage.set('aid-language', 'zh-CN')
                     this.$i18n.locale = 'zh-CN'
                 }
                 this.instance.post(this.authorization.changeLangUri, {
-                    language: this.lang === '中' ? 'en' : 'zh'
+                    language: this.lang
                 }).then(res => {
-                    window.location.reload()
+                    // window.location.reload()
                 }).catch(res => {
-                    /**
-                     * 处理相关错误的问题
-                     */
-                    if (res && res.response) {
-                        switch (res.response.status) {
-                            /**
-                             * 判断相关的错误，例如判断 token 失效， 或者没有登录的情况
-                             */
-                            case 401:
-                                let that = this
-                                let title = this.$t('frame.systemInfo')
-                                let content = this.$t('frame.systemInfoContent')
-                                this.$Modal.warning({
-                                    title: title,
-                                    content: content,
-                                    onOk: () => {
-                                        let accessToken = localStorage.get('access_token')
-                                        let refreshToken = localStorage.get('refresh_token')
-                                        if (!accessToken || !refreshToken) return
-                                        let msg = {
-                                            client_id: that.authorization.client_id,
-                                            redirect_uri: encodeURIComponent(that.authorization.redirect_uri),
-                                            state: uuid(6, 16)
-                                        }
-                                        window.location.href = that.authorization.authorizeUri + '?client_id=' + msg.client_id + '&redirect_uri=' + msg.redirect_uri + '&response_type=code&scope=read&state=' + msg.state
-                                    }
-                                })
-                                break
-                        }
-                    }
+                    that.handleResponseExcept(res)
                 })
             },
             /* 跳出当前域，并将其 path 保存下来 */
@@ -816,50 +802,59 @@
                     }).then(res => {
                         localStorage.set('access_token', res.data.access_token, res.data.expires_in * 1000)
                         // localStorage.set('refresh_token', res.data.refresh_token, Math.pow(2, 32))
-                        let alink = document.createElement('a')
-                        alink.href = url
-                        let path = alink.pathname.replace(/^([^\/])/, '/$1')
-                        if(url.indexOf('?') > -1){
-                            window.location.href = url + '&path=' + path
-                        }else{
-                          if (path.indexOf('/rpt/views') > 0){
-                            window.location.href = url
-                          } else {
-                            window.location.href = url + '?path=' + path
-                          }
-                        }
-                        // localStorage.set('aid-path', path)
-                        //window.location.href = url + '?path=' + path
+                      that.changeToPage(url)
                     }).catch(res => {
-                        let alink = document.createElement('a')
-                        alink.href = url
-                        let path = alink.pathname.replace(/^([^\/])/, '/$1')
-                        if(url.indexOf('?') > -1){
-                            window.location.href = url + '&path=' + path
-                        }else{
-                            if (path.indexOf('/rpt/views') > 0){
-                              window.location.href = url
-                            } else {
-                              window.location.href = url + '?path=' + path
-                            }
-                        }
-                        // localStorage.set('aid-path', path)
-                      //  window.location.href = url + '?path=' + path
+                      that.changeToPage(url)
                     })
                 } else {
-                    let alink = document.createElement('a')
-                    alink.href = url
-                    let path = alink.pathname.replace(/^([^\/])/, '/$1')
-                    if (url.indexOf('?') > -1) {
-                        window.location.href = url + '&path=' + path
-                    } else {
-                      if (path.indexOf('/rpt/views') > 0){
-                        window.location.href = url
-                      } else {
-                        window.location.href = url + '?path=' + path
-                      }
-                    }
+                  that.changeToPage(url)
                 }
+            },
+            changeToPage(url){
+                let alink = document.createElement('a')
+                alink.href = url
+                let path = alink.pathname.replace(/^([^\/])/, '/$1')
+                if(url.indexOf('?') > -1){
+                  window.location.href = url + '&path=' + path
+                }else{
+                  if (path.indexOf('/rpt/views') > 0){
+                    window.location.href = url
+                  } else {
+                    window.location.href = url + '?path=' + path
+                  }
+                }
+            },
+            handleResponseExcept(res){
+              /**
+               * 处理相关错误的问题
+               */
+              if (res && res.response) {
+                switch (res.response.status) {
+                  /**
+                   * 判断相关的错误，例如判断 token 失效， 或者没有登录的情况
+                   */
+                  case 401:
+                    let that = this
+                    let title = this.$t('frame.systemInfo')
+                    let content = this.$t('frame.systemInfoContent')
+                    this.$Modal.warning({
+                      title: title,
+                      content: content,
+                      onOk: () => {
+                        let accessToken = localStorage.get('access_token')
+                        let refreshToken = localStorage.get('refresh_token')
+                        if (!accessToken || !refreshToken) return
+                        let msg = {
+                          client_id: that.authorization.client_id,
+                          redirect_uri: encodeURIComponent(that.authorization.redirect_uri),
+                          state: uuid(6, 16)
+                        }
+                        window.location.href = that.authorization.authorizeUri + '?client_id=' + msg.client_id + '&redirect_uri=' + msg.redirect_uri + '&response_type=code&scope=read&state=' + msg.state
+                      }
+                    })
+                    break
+                }
+              }
             },
             /* 用于处理401重新再发请求 */
             // 重新获取 token
@@ -881,72 +876,48 @@
             },
             // 获取menu数据
             getMenuCb() {
+                let that = this;
+              let menuListInfo = localStorage.get('menu_list')
+              if (menuListInfo != null && menuListInfo != ''){
+                that.translateMenuInfo(res);
+              }else{
                 this.instance.get(this.authorization.menuUri,
-                    {
-                        params: {
-                            language: this.lang
-                        }
-                    }).then(res => {
-                    this.menu = transData(res.data, 'menuId', 'menuPid', 'children', 'menuOrder')
-                    /**
-                     * 设置自动展开
-                     */
-                    this.$nextTick(() => {
-                        let route = localStorage.get('aid-path') || this.$route.path || getQuery('path') || '/'
-                        let queryName = getQueryData(res.data, 'menuId', 'menuPid', decodeURIComponent(route), 'menuName')
-                        console.log('queryName:   ' + queryName)
-                        this.queryActiveMenu = queryName.name
-                        this.queryOpenName = queryName.names
-                        let routeArr2 = ['/res', '/cust', '/order', '/acct', '/rpt', '/prod', '/odp', '/base', '/']
-                        let querys = localStorage.get('query-key')
-                        if (route && !routeArr2.includes(decodeURIComponent(path))) {
-                            let query = JSON.parse(querys)
-                            this.$router.push({path: decodeURIComponent(route), query: query})
-                            localStorage.remove('aid-path')
-                            localStorage.remove('query-key')
-                        }
-                    })
-                    /**
-                     * 先找出这一条数据，并将其 menuName 组成一个数组
-                     */
-                }).catch(res => {
-                    /**
-                     * 处理相关错误的问题
-                     */
-                    if (res && res.response) {
-                        switch (res.response.status) {
-                            /**
-                             * 判断相关的错误，例如判断 token 失效， 或者没有登录的情况
-                             */
-                            case 401:
-                                /**
-                                 * 增加错误判断，避免无限刷新
-                                 */
-                                    // let invalidCount = localStorage.get('token-invalid')
-                                    // localStorage.set('token-invalid', parseInt(invalidCount) + 1)
-                                let that = this
-                                let title = this.$t('frame.systemInfo')
-                                let content = this.$t('frame.systemInfoContent')
-                                this.$Modal.warning({
-                                    title: title,
-                                    content: content,
-                                    onOk: () => {
-                                        let accessToken = localStorage.get('access_token')
-                                        let refreshToken = localStorage.get('refresh_token')
-                                        if (!accessToken || !refreshToken) return
-                                        let uri = that.authorization.redirect_uri
-                                        let msg = {
-                                            client_id: that.authorization.client_id,
-                                            redirect_uri: encodeURIComponent(uri),
-                                            state: uuid(6, 16)
-                                        }
-                                        window.location.href = that.authorization.authorizeUri + '?client_id=' + msg.client_id + '&redirect_uri=' + msg.redirect_uri + '&response_type=code&scope=read&state=' + msg.state
-                                    }
-                                })
-                                break
-                        }
+                  {
+                    params: {
+                      language: this.lang
                     }
+                  }).then(res => {
+                  localStorage.set('menu_list',res.data)
+                  that.translateMenuInfo(res.data);
+
+                }).catch(res => {
+                  that.handleResponseExcept(res)
                 })
+              }
+
+            },
+            translateMenuInfo(res){
+              /**
+               * 先找出这一条数据，并将其 menuName 组成一个数组
+               */
+              this.menu = transData(res, 'menuId', 'menuPid', 'children', 'menuOrder')
+              /**
+               * 设置自动展开
+               */
+              this.$nextTick(() => {
+                let route = localStorage.get('aid-path') || this.$route.path || getQuery('path') || '/'
+                let queryName = getQueryData(res.data, 'menuId', 'menuPid', decodeURIComponent(route), 'menuName')
+                this.queryActiveMenu = queryName.name
+                this.queryOpenName = queryName.names
+                let routeArr2 = ['/res', '/cust', '/order', '/acct','/mks', '/rpt', '/prod', '/odp', '/base', '/']
+                let querys = localStorage.get('query-key')
+                if (route && !routeArr2.includes(decodeURIComponent(route))) {
+                  let query = JSON.parse(querys)
+                  this.$router.push({path: decodeURIComponent(route), query: query})
+                  localStorage.remove('aid-path')
+                  localStorage.remove('query-key')
+                }
+              })
             },
             getbulletinListCb() {
                 this.instance.get(this.authorization.bulletinListUri,
@@ -958,37 +929,7 @@
                     }).then(res => {
                     this.notices = res.data.result
                 }).catch(res => {
-                    /**
-                     * 处理相关错误的问题
-                     */
-                    if (res && res.response) {
-                        switch (res.response.status) {
-                            /**
-                             * 判断相关的错误，例如判断 token 失效， 或者没有登录的情况
-                             */
-                            case 401:
-                                let that = this
-                                let title = this.$t('frame.systemInfo')
-                                let content = this.$t('frame.systemInfoContent')
-                                this.$Modal.warning({
-                                    title: title,
-                                    content: content,
-                                    onOk: () => {
-                                        let accessToken = localStorage.get('access_token')
-                                        let refreshToken = localStorage.get('refresh_token')
-                                        if (!accessToken || !refreshToken) return
-                                      let uri = that.authorization.redirect_uri
-                                      let msg = {
-                                        client_id: that.authorization.client_id,
-                                        redirect_uri: encodeURIComponent(uri),
-                                        state: uuid(6, 16)
-                                      }
-                                        window.location.href = that.authorization.authorizeUri + '?client_id=' + msg.client_id + '&redirect_uri=' + msg.redirect_uri + '&response_type=code&scope=read&state=' + msg.state
-                                    }
-                                })
-                                break
-                        }
-                    }
+                    that.handleResponseExcept(res)
                 })
             },
             //查询
@@ -1010,12 +951,10 @@
         async created() {
             /* 用于监测传过来的path */
             let path = getQuery('path') || this.$route.path
-            let routeArr = ['/res', '/cust', '/order', '/acct', '/rpt', '/prod', '/odp', '/provision', '/base', '/']
+            let routeArr = ['/res', '/cust', '/order', '/acct', '/mks', '/rpt', '/prod', '/odp', '/provision', '/base', '/']
             if (path && !routeArr.includes(decodeURIComponent(path))) {
                 localStorage.set('aid-path', decodeURIComponent(path))
             }
-            console.log('11111111111111111111')
-            console.log(this.showMenuHead)
             /**
              * 获取所有URL query 并存储
              */
@@ -1038,122 +977,22 @@
             if (!accessToken || !refreshToken) return
             if (this.menuList && this.menuList.length) return
 
-            // 获取login处设置的语言
-            let fetchLang = await this.instance.get(this.authorization.langUri)
-            if (fetchLang.data === '中') {
-                this.lang = 'EN'
-                localStorage.set('aid-language', 'zh-CN')
-                this.$i18n.locale = 'zh-CN'
-            } else if (fetchLang.data === 'en') {
-                this.lang = '中'
-                localStorage.set('aid-language', 'en-US')
-                this.$i18n.locale = 'en-US'
-            }
-
-            // 获取menu数据
-            if(this.showMenuHead !== '4' && this.showMenuHead !== '5'){
-              this.instance.get(this.authorization.menuUri,
-                {
-                  params: {
-                    language: fetchLang.data
-                  }
-                }).then(res => {
-                this.menu = transData(res.data, 'menuId', 'menuPid', 'children', 'menuOrder')
-                /**
-                 * 设置自动展开
-                 */
-                this.$nextTick(() => {
-                  let route = localStorage.get('aid-path') || this.$route.path || getQuery('path') || '/'
-                  let queryName = getQueryData(res.data, 'menuId', 'menuPid', decodeURIComponent(route), 'menuName')
-                  this.queryActiveMenu = queryName.name
-                  this.queryOpenName = queryName.names
-                  let routeArr2 = ['/res', '/cust', '/order', '/acct', '/rpt', '/prod', '/odp', '/provision', '/base', '/']
-                  let querys = localStorage.get('query-key')
-                  if (route && !routeArr2.includes(decodeURIComponent(path))) {
-                    let query = JSON.parse(querys)
-                    this.$router.push({path: decodeURIComponent(route), query: query})
-                    localStorage.remove('aid-path')
-                    localStorage.remove('query-key')
-                  }
-                })
-                /**
-                 * 先找出这一条数据，并将其 menuName 组成一个数组
-                 */
-              }).catch(res => {
-                /**
-                 * 处理相关错误的问题
-                 */
-                if (res && res.response) {
-                  switch (res.response.status) {
-                    /**
-                     * 判断相关的错误，例如判断 token 失效， 或者没有登录的情况
-                     */
-                    case 401:
-                      /**
-                       * 增加错误判断，避免无限刷新
-                       */
-                      // let invalidCount = localStorage.get('token-invalid')
-                      // localStorage.set('token-invalid', parseInt(invalidCount) + 1)
-                      /* let that = this
-                      let title = this.$t('frame.systemInfo')
-                      let content = this.$t('frame.systemInfoContent')
-                      this.$Modal.warning({
-                title: title,
-                content: content,
-                onOk: () => {
-                              let accessToken = localStorage.get('access_token')
-                                  let refreshToken = localStorage.get('refresh_token')
-                                  if (!accessToken || !refreshToken) return
-                            let msg = {
-                              client_id: that.authorization.client_id,
-                              redirect_uri: encodeURIComponent(that.authorization.redirect_uri),
-                              state: uuid(6, 16)
-                            }
-                            window.location.href = that.authorization.authorizeUri + '?client_id=' + msg.client_id + '&redirect_uri=' + msg.redirect_uri + '&response_type=code&scope=read&state=' + msg.state
-                }
-              }) */
-                      // 第一次请求主动获取token
-                      that.getTokenAgian(that.getbulletinListCb)
-                      break
-                  }
-                }
-              })
-            }
-
-            if(this.showMenuHead !== '4'){
-              /* 获取10个最新的消息列表 */
-              this.instance.get(this.authorization.bulletinListUri,
-                {
-                  params: {
-                    pageNo: 1,
-                    pageSize: 10
-                  }
-                }).then(res => {
-                this.notices = res.data.result
-              }).catch(res => {
-                /**
-                 * 处理相关错误的问题
-                 */
-                if (res && res.response) {
-                  switch (res.response.status) {
-                    /**
-                     * 判断相关的错误，例如判断 token 失效， 或者没有登录的情况
-                     */
-                    case 401:
-                      // 第一次请求主动获取token
-                      that.getTokenAgian(that.getMenuCb)
-                      break
-                  }
-                }
-              })
+            let baseInfo = localStorage.get('frame_base_info');
+            if (!baseInfo && baseInfo != null && baseInfo != undefined){
+              this.translateBaseInfo(baseInfo)
+            } else {
+              this.getBaseInfo();
             }
         },
         beforeMount(){
             this.getParentMenu()
-            this.getStaffMpMenue()
+            if (this.showMenu === '4'){
+              this.getStaffMpMenue()
+            }
         },
         mounted() {
-            this.queryStaff();
+
+            // this.queryStaff();
 
             /* 设置 */
             this.$nextTick(() => {
