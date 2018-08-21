@@ -12,9 +12,6 @@ export default {
   getStaffName: '/api/getStaffName',
   personalInfoInit: '/api/init',
   getCurrency: '/api/initCurrency',
-  personalInfoUpdate: '/api/update'
-  // aa: '/api/aa',
-  // getStaffMenuFunc: '/api/v1/getStaffMenueFunc',
-  // queryUnhandle: '/api/unHandleQuery',
-  // queryHandle:'/api/handleQuery',
+  personalInfoUpdate: '/api/update',
+  baseInfoUrl: '/api/v1/getBaseInfo'
 }

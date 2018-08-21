@@ -162,7 +162,7 @@
                         <t-form-item :label="$t('frame.postCode')" class="mb-20" prop="postCode"  label-span="220px">
                             <div class="row">
                                 <div class="col-8 pr-0">
-                                    <t-input  v-model="formRight.postCode"></t-input>
+                                    <t-input  v-model="formRight.postCode" :maxlength="6"></t-input>
                                 </div>
                             </div>
                         </t-form-item>
