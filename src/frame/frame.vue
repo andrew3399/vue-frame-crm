@@ -292,7 +292,7 @@
 </template>
 <script>
     import ClickoutSide from './clickoutside.js'
-    // import SessionStorage from '../utils/sessionStorage.js'
+    import SessionStorage from '../utils/sessionStorage.js'
     import LocalStorage from '../utils/localStorage.js'
     import {transData, getQueryData, getQuery, uuid} from '../utils/utils.js'
     import * as Constant from '../store/constant.js'
@@ -300,7 +300,7 @@
     import {Base64} from 'js-base64'
     import QueryString from 'query-string'
     // import EventHub from '../eventHub'
-    // let sessionStorage = new SessionStorage ()
+    let sessionStorage = new SessionStorage ()
     //test
     let localStorage = new LocalStorage()
 
@@ -521,14 +521,14 @@
                 && this.authorization.baseInfoUrl != '') {
               this.instance.post(this.authorization.baseInfoUrl,{}).then(res=>{
                 let resData = res.data;
-                localStorage.set('frame_base_info',resData)
+                sessionStorage.set('frame-base-info',resData)
                 that.translateBaseInfo(resData)
               })
             }
           },
           translateBaseInfo(resData){
             this.menu = resData.staffMenue;
-            localStorage.set('menu_list',this.menu)
+            sessionStorage.set('menu_list',this.menu)
             this.translateMenuInfo(this.menu);
             this.formRight.staffName = resData.staffName
             this.formRight.staffNO = resData.staffNo
@@ -593,8 +593,9 @@
                 if (parthMenuArray != null && parthMenuArray.length > 0 && that.authorization.getStaffMenuFunc !== undefined) {
                   that.$store.state.storeModule.staffMenuFunc = []
                   let currentMenu = parthMenuArray[parthMenuArray.length - 1]
-                  let frameBaseInfo = localStorage.get('frame_base_info')
-                  if (frameBaseInfo && frameBaseInfo != null){
+                  let frameBaseInfo = sessionStorage.get('frame-base-info')
+                  if (frameBaseInfo && frameBaseInfo != null && frameBaseInfo.staffMenuFunsMap != null
+                    && frameBaseInfo.staffMenuFunsMap != undefined){
                     that.$store.state.storeModule.staffMenuFunc = frameBaseInfo.staffMenuFunsMap[currentMenu.menuId]
                   }
                   if (that.$store.state.storeModule.staffMenuFunc.length <= 0){
@@ -692,8 +693,8 @@
                 localStorage.remove('access_token')
                 localStorage.remove('refresh_token')
                 localStorage.remove('session_time')
-                localStorage.remove('menu_list')
-                localStorage.remove('frame_base_info')
+                sessionStorage.remove('menu_list')
+                sessionStorage.remove('frame-base-info')
                 window.location.href = this.authorization.logout_uri
             },
             /* 到修改密码 */
@@ -769,15 +770,16 @@
             },
             /* 切换语言 */
             handleChangeLang() {
+                let language = 'en-US'
                 if (this.lang === 'EN') {
                     this.lang = 'ZH'
-                    localStorage.set('aid-language', 'en-US')
-                    this.$i18n.locale = 'en-US'
+                    language = 'en-US'
                 } else if (this.lang === 'ZH') {
                     this.lang = 'EN'
-                    localStorage.set('aid-language', 'zh-CN')
-                    this.$i18n.locale = 'zh-CN'
+                    language = 'zh-CN'
                 }
+                  localStorage.set('aid-language', language)
+                  this.$i18n.locale = language
                 this.instance.post(this.authorization.changeLangUri, {
                     language: this.lang
                 }).then(res => {
@@ -906,7 +908,7 @@
                */
               this.$nextTick(() => {
                 let route = localStorage.get('aid-path') || this.$route.path || getQuery('path') || '/'
-                let queryName = getQueryData(res.data, 'menuId', 'menuPid', decodeURIComponent(route), 'menuName')
+                let queryName = getQueryData(res, 'menuId', 'menuPid', decodeURIComponent(route), 'menuName')
                 this.queryActiveMenu = queryName.name
                 this.queryOpenName = queryName.names
                 let routeArr2 = ['/res', '/cust', '/order', '/acct','/mks', '/rpt', '/prod', '/odp', '/base', '/']
@@ -977,8 +979,13 @@
             if (!accessToken || !refreshToken) return
             if (this.menuList && this.menuList.length) return
 
-            let baseInfo = localStorage.get('frame_base_info');
-            if (!baseInfo && baseInfo != null && baseInfo != undefined){
+            // 设置语言信息
+            let language = localStorage.get('aid-language')
+            this.$i18n.locale = language
+            this.lang = language === 'en-US' ?  'ZH' : 'EN'
+            // 获取基础信息
+            let baseInfo = sessionStorage.get('frame-base-info')
+            if (baseInfo != null ){
               this.translateBaseInfo(baseInfo)
             } else {
               this.getBaseInfo();
