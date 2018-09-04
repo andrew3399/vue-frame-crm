@@ -167,6 +167,7 @@
                                     @on-select="handleNavSelect"
                                     class="menu-span"
                             >
+
                                 <template v-for="(item, x) in navs">
                                     <t-submenu v-if="item.children" :name="x">
                                         <template slot="title">
@@ -180,11 +181,15 @@
                                         </t-menu-item>
                                     </t-submenu>
                                     <t-menu-item :name="x" v-else>
+                                        <span v-if="x=='0'">
+                                            <t-icon type="clock">
+                                            </t-icon><font color="#0085D0">HK</font>&nbsp&nbsp{{formRight.HKTime}}&nbsp&nbsp&nbsp
+                                        </span>
                                         <t-badge dot state="danger" v-if="item.icon === 'bell' && count">
                                         <span @click="showSlipbox">
                                             <t-icon :type="item.icon" v-if="item.icon"></t-icon>
                                         <span class="sub-text" v-if="item.name">{{item.name}}</span>
-                                    </span>
+                                        </span>
                                         </t-badge>
                                         <template v-else-if="item.icon === 'bell'">
                                     <span @click="showSlipbox">
@@ -425,6 +430,7 @@
                 formRight:{
                     staffName: '',
                     staffNo: '',
+                    HKTime:'',
                 },
                 isOpen: true,
                 isOpenOnMinWin: true,
@@ -517,14 +523,34 @@
         methods: {
           getBaseInfo(){
             let that = this
-            if (this.authorization != undefined && this.authorization.baseInfoUrl != undefined
+              if (this.authorization != undefined && this.authorization.baseInfoUrl != undefined
                 && this.authorization.baseInfoUrl != '') {
               this.instance.post(this.authorization.baseInfoUrl,{}).then(res=>{
                 let resData = res.data;
                 sessionStorage.set('frame-base-info',resData)
-                that.translateBaseInfo(resData)
+                that.translateBaseInfo(resData);
               })
             }
+          },
+
+          getLocalTime(){
+            //参数i为时区值数字，比如北京为东八区则输进8,西5输入-5
+            var d = new Date();
+            //得到1970年一月一日到现在的秒数
+            var len = d.getTime();
+            //本地时间与GMT时间的时间偏移差
+            var offset = d.getTimezoneOffset() * 60000;
+            //得到现在的格林尼治时间
+            var utcTime = (len + offset) + 3600000*8;
+            var date = new Date(utcTime);
+            var year = date.getFullYear();
+            var month = date.getMonth() + 1;
+            var day = date.getDate();
+            var hour = date.getHours() < 10 ? "0" + date.getHours() : date.getHours();
+            var minutes = date.getMinutes() < 10 ? "0" + date.getMinutes() : date.getMinutes();
+            var second = date.getSeconds() < 10 ? "0" + date.getSeconds() : date.getSeconds();
+            var currentTime = year + "-" + month + "-" + day + "  " + hour + ":" + minutes + ":" + second ;
+            this.formRight.HKTime =  currentTime;
           },
           translateBaseInfo(resData){
             this.menu = resData.staffMenue;
@@ -998,15 +1024,15 @@
             }
         },
         mounted() {
-
-            // this.queryStaff();
-
+          let that = this
+          this.timer = setInterval(function(){
+            that.getLocalTime();
+          },1000)
             /* 设置 */
             this.$nextTick(() => {
                 this.setInstance(this.instance)
                 this.setAuthorization(this.authorization)
             })
-            let that = this
             let clientWidth = document.body.clientWidth || document.body.offsetWidth
             that.clientWidth = clientWidth
             if (this.clientWidth < 1200) {
