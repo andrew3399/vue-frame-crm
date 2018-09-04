@@ -43,14 +43,66 @@
             </div>
         </div>
 
+        <slide-component @ievent="ievent('basicInfoDiv',basicInfoDiv)"  style="padding-top: 10px;"  :title="$t('my_task.myTasks')"></slide-component>
+
+        <div class="enquiries mt-10" style="padding:0px 0px 15px 0px;"  v-show="basicInfoDiv">
+            <!-- 标题 star-->
+            <div class="notice-list-title" >
+                <div class="d-flex justify-content-between">
+                    <div class="col-xs-12 col-sm-12 col-md-7 col-lg-7 col-xl-7">
+                    </div>
+                    <div  class="col-xs-12 col-sm-12 col-md-4 col-lg-4 col-xl-4">
+                        <t-select v-model="filterType"  @on-change="changeTaskListFilter">
+                            <t-option v-for="item in changeTaskListFilterList" :value="item.value" :key="item.value">
+                                {{lang.indexOf('zh')!=-1 ? (item.label_zh?item.label_zh:item.label):item.label}}
+                            </t-option>
+                        </t-select>
+
+                    </div>
+                    <!--查询区域 star-->
+                    <div class="manag-rt-btn">
+                        <t-button type="primary"  class="enq-btn"  @click="handleJumpToAdd()">{{$t('my_task.newTask')}}</t-button>
+                    </div>
+                </div>
+            </div>
+
+            <div  class="selectTable">
+                <!-- 查询结果tab star-->
+                <div class="enquiries-tab">
+                    <div class="cmi-tab mt-15">
+                        <t-table  border :columns="columns" :data="queryData" ></t-table>
+                    </div>
+                    <!--  分页 star-->
+                    <div class="notice-pager mt-10" style="margin: 20px 0px 5px 0px !important;">
+                        <t-pager :total="total" :page-size="pageSize"  @on-change="handleOnTaskPagerChange" @on-size-change="handleOnTaskPagerSizeChange" show-elevator show-sizer></t-pager>
+
+                    </div>
+                    <!-- 分页 star-->
+                </div>
+                <!-- 查询结果tab end-->
+            </div>
+
+        </div>
     </div>
 </template>
 <script>
     import { mapState } from 'vuex'
+    //引入常量配置
+    import Storage from '../../src/views/localstorage.js'
+    // 注册详情页面组件
+    import slideComponent from './component/slide/slide.vue'
+
+    let storage = new Storage();
+
+
     export default {
         data () {
             return {
-                bulletinTitle:'',
+              lang: storage.get("aid-language"),
+              bulletinTitle:'',
+              basicInfoDiv:true,
+
+              chooseDateType:'',
                 total: 0,
                 pageSize: 5,
                 sizerRange: [10, 15, 20, 50],
@@ -58,6 +110,9 @@
                 items: [],
                 handleItems: [],
                 unHandleItems: [],
+                changeTaskListFilterList:[],
+                queryData: [],
+                filterType:'',
                 fromItem:{
                     pageNum:1,
                     pageSize:5,
@@ -101,15 +156,102 @@
             ...mapState({
                 instance: state => state.storeModule.instance,
                 authorization: state => state.storeModule.authorization
-            })
+            }),
+
+          columns() {
+            return [
+              {
+                title: this.$t('my_task.dueDate'),
+                key: 'workCloseTime',
+                width: 150,
+                render: (h, params) => {
+                  return h('span', !params.row.workCloseTime ? '' : this.tranceDate(params.row.workCloseTime))
+                }
+
+              },
+              {
+                title: this.$t('my_task.status'),
+                key: 'workStatusName',
+              },
+              {
+                title: this.$t('my_task.subject'),
+                key: 'subject',
+              },
+              {
+                title: this.$t('my_task.name'),
+                key: 'contactName',
+              },
+            {
+              title: this.$t('my_task.relatedTo'),
+                key: 'relatedToName',
+            }, {
+              title: this.$t('my_task.account'),
+              key: 'relatedName',
+            },{
+              title: this.$t('my_task.oper'),
+              key: 'action',
+                width: 180,
+                fixed: 'right',
+                align: 'left',
+                render: (h, params) => {
+                  return h('div', [
+                    h('t-button', {
+                      props: {
+                        type: 'outline-primary',
+                        size: 'sm'
+                      },
+                      style: {
+                        marginRight: '5px',
+                      },
+                      on: {
+                        click: () => {
+                          this.show(params.row)
+                        }
+                      }
+                    },  this.$t('my_task.detail')),
+                    h('t-button', {
+                      props: {
+                        type: 'outline-primary',
+                        size: 'sm'
+                      },
+                      style: {
+                        marginRight: '5px',
+                      },
+                      on: {
+                        click: () => {
+                          this.modify(params.row)
+                        }
+                      }
+                    }, this.$t('my_task.modify')),
+
+                  ])
+                }
+            },
+
+            ]
+
+          },
         },
+      components: {
+        slideComponent,
+      },
         methods: {
+          ievent(slideDiv,slideDivState) {
+            switch (slideDiv) {
+              case 'basicInfoDiv' :
+                this.basicInfoDiv = !slideDivState
+                break
+            }
+          },
             navToDetail (item) {
                 const bulletinId = item.bulletinId
                 this.$router.push({ name: 'notice', params: { bulletinId }})
                 // this.$router.push({ path: `notice/${item.bulletinId}` })
                 // this.$router.push({ path: '/notice', query: { bulletinId: item.bulletinId } })
             },
+            tranceDate(code) {
+                 return code.split(" ")[0]
+             },
             jumpToUnHandle(){
                 this.$router.push({ name: 'unHandle'})
             },
@@ -120,11 +262,61 @@
                 this.pageNo = item
                 this.getBulletinList()
             },
+          handleOnTaskPagerChange(item){
+            this.pageNo = item
+            this.queryMyTasks(this.filterType)
+          },
             handleOnPagerSizeChange (item) {
                 this.pageSize = item
                 this.pageNo = 1
                 this.getBulletinList()
             },
+          handleOnTaskPagerSizeChange(item) {
+            this.pageSize = item
+            this.pageNo = 1
+            this.queryMyTasks(this.filterType)
+          },
+          initTasklistFilter(){
+              //初始化获取筛选器的值
+            this.instance.get(this.authorization.initTasklistFilter, {}
+            ).then(res => {
+              this.changeTaskListFilterList  = res.data.result.tasklistFilterData;
+            }).catch(res => {
+              this.$Message.warning(this.$t('frame.warning'))
+            })
+           },
+          changeTaskListFilter(){
+            this.queryMyTasks(this.filterType);
+          },
+         queryMyTasks(val){
+              debugger
+             this.$nextTick(() => {
+               this.instance.get(this.authorization.queryMyTasks, {
+                 params: {
+                   lanager:this.lang,
+                   pageNum: this.pageNo,
+                   pageSize:this.pageSize,
+                   queryType:val
+                 }
+               }).then(res => {
+                 this.queryData = [];
+                 this.total = 0;
+                 if (res.data.success) {
+                   this.queryData = res.data.result.result == null ? [] : res.data.result.result;
+                   this.total = res.data.result.count;
+                 }
+               }).catch(res => {
+                 this.$Message.warning(this.$t('frame.warning'))
+               })
+             })
+           },
+          show(taskRow){
+            window.open("/cust/detail-task?taskId="+taskRow.taskId +"&workId="+taskRow.workId,"_self");
+          },
+          modify(taskRow){
+          //  this.$router.push({ name: 'newTask'})
+            window.open("/cust/new-task?oper=U&taskId="+taskRow.taskId +"&workId="+taskRow.workId,"_self");
+          },
             getBulletinList (params) {
                 this.$nextTick(() => {
                     this.instance.get(this.authorization.bulletinListUri, {
@@ -148,6 +340,9 @@
                     })
                 })
             },
+           handleChooseTask(){
+
+          },
             handleChooseRole(bulletinTitle){
                 this.$nextTick(() => {
                     this.instance.get(this.authorization.bulletinListUri, {
@@ -178,7 +373,13 @@
                 var url = url1.concat(formkey1);
                 // console.log(url)
                 window.open(url);
-            }
+            },
+            handleJumpToAdd(){
+                //跳转到新增
+              // this.$router.push({ name: 'newTask'})
+              // console.log(url)
+              window.open("/cust/new-task?oper=C","_self");
+            },
         },
         mounted () {
             /**
@@ -186,8 +387,9 @@
              */
             setTimeout(() => {
                 this.getBulletinList()
+                this.initTasklistFilter()
             }, 300)
-        }
+        },
     }
 </script>
 <style lang="scss" scoped>

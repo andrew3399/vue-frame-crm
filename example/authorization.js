@@ -13,5 +13,7 @@ export default {
   personalInfoInit: '/api/init',
   getCurrency: '/api/initCurrency',
   personalInfoUpdate: '/api/update',
-  baseInfoUrl: '/api/v1/getBaseInfo'
+  baseInfoUrl: '/api/v1/getBaseInfo',
+  queryMyTasks: '/api/v1/task/queryMyTaskPage',
+  initTasklistFilter: '/api/v1/initTasklistFilter',
 }
