@@ -139,6 +139,99 @@ export default {
       list_tag_important: 'Important'
     }
   },
+  my_task: {
+    myTasks: 'My Tasks',
+    dueDate: 'Due Date',
+    status: 'Status',
+    subject: 'Subject',
+    name: 'Name',
+    relatedTo: 'Related To',
+    account: 'Account',
+    oper: 'Oper',
+    newTask: 'New Task',
+    complete: 'Complete',
+    modify: 'Modify',
+    detail: 'Detail',
+    taskListFilter: 'Task list filter:',
+    submitSuccess: 'Submitted Successfully!',
+    taskDetail: 'Task Detail',
+    newTaskAdd: {
+      newTasks: 'New Task',
+      recordType: 'Record Type',
+      subject: 'Subject',
+      assignedTo: 'Assigned To',
+      name: 'Name',
+      activityCurrency: 'Activity Currency',
+      comments: 'Comments',
+      priority: 'Priority',
+      createRecurrTasks: 'Create Recurring Series of Tasks',
+      attachments: 'Attachments',
+      upload: 'Upload',
+      submit: 'Submit',
+      select: 'select',
+      dueDate: 'Due Date',
+      relatedTo: 'Related To',
+      status: 'Status',
+      cancel: 'Cancel',
+      notEmpty: 'can not be empty',
+      modifyTask: 'Modify Task',
+      modifySeris: 'Modify Series',
+      cancelReturn: 'Return'
+    },
+    staff: {
+      staffInfo: 'Select the assigned person',
+      staffNo: 'Staff No',
+      staffName: 'Staff Name',
+      departName: 'depart Name',
+      contactTel: 'contact Tel',
+      search: 'Search'
+    },
+    contact: {
+      contactInfo: 'Select Contacts',
+      contactType: 'Contact Type',
+      contactName: 'Contact Name',
+      contactEmail: 'Mailbox',
+      contactTel: 'Telephone Number',
+      contactTitle: 'Title',
+      contactCountry: 'Country/Area'
+    },
+    campaign: {
+      campaignInfo: 'Select Campaign',
+      campaignName: 'Campaign Name',
+      startDate: 'Start Date',
+      status: 'Status',
+      updatedTime: 'Updated Time',
+    },
+    opportunity: {
+      opportunityInfo: 'Select Opportunity',
+      opportunity_name: 'Opportunity Name',
+      customer_name: 'Customer Name',
+      close_date: 'Close Date',
+      stage: 'Stage',
+      owner: 'Owner',
+      created_time: 'Created Time'
+    },
+    leads: {
+      leadsInfo: 'select Lead',
+      company: 'Company',
+      owner: 'Owner',
+      leadStatus: 'Lead Status',
+      leadSource: 'Lead Source',
+      leadCurrency: 'Lead Currency',
+      creator: 'Creator',
+      creatorDate: 'Created Date'
+    },
+    cust: {
+      custInfo: 'Select Cust',
+      customer_name: 'Cust Name',
+      inter_account_manage: 'Internet Customer Manager',
+      voice_account_manage: 'Voice Customer Manager',
+      mobile_account_manage: 'Mobile Customer Manager',
+    },
+    subjectSelect: {
+      selectSubjectInfo: 'Select a Subject below.'
+    }
+  },
   handle_local: {
     handle: {
       order_title: 'order title',
