@@ -48,21 +48,25 @@
         <div class="enquiries mt-10" style="padding:0px 0px 15px 0px;"  v-show="basicInfoDiv">
             <!-- 标题 star-->
             <div class="notice-list-title" >
-                <div class="d-flex justify-content-between">
+                <div class="row">
                     <div class="col-xs-12 col-sm-12 col-md-7 col-lg-7 col-xl-7">
                     </div>
-                    <div  class="col-xs-12 col-sm-12 col-md-4 col-lg-4 col-xl-4">
-                        <t-select v-model="filterType"  @on-change="changeTaskListFilter">
-                            <t-option v-for="item in changeTaskListFilterList" :value="item.value" :key="item.value">
-                                {{lang.indexOf('zh')!=-1 ? (item.label_zh?item.label_zh:item.label):item.label}}
-                            </t-option>
-                        </t-select>
-
+                    <div  class="col-xs-12 col-sm-12 col-md-5 col-lg-5 col-xl-5">
+                        <div class="d-flex justify-content-start">
+                            <div style="width:80%;margin-right:10px;">
+                                <t-select v-model="filterType"  @on-change="changeTaskListFilter">
+                                    <t-option v-for="item in changeTaskListFilterList" :value="item.value" :key="item.value">
+                                        {{lang.indexOf('zh')!=-1 ? (item.label_zh?item.label_zh:item.label):item.label}}
+                                    </t-option>
+                                </t-select>
+                            </div>
+                            <!--查询区域 star-->
+                            <div class="manag-rt-btn">
+                                <t-button type="primary" @click="handleJumpToAdd()">{{$t('my_task.newTask')}}</t-button>
+                            </div>
+                        </div>
                     </div>
-                    <!--查询区域 star-->
-                    <div class="manag-rt-btn">
-                        <t-button type="primary"  class="enq-btn"  @click="handleJumpToAdd()">{{$t('my_task.newTask')}}</t-button>
-                    </div>
+                    
                 </div>
             </div>
 

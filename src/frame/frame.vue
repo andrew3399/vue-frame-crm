@@ -181,15 +181,11 @@
                                         </t-menu-item>
                                     </t-submenu>
                                     <t-menu-item :name="x" v-else>
-                                        <span v-if="x=='0'">
-                                            <t-icon type="clock">
-                                            </t-icon><font color="#0085D0">HK</font>&nbsp&nbsp{{formRight.HKTime}}&nbsp&nbsp&nbsp
-                                        </span>
                                         <t-badge dot state="danger" v-if="item.icon === 'bell' && count">
                                         <span @click="showSlipbox">
                                             <t-icon :type="item.icon" v-if="item.icon"></t-icon>
                                         <span class="sub-text" v-if="item.name">{{item.name}}</span>
-                                        </span>
+                                    </span>
                                         </t-badge>
                                         <template v-else-if="item.icon === 'bell'">
                                     <span @click="showSlipbox">
@@ -588,6 +584,7 @@
                 this.instance.post(this.authorization.getStaffMpMenue,{
                   mpId: pathParams.mpId
                 }).then(function(ret){
+                  console.log(ret)
                   if (ret.status === 200 && ret.data != null){
                     that.$store.state.storeModule.staffMpMenu = ret.data
                     that.staffMpMenu = ret.data
@@ -605,6 +602,7 @@
                       }
                     }
                   }
+                  // if (ret.data)
                 })
             }
           },
@@ -804,8 +802,8 @@
                     this.lang = 'EN'
                     language = 'zh-CN'
                 }
-                  localStorage.set('aid-language', language)
-                  this.$i18n.locale = language
+                localStorage.set('aid-language', language)
+                this.$i18n.locale = language
                 this.instance.post(this.authorization.changeLangUri, {
                     language: this.lang
                 }).then(res => {
@@ -814,6 +812,7 @@
                     that.handleResponseExcept(res)
                 })
             },
+            
             /* 跳出当前域，并将其 path 保存下来 */
             handleOtherRegin(url) {
                 let accessToken = localStorage.get('access_token')
@@ -1005,10 +1004,32 @@
             if (!accessToken || !refreshToken) return
             if (this.menuList && this.menuList.length) return
 
+            // 获取login处设置的语言
+            // let fetchLang = await this.instance.get(this.authorization.langUri)
+            // if (fetchLang.data === '中') {
+            //     this.lang = 'EN'
+            //     localStorage.set('aid-language', 'zh-CN')
+            //     this.$i18n.locale = 'zh-CN'
+            // } else if (fetchLang.data === 'en') {
+            //     this.lang = '中'
+            //     localStorage.set('aid-language', 'en-US')
+            //     this.$i18n.locale = 'en-US'
+            // }
+
             // 设置语言信息
-            let language = localStorage.get('aid-language')
-            this.$i18n.locale = language
-            this.lang = language === 'en-US' ?  'ZH' : 'EN'
+            let fetchLang = await this.instance.get(this.authorization.langUri)
+            console.log(JSON.stringify(fetchLang))
+            if (fetchLang.data === 'zh') {
+                this.lang = 'EN'
+                localStorage.set('aid-language', 'zh-CN')
+                this.$i18n.locale = 'zh-CN'
+            } else if (fetchLang.data === 'en') {
+                this.lang = 'ZH'
+                localStorage.set('aid-language', 'en-US')
+                this.$i18n.locale = 'en-US'
+            }
+            // this.$i18n.locale = language
+            // this.lang = language === 'en-US' ?  'ZH' : 'EN'
             // 获取基础信息
             let baseInfo = sessionStorage.get('frame-base-info')
             if (baseInfo != null ){
