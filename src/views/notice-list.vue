@@ -49,15 +49,19 @@
             <!-- 标题 star-->
             <div class="notice-list-title" >
                 <div class="d-flex justify-content-between">
-                    <div class="col-xs-12 col-sm-12 col-md-7 col-lg-7 col-xl-7">
+                    <div class="col-xs-12 col-sm-12 col-md-4 col-lg-4 col-xl-4">
                     </div>
-                    <div  class="col-xs-12 col-sm-12 col-md-4 col-lg-4 col-xl-4">
-                        <t-select v-model="filterType"  @on-change="changeTaskListFilter">
-                            <t-option v-for="item in changeTaskListFilterList" :value="item.value" :key="item.value">
-                                {{lang.indexOf('zh')!=-1 ? (item.label_zh?item.label_zh:item.label):item.label}}
-                            </t-option>
-                        </t-select>
-
+                    <div  class="col-xs-12 col-sm-12 col-md-7 col-lg-7 col-xl-7 row" >
+                        <div  class="col-xs-12 col-sm-12 col-md-3 col-lg-3 col-xl-3" style=" font-size: 15px; padding: 1.2% 0 0 0;  font-weight: 300;">
+                            {{$t('my_task.taskListFilter')}}
+                        </div>
+                        <div  class="col-xs-12 col-sm-12 col-md-9 col-lg-9 col-xl-9">
+                            <t-select v-model="filterType"  @on-change="changeTaskListFilter">
+                                <t-option v-for="item in changeTaskListFilterList" :value="item.value" :key="item.value">
+                                    {{lang.indexOf('zh')!=-1 ? (item.label_zh?item.label_zh:item.label):item.label}}
+                                </t-option>
+                            </t-select>
+                        </div>
                     </div>
                     <!--查询区域 star-->
                     <div class="manag-rt-btn">
@@ -70,7 +74,7 @@
                 <!-- 查询结果tab star-->
                 <div class="enquiries-tab">
                     <div class="cmi-tab mt-15">
-                        <t-table  border :columns="columns" :data="queryData" ></t-table>
+                        <t-table  border :columns="columns" :data="queryData" :all-ellipsis="true"></t-table>
                     </div>
                     <!--  分页 star-->
                     <div class="notice-pager mt-10" style="margin: 20px 0px 5px 0px !important;">
@@ -190,42 +194,61 @@
             },{
               title: this.$t('my_task.oper'),
               key: 'action',
-                width: 180,
+                width: 280,
                 fixed: 'right',
                 align: 'left',
                 render: (h, params) => {
-                  return h('div', [
-                    h('t-button', {
-                      props: {
-                        type: 'outline-primary',
-                        size: 'sm'
-                      },
-                      style: {
-                        marginRight: '5px',
-                      },
-                      on: {
-                        click: () => {
-                          this.show(params.row)
-                        }
+                  let a = h('t-button', {
+                    props: {
+                      type: 'outline-primary',
+                      size: 'sm'
+                    },
+                    style: {
+                      marginRight: '5px',
+                    },
+                    on: {
+                      click: () => {
+                        this.show(params.row)
                       }
-                    },  this.$t('my_task.detail')),
-                    h('t-button', {
-                      props: {
-                        type: 'outline-primary',
-                        size: 'sm'
-                      },
-                      style: {
-                        marginRight: '5px',
-                      },
-                      on: {
-                        click: () => {
-                          this.modify(params.row)
-                        }
-                      }
-                    }, this.$t('my_task.modify')),
+                    },
+                  }, this.$t('my_task.detail'))
 
-                  ])
-                }
+                  let b = h('t-button', {
+                    props: {
+                      type: 'outline-primary',
+                      size: 'sm'
+                    },
+                    style: {
+                      marginRight: '5px',
+                    },
+                    on: {
+                      click : () => {
+                        this.modify(params.row)
+                      }
+                    }
+                  }, this.$t('my_task.modify'))
+
+                  let c = h
+                  ('t-button', {
+                    props: {
+                      type: 'outline-primary',
+                      size: 'sm'
+                    },
+                    style: {
+                      marginRight: '5px',
+                    },
+                    on: {
+                      click: () => {
+                        this.complete(params.row)
+                      }
+                    }
+                  }, this.$t('my_task.complete'));
+                  if(params.row.workStatus == '1'){
+                    return h('div', [a,b,c])
+                  }else{
+                    return h('div', [a,b])
+                  }
+                },
             },
 
             ]
@@ -281,6 +304,8 @@
             this.instance.get(this.authorization.initTasklistFilter, {}
             ).then(res => {
               this.changeTaskListFilterList  = res.data.result.tasklistFilterData;
+              this.filterType ='101';
+              this.queryMyTasks(this.filterType);
             }).catch(res => {
               this.$Message.warning(this.$t('frame.warning'))
             })
@@ -316,6 +341,10 @@
           modify(taskRow){
           //  this.$router.push({ name: 'newTask'})
             window.open("/cust/new-task?oper=U&taskId="+taskRow.taskId +"&workId="+taskRow.workId,"_self");
+          },
+
+          complete(taskRow){
+           window.open("/cust/new-task?oper=U&completeFlag=1&taskId="+taskRow.taskId +"&workId="+taskRow.workId,"_self");
           },
             getBulletinList (params) {
                 this.$nextTick(() => {
