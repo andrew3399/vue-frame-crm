@@ -15,5 +15,7 @@ export default {
   personalInfoUpdate: '/api/update',
   baseInfoUrl: '/api/v1/getBaseInfo',
   queryMyTasks: '/api/v1/task/queryMyTaskPage',
-  initTasklistFilter: '/api/v1/initTasklistFilter'
+  initTasklistFilter: '/api/v1/initTasklistFilter',
+  getStaffMenuFunc: '/api/v1/getStaffMenueFunc',
+  getStaffMpMenue: '/api/v1/getStaffMpMenue',
 }
