@@ -49,11 +49,14 @@
             <!-- 标题 star-->
             <div class="notice-list-title" >
                 <div class="row">
-                    <div class="col-xs-12 col-sm-12 col-md-7 col-lg-7 col-xl-7">
+                    <div class="col-xs-12 col-sm-12 col-md-5 col-lg-5 col-xl-5">
                     </div>
-                    <div  class="col-xs-12 col-sm-12 col-md-5 col-lg-5 col-xl-5">
+                    <div  class="col-xs-12 col-sm-12 col-md-7 col-lg-7 col-xl-7">
                         <div class="d-flex justify-content-start">
-                            <div style="width:80%;margin-right:10px;">
+                            <div  class="col-xs-12 col-sm-12 col-md-3 col-lg-3 col-xl-3" style=" font-size: 15px; padding: 1.2% 0 0 0;  font-weight: 300;">
+                                {{$t('my_task.taskListFilter')}}
+                            </div>
+                            <div  class="col-xs-12 col-sm-12 col-md-6 col-lg-6 col-xl-6">
                                 <t-select v-model="filterType"  @on-change="changeTaskListFilter">
                                     <t-option v-for="item in changeTaskListFilterList" :value="item.value" :key="item.value">
                                         {{lang.indexOf('zh')!=-1 ? (item.label_zh?item.label_zh:item.label):item.label}}
@@ -74,7 +77,7 @@
                 <!-- 查询结果tab star-->
                 <div class="enquiries-tab">
                     <div class="cmi-tab mt-15">
-                        <t-table  border :columns="columns" :data="queryData" ></t-table>
+                        <t-table  border :columns="columns" :data="queryData" :all-ellipsis="true"></t-table>
                     </div>
                     <!--  分页 star-->
                     <div class="notice-pager mt-10" style="margin: 20px 0px 5px 0px !important;">
@@ -194,7 +197,7 @@
             },{
               title: this.$t('my_task.oper'),
               key: 'action',
-                width: 180,
+                width: 280,
                 fixed: 'right',
                 align: 'left',
                 render: (h, params) => {
@@ -227,7 +230,20 @@
                         }
                       }
                     }, this.$t('my_task.modify')),
-
+                    h('t-button', {
+                      props: {
+                        type: 'outline-primary',
+                        size: 'sm'
+                      },
+                      style: {
+                        marginRight: '5px',
+                      },
+                      on: {
+                        click: () => {
+                          this.complete(params.row)
+                        }
+                      }
+                    }, this.$t('my_task.complete')),
                   ])
                 }
             },
@@ -285,6 +301,8 @@
             this.instance.get(this.authorization.initTasklistFilter, {}
             ).then(res => {
               this.changeTaskListFilterList  = res.data.result.tasklistFilterData;
+              this.filterType ='101';
+              this.queryMyTasks(this.filterType);
             }).catch(res => {
               this.$Message.warning(this.$t('frame.warning'))
             })
@@ -320,6 +338,9 @@
           modify(taskRow){
           //  this.$router.push({ name: 'newTask'})
             window.open("/cust/new-task?oper=U&taskId="+taskRow.taskId +"&workId="+taskRow.workId,"_self");
+          },
+          complete(taskRow){
+            window.open("/cust/new-task?oper=U&completeFlag=1&taskId="+taskRow.taskId +"&workId="+taskRow.workId,"_self");
           },
             getBulletinList (params) {
                 this.$nextTick(() => {
