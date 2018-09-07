@@ -337,10 +337,10 @@
           },
           modify(taskRow){
           //  this.$router.push({ name: 'newTask'})
-            window.open("/cust/new-task?oper=U&taskId="+taskRow.taskId +"&workId="+taskRow.workId,"_self");
+            window.open("/cust/mod-task?oper=U&taskId="+taskRow.taskId +"&workId="+taskRow.workId,"_self");
           },
           complete(taskRow){
-            window.open("/cust/new-task?oper=U&completeFlag=1&taskId="+taskRow.taskId +"&workId="+taskRow.workId,"_self");
+            window.open("/cust/mod-task?oper=U&completeFlag=1&taskId="+taskRow.taskId +"&workId="+taskRow.workId,"_self");
           },
             getBulletinList (params) {
                 this.$nextTick(() => {
