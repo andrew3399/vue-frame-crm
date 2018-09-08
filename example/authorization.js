@@ -16,6 +16,8 @@ export default {
   baseInfoUrl: '/api/v1/getBaseInfo',
   queryMyTasks: '/api/v1/task/queryMyTaskPage',
   initTasklistFilter: '/api/v1/initTasklistFilter',
+  queryHandle: '/api/v1/handleQuery',
+  queryUnhandle: '/api/v1/unHandleQuery',
   getStaffMenuFunc: '/api/v1/getStaffMenueFunc',
-  getStaffMpMenue: '/api/v1/getStaffMpMenue',
+  getStaffMpMenue: '/api/v1/getStaffMpMenue'
 }
