@@ -167,6 +167,7 @@
                                     @on-select="handleNavSelect"
                                     class="menu-span"
                             >
+
                                 <template v-for="(item, x) in navs">
                                     <t-submenu v-if="item.children" :name="x">
                                         <template slot="title">
@@ -425,6 +426,7 @@
                 formRight:{
                     staffName: '',
                     staffNo: '',
+                    HKTime:'',
                 },
                 isOpen: true,
                 isOpenOnMinWin: true,
@@ -517,14 +519,34 @@
         methods: {
           getBaseInfo(){
             let that = this
-            if (this.authorization != undefined && this.authorization.baseInfoUrl != undefined
+              if (this.authorization != undefined && this.authorization.baseInfoUrl != undefined
                 && this.authorization.baseInfoUrl != '') {
               this.instance.post(this.authorization.baseInfoUrl,{}).then(res=>{
                 let resData = res.data;
                 sessionStorage.set('frame-base-info',resData)
-                that.translateBaseInfo(resData)
+                that.translateBaseInfo(resData);
               })
             }
+          },
+
+          getLocalTime(){
+            //参数i为时区值数字，比如北京为东八区则输进8,西5输入-5
+            var d = new Date();
+            //得到1970年一月一日到现在的秒数
+            var len = d.getTime();
+            //本地时间与GMT时间的时间偏移差
+            var offset = d.getTimezoneOffset() * 60000;
+            //得到现在的格林尼治时间
+            var utcTime = (len + offset) + 3600000*8;
+            var date = new Date(utcTime);
+            var year = date.getFullYear();
+            var month = date.getMonth() + 1;
+            var day = date.getDate();
+            var hour = date.getHours() < 10 ? "0" + date.getHours() : date.getHours();
+            var minutes = date.getMinutes() < 10 ? "0" + date.getMinutes() : date.getMinutes();
+            var second = date.getSeconds() < 10 ? "0" + date.getSeconds() : date.getSeconds();
+            var currentTime = year + "-" + month + "-" + day + "  " + hour + ":" + minutes + ":" + second ;
+            this.formRight.HKTime =  currentTime;
           },
           translateBaseInfo(resData){
             this.menu = resData.staffMenue;
@@ -562,6 +584,7 @@
                 this.instance.post(this.authorization.getStaffMpMenue,{
                   mpId: pathParams.mpId
                 }).then(function(ret){
+                  console.log(ret)
                   if (ret.status === 200 && ret.data != null){
                     that.$store.state.storeModule.staffMpMenu = ret.data
                     that.staffMpMenu = ret.data
@@ -579,6 +602,7 @@
                       }
                     }
                   }
+                  // if (ret.data)
                 })
             }
           },
@@ -593,12 +617,15 @@
                 if (parthMenuArray != null && parthMenuArray.length > 0 && that.authorization.getStaffMenuFunc !== undefined) {
                   that.$store.state.storeModule.staffMenuFunc = []
                   let currentMenu = parthMenuArray[parthMenuArray.length - 1]
+
                   let frameBaseInfo = sessionStorage.get('frame-base-info')
                   if (frameBaseInfo && frameBaseInfo != null && frameBaseInfo.staffMenuFunsMap != null
-                    && frameBaseInfo.staffMenuFunsMap != undefined){
+                   && frameBaseInfo.staffMenuFunsMap != undefined){
+                //   let frameBaseInfo = localStorage.get('frame_base_info')
+                //   if (frameBaseInfo && frameBaseInfo != null){
                     that.$store.state.storeModule.staffMenuFunc = frameBaseInfo.staffMenuFunsMap[currentMenu.menuId]
                   }
-                  if (that.$store.state.storeModule.staffMenuFunc.length <= 0){
+                  if (that.$store.state.storeModule.staffMenuFunc != undefined && that.$store.state.storeModule.staffMenuFunc.length <= 0){
                     that.instance.post(that.authorization.getStaffMenuFunc, {
                       menuId: currentMenu.menuId
                     }).then(function (res) {
@@ -778,8 +805,8 @@
                     this.lang = 'EN'
                     language = 'zh-CN'
                 }
-                  localStorage.set('aid-language', language)
-                  this.$i18n.locale = language
+                localStorage.set('aid-language', language)
+                this.$i18n.locale = language
                 this.instance.post(this.authorization.changeLangUri, {
                     language: this.lang
                 }).then(res => {
@@ -788,6 +815,7 @@
                     that.handleResponseExcept(res)
                 })
             },
+            
             /* 跳出当前域，并将其 path 保存下来 */
             handleOtherRegin(url) {
                 let accessToken = localStorage.get('access_token')
@@ -979,10 +1007,32 @@
             if (!accessToken || !refreshToken) return
             if (this.menuList && this.menuList.length) return
 
+            // 获取login处设置的语言
+            // let fetchLang = await this.instance.get(this.authorization.langUri)
+            // if (fetchLang.data === '中') {
+            //     this.lang = 'EN'
+            //     localStorage.set('aid-language', 'zh-CN')
+            //     this.$i18n.locale = 'zh-CN'
+            // } else if (fetchLang.data === 'en') {
+            //     this.lang = '中'
+            //     localStorage.set('aid-language', 'en-US')
+            //     this.$i18n.locale = 'en-US'
+            // }
+
             // 设置语言信息
-            let language = localStorage.get('aid-language')
-            this.$i18n.locale = language
-            this.lang = language === 'en-US' ?  'ZH' : 'EN'
+            let fetchLang = await this.instance.get(this.authorization.langUri)
+            console.log(JSON.stringify(fetchLang))
+            if (fetchLang.data === 'zh') {
+                this.lang = 'EN'
+                localStorage.set('aid-language', 'zh-CN')
+                this.$i18n.locale = 'zh-CN'
+            } else if (fetchLang.data === 'en') {
+                this.lang = 'ZH'
+                localStorage.set('aid-language', 'en-US')
+                this.$i18n.locale = 'en-US'
+            }
+            // this.$i18n.locale = language
+            // this.lang = language === 'en-US' ?  'ZH' : 'EN'
             // 获取基础信息
             let baseInfo = sessionStorage.get('frame-base-info')
             if (baseInfo != null ){
@@ -998,15 +1048,15 @@
             }
         },
         mounted() {
-
-            // this.queryStaff();
-
+          let that = this
+          this.timer = setInterval(function(){
+            that.getLocalTime();
+          },1000)
             /* 设置 */
             this.$nextTick(() => {
                 this.setInstance(this.instance)
                 this.setAuthorization(this.authorization)
             })
-            let that = this
             let clientWidth = document.body.clientWidth || document.body.offsetWidth
             that.clientWidth = clientWidth
             if (this.clientWidth < 1200) {

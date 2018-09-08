@@ -1,0 +1,17 @@
+.slide{
+    // margin-top: 10px;
+    .slide-wrap{
+        margin-top: 10px;
+        padding:3px 20px;
+        
+        .slide-text{
+            font-size: 16px;
+            //padding-top: 5px;
+        }
+        .slide-icon{
+            font-size: 22px;
+            cursor: pointer;
+            //padding-top: 5px;
+        }
+    }
+}

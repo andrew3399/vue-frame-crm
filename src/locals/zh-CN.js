@@ -128,6 +128,99 @@ export default {
       list_tag_important: '重要'
     }
   },
+  my_task: {
+    myTasks: '我的任务',
+    dueDate: '到期日期',
+    status: '状态',
+    subject: '主题',
+    name: '名称',
+    relatedTo: '相关项',
+    account: '客户',
+    oper: '操作',
+    newTask: '新增',
+    complete: '完成',
+    modify: '修改',
+    detail: '详情',
+    taskListFilter: '任务列表筛选器:',
+    taskDetail: '任务详情',
+    newTaskAdd: {
+      newTasks: '新增任务',
+      recordType: '记录类型',
+      subject: '主题',
+      assignedTo: '被分配人',
+      name: '名称',
+      activityCurrency: '活动币种',
+      comments: '留言',
+      priority: '优先级',
+      createRecurrTasks: '创建重复任务',
+      attachments: '附件',
+      upload: '上传',
+      submit: '提交',
+      select: '选择',
+      dueDate: '到期日期',
+      relatedTo: '相关项',
+      submitSuccess: '提交成功!',
+      status: '状态',
+      cancel: '取消',
+      notEmpty: '不能为空',
+      modifyTask: '修改任务',
+      modifySeris: '修改序列',
+      cancelReturn: '返回'
+    },
+    staff: {
+      staffInfo: '选择被分配人',
+      staffNo: '员工编号',
+      staffName: '员工姓名',
+      departName: '部门名称',
+      contactTel: '联系电话',
+      search: '查询'
+    },
+    contact: {
+      contactInfo: '选择联系人',
+      contactType: '联系人类别',
+      contactName: '联系人名称',
+      contactEmail: '邮箱',
+      contactTel: '电话号码',
+      contactTitle: '职位',
+      contactCountry: '国家/地区'
+    },
+    campaign: {
+      campaignInfo: '选择市场活动',
+      campaignName: '市场活动名称',
+      startDate: '开始日期',
+      status: '状态',
+      updatedTime: '更新时间'
+    },
+    opportunity: {
+      opportunityInfo: '选择商机',
+      opportunity_name: '商机名称',
+      customer_name: '客户名称',
+      close_date: '结束日期',
+      stage: '阶段',
+      owner: '所有人',
+      created_time: '创建时间'
+    },
+    leads: {
+      leadsInfo: '选择潜在客户',
+      leadSource: '潜在客户来源',
+      leadCurrency: '潜在客户币种',
+      company: '公司',
+      owner: '潜在客户所有人',
+      leadStatus: '潜在客户状态',
+      creator: '创建人',
+      creatorDate: '创建时间'
+    },
+    cust: {
+      custInfo: '选择客户',
+      customer_name: '客户名称',
+      inter_account_manage: 'Internet客户经理',
+      voice_account_manage: 'Voice客户经理',
+      mobile_account_manage: 'Mobile客户经理',
+    },
+    subjectSelect: {
+      selectSubjectInfo: '从下面选择 主题'
+    }
+  },
   handle_local: {
     handle: {
       order_title: '工单标题',
