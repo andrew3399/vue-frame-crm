@@ -617,12 +617,15 @@
                 if (parthMenuArray != null && parthMenuArray.length > 0 && that.authorization.getStaffMenuFunc !== undefined) {
                   that.$store.state.storeModule.staffMenuFunc = []
                   let currentMenu = parthMenuArray[parthMenuArray.length - 1]
+
                   let frameBaseInfo = sessionStorage.get('frame-base-info')
                   if (frameBaseInfo && frameBaseInfo != null && frameBaseInfo.staffMenuFunsMap != null
-                    && frameBaseInfo.staffMenuFunsMap != undefined){
+                   && frameBaseInfo.staffMenuFunsMap != undefined){
+                //   let frameBaseInfo = localStorage.get('frame_base_info')
+                //   if (frameBaseInfo && frameBaseInfo != null){
                     that.$store.state.storeModule.staffMenuFunc = frameBaseInfo.staffMenuFunsMap[currentMenu.menuId]
                   }
-                  if (that.$store.state.storeModule.staffMenuFunc.length <= 0){
+                  if (that.$store.state.storeModule.staffMenuFunc != undefined && that.$store.state.storeModule.staffMenuFunc.length <= 0){
                     that.instance.post(that.authorization.getStaffMenuFunc, {
                       menuId: currentMenu.menuId
                     }).then(function (res) {
