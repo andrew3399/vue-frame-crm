@@ -53,7 +53,7 @@
                     </div>
                     <div  class="col-xs-12 col-sm-12 col-md-7 col-lg-7 col-xl-7">
                         <div class="d-flex justify-content-start">
-                            <div  class="col-xs-12 col-sm-12 col-md-3 col-lg-3 col-xl-3" style=" font-size: 15px; padding: 1.2% 0 0 0;  font-weight: 300;">
+                            <div  class="col-xs-12 col-sm-12 col-md-3 col-lg-3 col-xl-3 text-right" style=" font-size: 15px; padding: 1.2% 0 0 0;  font-weight: 300;">
                                 {{$t('my_task.taskListFilter')}}
                             </div>
                             <div  class="col-xs-12 col-sm-12 col-md-6 col-lg-6 col-xl-6">
