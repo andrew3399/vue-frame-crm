@@ -181,11 +181,15 @@
                                         </t-menu-item>
                                     </t-submenu>
                                     <t-menu-item :name="x" v-else>
+                                        <span v-if="x=='0'">
+                                            <t-icon type="clock">
+                                            </t-icon><font color="#0085D0">HK</font>&nbsp&nbsp{{formRight.HKTime}}&nbsp&nbsp&nbsp
+                                        </span>
                                         <t-badge dot state="danger" v-if="item.icon === 'bell' && count">
                                         <span @click="showSlipbox">
                                             <t-icon :type="item.icon" v-if="item.icon"></t-icon>
-                                        <span class="sub-text" v-if="item.name">{{item.name}}</span>
-                                    </span>
+                                            <span class="sub-text" v-if="item.name">{{item.name}}</span>
+                                        </span>
                                         </t-badge>
                                         <template v-else-if="item.icon === 'bell'">
                                     <span @click="showSlipbox">
