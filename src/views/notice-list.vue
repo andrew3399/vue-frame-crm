@@ -108,7 +108,7 @@
               lang: storage.get("aid-language"),
               bulletinTitle:'',
               basicInfoDiv:true,
-
+              initFlag:false,
               chooseDateType:'',
                 total: 0,
                 pageSize: 5,
@@ -313,10 +313,11 @@
             })
            },
           changeTaskListFilter(){
-            this.queryMyTasks(this.filterType);
+            if(this.initFlag){
+              this.queryMyTasks(this.filterType);
+            }
           },
          queryMyTasks(val){
-              debugger
              this.$nextTick(() => {
                this.instance.get(this.authorization.queryMyTasks, {
                  params: {
@@ -335,6 +336,7 @@
                }).catch(res => {
                  this.$Message.warning(this.$t('frame.warning'))
                })
+               this.initFlag = true ;
              })
            },
           show(taskRow){
