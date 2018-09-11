@@ -259,7 +259,7 @@
                                           <p class="nw-r-time">{{$t('frame.expiryDate')}}：{{item.activeTime | format}} {{$t('frame.to')}} {{item.inactiveTime | format}}</p>
                                       </span>
                                     </div>
-                                    <p class="notice__loading" v-if="notices.length > 0 "><a href="javascript:;" target="_self"
+                                    <p class="notice__loading" v-if="notices != null && notices.length > 0 "><a href="javascript:;" target="_self"
                                                                   @click="loadingMore">{{$t('frame.loadingMore')}}</a>
                                     </p>
                                 </t-tab-panel>
@@ -305,7 +305,7 @@
     import {Base64} from 'js-base64'
     import QueryString from 'query-string'
     // import EventHub from '../eventHub'
-    let sessionStorage = new SessionStorage ()
+    let sessionStorage = window.sessionStorage
     //test
     let localStorage = new LocalStorage()
 
@@ -527,7 +527,7 @@
                 && this.authorization.baseInfoUrl != '') {
               this.instance.post(this.authorization.baseInfoUrl,{}).then(res=>{
                 let resData = res.data;
-                sessionStorage.set('frame-base-info',resData)
+                sessionStorage.setItem('frame-base-info',resData)
                 that.translateBaseInfo(resData);
               })
             }
@@ -554,11 +554,11 @@
           },
           translateBaseInfo(resData){
             this.menu = resData.staffMenue;
-            sessionStorage.set('menu_list',this.menu)
+            sessionStorage.setItem('menu_list',this.menu)
             this.translateMenuInfo(this.menu);
             this.formRight.staffName = resData.staffName
             this.formRight.staffNO = resData.staffNo
-            this.notices = resData.bulletinList
+            // this.notices = resData.bulletinList
             this.staffMenuFuncMap = resData.staffMenuFunsMap
           },
           changeStaffMpMenu(url){
@@ -578,6 +578,7 @@
           },
           //ESOP集成涉及的菜单列表信息获取
           getStaffMpMenue(){
+            console.log('getMpMenu')
             let that = this
             let routePath = this.$route.path
             let pathParams = this.$route.query
@@ -588,7 +589,9 @@
                 this.instance.post(this.authorization.getStaffMpMenue,{
                   mpId: pathParams.mpId
                 }).then(function(ret){
+                  console.log(" ==================== staffMpMenu =====================")
                   console.log(ret)
+                  console.log(" ==================== staffMpMenu  End=====================")
                   if (ret.status === 200 && ret.data != null){
                     that.$store.state.storeModule.staffMpMenu = ret.data
                     that.staffMpMenu = ret.data
@@ -612,6 +615,7 @@
           },
           getParentMenu(){
             let that  = this
+            let frameBaseInfo = sessionStorage.getItem('frame-base-info')
             this.instance.post(this.authorization.parentMenuUri, {
               url: this.$route.path,
               params: this.$route.params
@@ -622,14 +626,13 @@
                   that.$store.state.storeModule.staffMenuFunc = []
                   let currentMenu = parthMenuArray[parthMenuArray.length - 1]
 
-                  let frameBaseInfo = sessionStorage.get('frame-base-info')
                   if (frameBaseInfo && frameBaseInfo != null && frameBaseInfo.staffMenuFunsMap != null
-                   && frameBaseInfo.staffMenuFunsMap != undefined){
+                   && frameBaseInfo.staffMenuFunsMap !== undefined){
                 //   let frameBaseInfo = localStorage.get('frame_base_info')
                 //   if (frameBaseInfo && frameBaseInfo != null){
                     that.$store.state.storeModule.staffMenuFunc = frameBaseInfo.staffMenuFunsMap[currentMenu.menuId]
                   }
-                  if (that.$store.state.storeModule.staffMenuFunc != undefined && that.$store.state.storeModule.staffMenuFunc.length <= 0){
+                  if (that.$store.state.storeModule.staffMenuFunc !== undefined && that.$store.state.storeModule.staffMenuFunc.length <= 0){
                     that.instance.post(that.authorization.getStaffMenuFunc, {
                       menuId: currentMenu.menuId
                     }).then(function (res) {
@@ -721,11 +724,11 @@
                 }
             },
             logoutAndRemoveSession() {
+                sessionStorage.removeItem('frame-base-info')
+                sessionStorage.clear()
                 localStorage.remove('access_token')
                 localStorage.remove('refresh_token')
                 localStorage.remove('session_time')
-                sessionStorage.remove('menu_list')
-                sessionStorage.remove('frame-base-info')
                 window.location.href = this.authorization.logout_uri
             },
             /* 到修改密码 */
@@ -769,6 +772,7 @@
                 this.$emit('on-click', item)
             },
             showSlipbox() {
+                this.getbulletinListCb()
                 this.hideSlip = false
             },
             hideSlipbox() {
@@ -911,26 +915,19 @@
             // 获取menu数据
             getMenuCb() {
                 let that = this;
-              let menuListInfo = localStorage.get('menu_list')
+              let menuListInfo = sessionStorage.getItem('menu_list')
               if (menuListInfo != null && menuListInfo != ''){
-                that.translateMenuInfo(res);
+                that.translateMenuInfo(menuListInfo);
               }else{
-                this.instance.get(this.authorization.menuUri,
-                  {
-                    params: {
-                      language: this.lang
-                    }
-                  }).then(res => {
-                  localStorage.set('menu_list',res.data)
-                  that.translateMenuInfo(res.data);
-
-                }).catch(res => {
-                  that.handleResponseExcept(res)
-                })
+                that.getBaseInfo()
               }
 
             },
             translateMenuInfo(res){
+              if (res === null || res === undefined){
+                this.getBaseInfo()
+                return;
+              }
               /**
                * 先找出这一条数据，并将其 menuName 组成一个数组
                */
@@ -952,6 +949,21 @@
                   localStorage.remove('query-key')
                 }
               })
+              /**
+               * 将所有的菜单权限信息保存到sessionStorage当中
+               */
+               let authorMenuArray = new Array();
+               for (var i = 0; i < res.length; i++){
+                 let menu = res[i];
+                 if(menu != null && menu.menuUrl !== null
+                    && menu.menuUrl !== undefined && menu.menuUrl !== ''){
+                   authorMenuArray.push(menu.menuUrl)
+                 }
+               }
+              console.log('============== authorMenuArray ============')
+              console.log(authorMenuArray)
+              console.log('================= end authorMenuArray ==')
+               sessionStorage.setItem("authorMenuArray",authorMenuArray)
             },
             getbulletinListCb() {
                 this.instance.get(this.authorization.bulletinListUri,
@@ -1038,7 +1050,7 @@
             // this.$i18n.locale = language
             // this.lang = language === 'en-US' ?  'ZH' : 'EN'
             // 获取基础信息
-            let baseInfo = sessionStorage.get('frame-base-info')
+            let baseInfo = sessionStorage.getItem('frame-base-info')
             if (baseInfo != null ){
               this.translateBaseInfo(baseInfo)
             } else {
@@ -1047,7 +1059,7 @@
         },
         beforeMount(){
             this.getParentMenu()
-            if (this.showMenu === '4'){
+            if (this.showMenuHead === '4'){
               this.getStaffMpMenue()
             }
         },
