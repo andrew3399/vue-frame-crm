@@ -53,7 +53,7 @@
                     </div>
                     <div  class="col-xs-12 col-sm-12 col-md-7 col-lg-7 col-xl-7">
                         <div class="d-flex justify-content-start">
-                            <div  class="col-xs-12 col-sm-12 col-md-3 col-lg-3 col-xl-3 text-right" style=" font-size: 15px; padding: 1.2% 0 0 0;  font-weight: 300;">
+                            <div  class="col-xs-12 col-sm-12 col-md-4 col-lg-4 col-xl-4" style=" font-size: .875rem; padding: 1.3% 0 0 0;  font-weight: 400;text-align:right;color:#868e8f">
                                 {{$t('my_task.taskListFilter')}}
                             </div>
                             <div  class="col-xs-12 col-sm-12 col-md-6 col-lg-6 col-xl-6">
@@ -108,7 +108,7 @@
               lang: storage.get("aid-language"),
               bulletinTitle:'',
               basicInfoDiv:true,
-
+              initFlag:false,
               chooseDateType:'',
                 total: 0,
                 pageSize: 5,
@@ -170,7 +170,8 @@
               {
                 title: this.$t('my_task.dueDate'),
                 key: 'workCloseTime',
-                width: 150,
+                align: 'center',
+                width: 140,
                 render: (h, params) => {
                   return h('span', !params.row.workCloseTime ? '' : this.tranceDate(params.row.workCloseTime))
                 }
@@ -183,18 +184,22 @@
               {
                 title: this.$t('my_task.subject'),
                 key: 'subject',
+                align: 'center',
               },
               {
                 title: this.$t('my_task.name'),
                 key: 'contactName',
+                align: 'center',
               },
             {
               title: this.$t('my_task.relatedTo'),
                 key: 'relatedToName',
+              align: 'center',
             }, {
               title: this.$t('my_task.account'),
               key: 'relatedName',
-            },{
+                align: 'center',
+              },{
               title: this.$t('my_task.oper'),
               key: 'action',
                 width: 280,
@@ -308,10 +313,11 @@
             })
            },
           changeTaskListFilter(){
-            this.queryMyTasks(this.filterType);
+            if(this.initFlag){
+              this.queryMyTasks(this.filterType);
+            }
           },
          queryMyTasks(val){
-              debugger
              this.$nextTick(() => {
                this.instance.get(this.authorization.queryMyTasks, {
                  params: {
@@ -330,6 +336,7 @@
                }).catch(res => {
                  this.$Message.warning(this.$t('frame.warning'))
                })
+               this.initFlag = true ;
              })
            },
           show(taskRow){
@@ -337,10 +344,10 @@
           },
           modify(taskRow){
           //  this.$router.push({ name: 'newTask'})
-            window.open("/cust/new-task?oper=U&taskId="+taskRow.taskId +"&workId="+taskRow.workId,"_self");
+            window.open("/cust/mod-task?oper=U&taskId="+taskRow.taskId +"&workId="+taskRow.workId,"_self");
           },
           complete(taskRow){
-            window.open("/cust/new-task?oper=U&completeFlag=1&taskId="+taskRow.taskId +"&workId="+taskRow.workId,"_self");
+            window.open("/cust/mod-task?oper=U&completeFlag=1&taskId="+taskRow.taskId +"&workId="+taskRow.workId,"_self");
           },
             getBulletinList (params) {
                 this.$nextTick(() => {
@@ -403,7 +410,7 @@
                 //跳转到新增
               // this.$router.push({ name: 'newTask'})
               // console.log(url)
-              window.open("/cust/new-task?oper=C","_self");
+              window.open("/cust/new-task?oper=C&assign=home","_self");
             },
         },
         mounted () {
