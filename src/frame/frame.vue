@@ -181,11 +181,15 @@
                                         </t-menu-item>
                                     </t-submenu>
                                     <t-menu-item :name="x" v-else>
+                                        <span v-if="x=='0'">
+                                            <t-icon type="clock">
+                                            </t-icon><font color="#0085D0">HK</font>&nbsp&nbsp{{formRight.HKTime}}&nbsp&nbsp&nbsp
+                                        </span>
                                         <t-badge dot state="danger" v-if="item.icon === 'bell' && count">
                                         <span @click="showSlipbox">
                                             <t-icon :type="item.icon" v-if="item.icon"></t-icon>
-                                        <span class="sub-text" v-if="item.name">{{item.name}}</span>
-                                    </span>
+                                            <span class="sub-text" v-if="item.name">{{item.name}}</span>
+                                        </span>
                                         </t-badge>
                                         <template v-else-if="item.icon === 'bell'">
                                     <span @click="showSlipbox">
@@ -617,12 +621,15 @@
                 if (parthMenuArray != null && parthMenuArray.length > 0 && that.authorization.getStaffMenuFunc !== undefined) {
                   that.$store.state.storeModule.staffMenuFunc = []
                   let currentMenu = parthMenuArray[parthMenuArray.length - 1]
+
                   let frameBaseInfo = sessionStorage.get('frame-base-info')
                   if (frameBaseInfo && frameBaseInfo != null && frameBaseInfo.staffMenuFunsMap != null
-                    && frameBaseInfo.staffMenuFunsMap != undefined){
+                   && frameBaseInfo.staffMenuFunsMap != undefined){
+                //   let frameBaseInfo = localStorage.get('frame_base_info')
+                //   if (frameBaseInfo && frameBaseInfo != null){
                     that.$store.state.storeModule.staffMenuFunc = frameBaseInfo.staffMenuFunsMap[currentMenu.menuId]
                   }
-                  if (that.$store.state.storeModule.staffMenuFunc.length <= 0){
+                  if (that.$store.state.storeModule.staffMenuFunc != undefined && that.$store.state.storeModule.staffMenuFunc.length <= 0){
                     that.instance.post(that.authorization.getStaffMenuFunc, {
                       menuId: currentMenu.menuId
                     }).then(function (res) {
