@@ -527,7 +527,7 @@
                 && this.authorization.baseInfoUrl != '') {
               this.instance.post(this.authorization.baseInfoUrl,{}).then(res=>{
                 let resData = res.data;
-                sessionStorage.setItem('frame-base-info',resData)
+                sessionStorage.setItem('frame-base-info',JSON.stringify(resData))
                 that.translateBaseInfo(resData);
               })
             }
@@ -554,7 +554,7 @@
           },
           translateBaseInfo(resData){
             this.menu = resData.staffMenue;
-            sessionStorage.setItem('menu_list',this.menu)
+            sessionStorage.setItem('menu_list',JSON.stringify(this.menu))
             this.translateMenuInfo(this.menu);
             this.formRight.staffName = resData.staffName
             this.formRight.staffNO = resData.staffNo
@@ -589,9 +589,6 @@
                 this.instance.post(this.authorization.getStaffMpMenue,{
                   mpId: pathParams.mpId
                 }).then(function(ret){
-                  console.log(" ==================== staffMpMenu =====================")
-                  console.log(ret)
-                  console.log(" ==================== staffMpMenu  End=====================")
                   if (ret.status === 200 && ret.data != null){
                     that.$store.state.storeModule.staffMpMenu = ret.data
                     that.staffMpMenu = ret.data
@@ -615,7 +612,7 @@
           },
           getParentMenu(){
             let that  = this
-            let frameBaseInfo = sessionStorage.getItem('frame-base-info')
+            let frameBaseInfo = JSON.parse(sessionStorage.getItem('frame-base-info'))
             this.instance.post(this.authorization.parentMenuUri, {
               url: this.$route.path,
               params: this.$route.params
@@ -625,12 +622,13 @@
                 if (parthMenuArray != null && parthMenuArray.length > 0 && that.authorization.getStaffMenuFunc !== undefined) {
                   that.$store.state.storeModule.staffMenuFunc = []
                   let currentMenu = parthMenuArray[parthMenuArray.length - 1]
-
+                    console.log(frameBaseInfo)
                   if (frameBaseInfo && frameBaseInfo != null && frameBaseInfo.staffMenuFunsMap != null
                    && frameBaseInfo.staffMenuFunsMap !== undefined){
                 //   let frameBaseInfo = localStorage.get('frame_base_info')
                 //   if (frameBaseInfo && frameBaseInfo != null){
                     that.$store.state.storeModule.staffMenuFunc = frameBaseInfo.staffMenuFunsMap[currentMenu.menuId]
+                    console.log(that.$store.state.storeModule.staffMenuFunc )
                   }
                   if (that.$store.state.storeModule.staffMenuFunc !== undefined && that.$store.state.storeModule.staffMenuFunc.length <= 0){
                     that.instance.post(that.authorization.getStaffMenuFunc, {
@@ -915,7 +913,7 @@
             // 获取menu数据
             getMenuCb() {
                 let that = this;
-              let menuListInfo = sessionStorage.getItem('menu_list')
+              let menuListInfo = JSON.parse(sessionStorage.getItem('menu_list'))
               if (menuListInfo != null && menuListInfo != ''){
                 that.translateMenuInfo(menuListInfo);
               }else{
@@ -960,10 +958,7 @@
                    authorMenuArray.push(menu.menuUrl)
                  }
                }
-              console.log('============== authorMenuArray ============')
-              console.log(authorMenuArray)
-              console.log('================= end authorMenuArray ==')
-               sessionStorage.setItem("authorMenuArray",authorMenuArray)
+               sessionStorage.setItem("authorMenuArray",JSON.stringify((authorMenuArray)))
             },
             getbulletinListCb() {
                 this.instance.get(this.authorization.bulletinListUri,
@@ -1050,7 +1045,7 @@
             // this.$i18n.locale = language
             // this.lang = language === 'en-US' ?  'ZH' : 'EN'
             // 获取基础信息
-            let baseInfo = sessionStorage.getItem('frame-base-info')
+            let baseInfo = JSON.parse(sessionStorage.getItem('frame-base-info'))
             if (baseInfo != null ){
               this.translateBaseInfo(baseInfo)
             } else {
