@@ -19,21 +19,21 @@ export function beforeEach (to, from, next, authorization, requestInstance, cb) 
   if (to.meta.requireAuth) {
     if (accessToken && refreshToken && sessionTime) {
       //校验是否有菜单权限信息
-      let authorMenuArray = sessionStorage.getItem('authorMenuArray')
+      let authorMenuArray = JSON.parse(sessionStorage.getItem('authorMenuArray'))
       let routeArr = ['/res', '/cust', '/order', '/acct','/mks', '/rpt', '/prod', '/odp', '/base', '/']
-      if ((authorMenuArray != null && authorMenuArray.length > 0 && authorMenuArray.indexOf(to.path) > -1) || (routeArr.indexOf(to.path) > -1)  ){
+      // if ((authorMenuArray != null && authorMenuArray.length > 0 && authorMenuArray.indexOf(to.path) > -1) || (routeArr.indexOf(to.path) > -1)  ){
         next()
-      } else {
-          if (to.matched != null && to.matched.length > 0){
-            next({
-              path: to.matched[0].path
-            })
-          } else {
-            next({
-              path: authorization.redirect_uri
-            })
-          }
-      }
+      // } else {
+      //     if (to.matched != null && to.matched.length > 0){
+      //       next({
+      //         path: to.matched[0].path
+      //       })
+      //     } else {
+      //       next({
+      //         path: authorization.redirect_uri
+      //       })
+      //     }
+      // }
     } else {
       sessionStorage.clear()
       let code = getQuery('code')
@@ -106,7 +106,7 @@ export function beforeEach (to, from, next, authorization, requestInstance, cb) 
         } else {
           let msg = {
             client_id: authorization.client_id,
-            redirect_uri: authorization.redirect_uri,
+            redirect_uri: encodeURIComponent(locationHref),
             state: uuid(6, 16)
           }
           window.location.href = authorization.authorizeUri + '?client_id=' + msg.client_id + '&redirect_uri=' + msg.redirect_uri + '&response_type=code&scope=read&state=' + msg.state
