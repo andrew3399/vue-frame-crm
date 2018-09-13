@@ -66,20 +66,20 @@ export function transData (original, idField, pidField, childrenField, orderFiel
    * 第一层将对象数组转化成JSON数据
    */
   for (; i < len; i++) {
-    if (!hash[original[i][id]]) {
+    if (!hash[original[i][id]] && original[i].treeDisplay === 'Y') {
       hash[original[i][id]] = original[i]
     }
   }
   for (; j < len; j++) {
     let aVal = original[j]
     let hashVP = hash[aVal[pid]]
-    if (hashVP) {
+    if (hashVP && 'Y' === aVal.treeDisplay) {
       !hashVP[children] && (hashVP[children] = [])
       hashVP[children].push(aVal)
       hashVP[children].sort((a, b) => {
         return a[menuOrder] - b[menuOrder]
       })
-    } else {
+    } else if ('Y' === aVal.treeDisplay) {
       result.push(aVal)
     }
   }

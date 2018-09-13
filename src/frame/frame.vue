@@ -136,20 +136,6 @@
             </div>
         </div>
         <div :class="['layout-content', 'layout-delete-dot',{'hidenMenu': showMenuHead !== '1' && showMenuHead !== '3'}]">
-            <div class="bg-white pt-10" style="padding-bottom: 10px;" v-if="showMenuHead === '4'">
-                <div class="bg-primary pl-10" style="color: white">
-                    <span >
-                        {{lang === 'EN' ? staffMpMenu.mpNameus : staffMpMenu.mpNamecn}}
-                    </span>
-                </div>
-                <div class="tab-menu" v-if="showMenuHead === '4'">
-                    <t-button-group>
-                        <t-button type="outline-primary" style="cursor: pointer;" v-for="staffMenu in staffMpMenu.menulist" @click="changeStaffMpMenu(staffMenu.menuUrl)">
-                            {{lang === 'EN'? staffMenu.menuEnName : staffMenu.menuName}}
-                        </t-button>
-                    </t-button-group>
-                </div>
-            </div>
 
             <div class="layout-nav navbar navbar-expand-lg bg-white align-items-center layout-nav--top"  v-if="showMenuHead === '1' || showMenuHead === '2'">
                 <div class="row nav-row">
@@ -212,8 +198,7 @@
                                         <t-dropdown>
                                             <t-badge class="ml-4" style="margin-left:0!important;">
                                                 <t-icon :type="item.icon" v-if="item.icon"></t-icon>
-                                                <!--{{staffName}}-->
-                                                {{formRight.staffName}}
+                                                <span style="width: 80px;overflow: hidden;">{{formRight.staffName}}</span>
                                                 <t-icon type="arrow-down-drop" size="20"></t-icon>
                                             </t-badge>
                                             <t-dropdown-menu slot="list" class="cl-frame-dropdown">
@@ -268,22 +253,37 @@
                     </div>
                 </div>
             </div>
-            <div :class="['layout-main',{'hidenNavTop': showMenuHead === '5'},{'showMoreNav': showMenuHead === '4'}]">
+            <div :class="[{'layout-main': showMenuHead !== '4'},{'hidenNavTop': showMenuHead === '5'},{'showMoreNav': showMenuHead === '4'}]">
                 <div class="layout-main--content">
                     <div class="bread-crumbs cmi-bread-crumbs-wrap" v-if="breadcrumbArr && showMenuHead !== '4' && showMenuHead !== '5'">
                         <div class="row ml-0 mr-0">
                             <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12 col-xl-12 pl-0">
                                 <t-breadcrumb separator=">" >
                                     <t-breadcrumb-item v-for="(item, $idx) in breadcrumbArr" :key="$idx"
-                                                       :class="($idx == 0 || $idx == breadcrumbArr.length - 1) ? 'unclick' : ''"
-                                                       :href="($idx == 0 || $idx == breadcrumbArr.length - 1) ? '' : item.menuUrl">
+                                                       :class="($idx === 0 || $idx === breadcrumbArr.length - 1) ? 'unclick' : ''"
+                                                       :href="($idx === 0 || $idx === breadcrumbArr.length - 1) ? '' : item.menuUrl">
                                         {{lang === 'EN' ? item.menuName : item.menuEnName}}
                                     </t-breadcrumb-item>
                                 </t-breadcrumb>
                             </div>
                         </div>
                     </div>
-                    <router-view></router-view>
+                    <div class="bg-white pt-10" style="padding-bottom: 10px;" v-if="showMenuHead === '4'">
+                        <div class="customer-tt-title pl-10">
+                    <span >
+                        {{lang === 'EN' ? staffMpMenu.mpNameus : staffMpMenu.mpNamecn}}
+                    </span>
+                        </div>
+                        <div class="customer-tt-table">
+                            <ul class="menu" >
+                                <li v-for="staffMenu in staffMpMenu.menulist" @click="changeStaffMpMenu(staffMenu.systemUrl,staffMenu.menuUrl)" :class="{'z-crttab':staffMenu.menuUrl === staffMpMenuUrl}">
+                                    {{lang === 'EN'? staffMenu.menuEnName : staffMenu.menuName}}
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                    <router-view v-if="!isIframeContent"></router-view>
+                    <iframe v-if="isIframeContent" :width="clientWidth" height="1000" :src="iframeUrl" frameborder="0"></iframe>
                     <div class="pager-footer" v-if="showMenuHead !== '4' && showMenuHead !== '5'">
                     <p>{{pagerFooter}}</p>
                     </div>
@@ -440,6 +440,9 @@
                 needBackDrop: false,
                 hideSlip: true,
                 hideSlideWrapSlip: true,
+                isIframeContent: false,
+                iframeUrl: '',
+              staffMpMenuUrl: '',
                 accordion: true,
                 isActive: 0,
                 menu: [],
@@ -463,9 +466,7 @@
                 return this.$store.state.storeModule.breadcrumbArr
             },
             treeData() {
-                if (this.menuList && this.menuList.length) {
-                    return this.menuList
-                } else if (this.menu && this.menu.length) {
+                 if (this.menu && this.menu.length) {
                     return this.menu
                 }
                 return []
@@ -521,6 +522,18 @@
           }
         },
         methods: {
+          getClientWidth(){
+            let clientWidth = document.body.clientWidth || document.body.offsetWidth
+            return clientWidth
+          },
+          setIframeHeight(iframe) {
+            if (iframe) {
+              var iframeWin = iframe.contentWindow || iframe.contentDocument.parentWindow;
+              if (iframeWin.document.body) {
+                iframe.height = iframeWin.document.documentElement.scrollHeight || iframeWin.document.body.scrollHeight;
+              }
+            }
+          },
           getBaseInfo(){
             let that = this
               if (this.authorization != undefined && this.authorization.baseInfoUrl != undefined
@@ -561,53 +574,72 @@
             // this.notices = resData.bulletinList
             this.staffMenuFuncMap = resData.staffMenuFunsMap
           },
-          changeStaffMpMenu(url){
-            if (url.indexOf('?') > -1){
-              url = url + "&showMenuHead=4"
-            } else{
-              url = url + "?showMenuHead=4"
+          changeStaffMpMenu(systemUrl,url){
+            this.staffMpMenuUrl = url
+            if (url.indexOf('showMenuHead=4') === -1){
+              if (url.indexOf('?') > -1){
+                url = url + "&showMenuHead=4"
+              } else{
+                url = url + "?showMenuHead=4"
+              }
             }
-            if(this.mpId != ''){
+            if(this.mpId !== '' && url.indexOf('mpId') === -1){
               url = url + "&mpId=" + this.mpId
             }
             let routePath = this.$route.matched[0].path
-            this.$router.push(url)
-            if (url.indexOf(routePath) == -1 && this.showMenuHead === 4){
-              this.$router.go(0)
+            let currentSystemUrl = window.location.protocol + "//" + window.location.host;
+            console.log(currentSystemUrl + ' ======  ' + systemUrl)
+            if (currentSystemUrl === systemUrl){
+              if (url.indexOf(routePath) === -1 && this.showMenuHead === 4){
+                let returnPath = this.$router.resolve(url)
+                this.changeToPage(returnPath)
+              } else {
+                this.$router.push(url)
+              }
+            } else {
+              this.isIframeContent = true
+              this.iframeUrl = systemUrl + url;
             }
           },
           //ESOP集成涉及的菜单列表信息获取
           getStaffMpMenue(){
-            console.log('getMpMenu')
             let that = this
             let routePath = this.$route.path
             let pathParams = this.$route.query
-            if (pathParams != null && pathParams != '' && pathParams.mpId != undefined
-                && pathParams.mpId != null && pathParams.mpId != ''
-                && this.authorization.getStaffMpMenue != undefined){
-                this.mpId = pathParams.mpId
-                this.instance.post(this.authorization.getStaffMpMenue,{
-                  mpId: pathParams.mpId
-                }).then(function(ret){
-                  if (ret.status === 200 && ret.data != null){
-                    that.$store.state.storeModule.staffMpMenu = ret.data
-                    that.staffMpMenu = ret.data
-                    let menuList = ret.data.menulist
-                    if (menuList.length > 0) {
-                       let defaultMenu = menuList[0]
-                        let menuUrl = defaultMenu.menuUrl
-                      if (menuUrl.indexOf('/') > -1){
-                         let menuRoutePath = menuUrl.substring(0,menuUrl.lastIndexOf("/"));
-                         if (routePath.indexOf(menuRoutePath) > -1){
-                           if(that.showMenuHead === '4' ){
-                             that.changeStaffMpMenu(menuUrl)
-                           }
-                         }
-                      }
-                    }
+            if (pathParams != null && pathParams !== '' && pathParams.mpId !== undefined
+                && pathParams.mpId != null && pathParams.mpId !== ''
+                && this.authorization.getStaffMpMenue !== undefined){
+               this.mpId = pathParams.mpId
+               let staffMpMenu = JSON.parse(sessionStorage.getItem('StaffMpMenu_' + this.mpId))
+               if (staffMpMenu !== null && staffMpMenu !== undefined && staffMpMenu !== '' && staffMpMenu.length > 0){
+                 that.translateMpMenu(staffMpMenu)
+               } else {
+                 this.instance.post(this.authorization.getStaffMpMenue,{
+                   mpId: pathParams.mpId
+                 }).then(function(ret){
+                   if (ret.status === 200 && ret.data != null){
+                     that.$store.state.storeModule.staffMpMenu = ret.data
+                     that.staffMpMenu = ret.data
+                     let menuList = ret.data.menulist
+                     that.translateMpMenu(menuList)
+                     sessionStorage.setItem('StaffMpMenu_' + that.mpId,JSON.stringify(menuList))
+                   }
+                 })
+               }
+            }
+          },
+          translateMpMenu(menuList){
+            if (menuList.length > 0) {
+              let defaultMenu = menuList[0]
+              let menuUrl = defaultMenu.menuUrl
+              if (menuUrl.indexOf('/') > -1){
+                let menuRoutePath = menuUrl.substring(0,menuUrl.lastIndexOf("/"));
+                if (routePath.indexOf(menuRoutePath) > -1){
+                  if(that.showMenuHead === '4' ){
+                    that.changeStaffMpMenu(menuUrl)
                   }
-                  // if (ret.data)
-                })
+                }
+              }
             }
           },
           getParentMenu(){
@@ -1069,6 +1101,7 @@
                 this.setAuthorization(this.authorization)
             })
             let clientWidth = document.body.clientWidth || document.body.offsetWidth
+            let clientHeight = window.innerHeight || document.documentElement.clientHeight || document.body.clientHeight;
             that.clientWidth = clientWidth
             if (this.clientWidth < 1200) {
                 this.openPosition = 'down'
@@ -1077,6 +1110,10 @@
                 that.showMenu = false
             } else {
                 that.showMenu = true
+            }
+            if (this.showMenuHead === '4'){
+              console.log(this.$router)
+              this.staffMpMenuUrl = this.$router.history.current.path
             }
 
             window.addEventListener('resize', () => {
