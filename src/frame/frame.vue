@@ -261,7 +261,7 @@
                                 <t-breadcrumb separator=">" >
                                     <t-breadcrumb-item v-for="(item, $idx) in breadcrumbArr" :key="$idx"
                                                        :class="($idx === 0 || $idx === breadcrumbArr.length - 1) ? 'unclick' : ''"
-                                                       :href="($idx === 0 || $idx === breadcrumbArr.length - 1) ? '' : item.menuUrl">
+                                                       :href="($idx === 0 || $idx === breadcrumbArr.length - 1) ? '' : changeToPage(item.menuUrl)">
                                         {{lang === 'EN' ? item.menuName : item.menuEnName}}
                                     </t-breadcrumb-item>
                                 </t-breadcrumb>
@@ -452,6 +452,7 @@
                 queryOpenName: [],
                 lang: 'EN',
                 tabs: 'tab-1',
+                scheduleTime: 0,
               staffMpMenu:{
                 mpNameus: '',
                 mpNamecn: '',
@@ -566,11 +567,13 @@
             this.formRight.HKTime =  currentTime;
           },
           translateBaseInfo(resData){
-            this.menu = resData.staffMenue;
-            sessionStorage.setItem('menu_list',JSON.stringify(this.menu))
-            this.translateMenuInfo(this.menu);
-            this.formRight.staffName = resData.staffName
-            this.formRight.staffNO = resData.staffNo
+            if (this.showMenuHead !== '4' && this.showMenuHead !== '5'){
+              this.menu = resData.staffMenue;
+              sessionStorage.setItem('menu_list',JSON.stringify(this.menu))
+              this.translateMenuInfo(this.menu);
+              this.formRight.staffName = resData.staffName
+              this.formRight.staffNO = resData.staffNo
+            }
             // this.notices = resData.bulletinList
             this.staffMenuFuncMap = resData.staffMenuFunsMap
           },
@@ -879,6 +882,9 @@
                 }
             },
             changeToPage(url){
+                if (url === '' || url === undefined ){
+                  return;
+                }
                 let alink = document.createElement('a')
                 alink.href = url
                 let path = alink.pathname.replace(/^([^\/])/, '/$1')
@@ -955,7 +961,9 @@
             },
             translateMenuInfo(res){
               if (res === null || res === undefined){
-                this.getBaseInfo()
+                this.scheduleTime = this.scheduleTime + 1
+                if (this.scheduleTime < 4)
+                    this.getBaseInfo()
                 return;
               }
               /**
@@ -1077,12 +1085,14 @@
             // this.$i18n.locale = language
             // this.lang = language === 'en-US' ?  'ZH' : 'EN'
             // 获取基础信息
+          if (this.showMenuHead !== '4' && this.showMenuHead !== '5'){
             let baseInfo = JSON.parse(sessionStorage.getItem('frame-base-info'))
             if (baseInfo != null ){
               this.translateBaseInfo(baseInfo)
             } else {
               this.getBaseInfo();
             }
+          }
         },
         beforeMount(){
             this.getParentMenu()
