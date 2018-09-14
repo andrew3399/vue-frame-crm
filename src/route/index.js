@@ -19,10 +19,29 @@ export function beforeEach (to, from, next, authorization, requestInstance, cb) 
   //校验是否有菜单权限信息
   let authorMenuArray = JSON.parse(sessionStorage.getItem('authorMenuArray'))
   let routeArr = ['/res', '/cust', '/order', '/acct','/mks', '/rpt', '/prod', '/odp', '/base', '/']
-
-    if (to.meta.requireAuth) {
+    if (to.meta && to.meta.requireAuth ) {
       if (accessToken && refreshToken && sessionTime) {
-        next()
+        if (authorMenuArray === null || to.meta.permission  === undefined || to.meta.permission === null ){
+          next()
+          return;
+        }
+        if (to.meta.permission && authorMenuArray && authorMenuArray.length > 0 && authorMenuArray.indexOf(to.path) > -1 ){
+          next()
+        } else {
+          if (authorMenuArray == null || authorMenuArray.length <= 0) {
+            next()
+          }
+          if (to.matched != null && to.matched.length > 0){
+            next({
+              path: to.matched[0].path
+            })
+          } else {
+            next({
+              path: authorization.redirect_uri
+            })
+          }
+        }
+        
       } else {
         sessionStorage.clear()
         let code = getQuery('code')
@@ -103,6 +122,22 @@ export function beforeEach (to, from, next, authorization, requestInstance, cb) 
         }
       }
     } else {
-      next()
+      if (authorMenuArray === null || to.meta.permission  === undefined || to.meta.permission === null || to.meta.permission === false){
+        next()
+        return;
+      }
+      if (to.meta.permission && authorMenuArray && authorMenuArray.length > 0 && authorMenuArray.indexOf(to.path) > -1 ){
+         next()
+      } else {
+        if (to.matched != null && to.matched.length > 0 && to.matched[0].path ){
+          next({
+            path: to.matched[0].path
+          })
+        } else {
+          next({
+            path: authorization.redirect_uri
+          })
+        }
+      }
     }
 }

@@ -258,13 +258,12 @@
                     <div class="bread-crumbs cmi-bread-crumbs-wrap" v-if="breadcrumbArr && showMenuHead !== '4' && showMenuHead !== '5'">
                         <div class="row ml-0 mr-0">
                             <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12 col-xl-12 pl-0">
-                                <t-breadcrumb separator=">" >
-                                    <t-breadcrumb-item v-for="(item, $idx) in breadcrumbArr" :key="$idx"
-                                                       :class="($idx === 0 || $idx === breadcrumbArr.length - 1) ? 'unclick' : ''"
-                                                       :href="($idx === 0 || $idx === breadcrumbArr.length - 1) ? '' : item.menuUrl">
-                                        {{lang === 'EN' ? item.menuName : item.menuEnName}}
-                                    </t-breadcrumb-item>
-                                </t-breadcrumb>
+                                <div class="breadcrumbs">
+                                    <p  v-for="(item, $idx) in breadcrumbArr" :key="$idx"
+                                        :class="($idx > 0 && $idx <= breadcrumbArr.length - 2) ? 'canclick' : 'unclick'"
+                                        @click="($idx === breadcrumbArr.length - 1)?'': changeToPage(item.menuUrl)"><span> {{lang === 'EN' ? item.menuName : item.menuEnName}}
+                                    </span><span v-if="$idx <= breadcrumbArr.length - 2">></span></p>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -572,8 +571,7 @@
               this.translateMenuInfo(this.menu);
               this.formRight.staffName = resData.staffName
               this.formRight.staffNO = resData.staffNo
-                console.log(resData)
-              this.lang = resData.staffLanguage.toUpperCase()
+              // this.lang = resData.staffLanguage.toUpperCase()
             // this.notices = resData.bulletinList
             this.staffMenuFuncMap = resData.staffMenuFunsMap
           },
@@ -986,7 +984,8 @@
                let authorMenuArray = new Array();
               authorMenuArray = JSON.parse(sessionStorage.getItem("authorMenuArray"))
               if (authorMenuArray == null || authorMenuArray.length < 0){
-                for (var i = 0; i < res.length; i++){
+                authorMenuArray = new Array();
+                for (let i = 0; i < res.length; i++){
                   let menu = res[i];
                   if(menu != null && menu.menuUrl !== null
                     && menu.menuUrl !== undefined && menu.menuUrl !== ''){
@@ -1068,9 +1067,7 @@
 
             // 设置语言信息
             let fetchLang = await this.instance.get(this.authorization.langUri)
-            console.log('111111111111111111111')
-            console.log(JSON.stringify(fetchLang))
-          console.log('22222222222222222')
+            // console.log(JSON.stringify(fetchLang))
             if (fetchLang.data === 'zh') {
                 this.lang = 'EN'
                 localStorage.set('aid-language', 'zh-CN')
