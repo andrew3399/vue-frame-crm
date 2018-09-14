@@ -19,20 +19,20 @@
             </div>
             <div class="row">
                 <div class="col-6">
-                    <t-form :model="formRight" :rules="ruleFormLabel" label-position="right" :label-span="4" class="mt-20">
+                    <t-form :model="formRight" :rules="ruleFormLabel" label-position="right" :label-span="4">
                         <t-form-item :label="$t('frame.accountId')" >
                             <div class="text-40">
                                 <!--{{$t('frame.mobileNum')}}-->
                                 {{ formRight.staffNo }}
                             </div>
                         </t-form-item>
-                        <t-form-item :label="$t('frame.oldPsd')" prop="input1" style="margin-bottom:25px;">
+                        <t-form-item :label="$t('frame.oldPsd')" prop="input1" class="pt-15">
                             <t-input type="password"  v-model="formRight.input1" style="width: 214px"></t-input>
                         </t-form-item>
-                        <t-form-item :label="$t('frame.newPsd')" prop="input2" style="margin-bottom:25px;">
+                        <t-form-item :label="$t('frame.newPsd')" prop="input2" class="pt-15">
                             <t-input type="password"  v-model="formRight.input2" style="width: 214px" :maxlength="20"></t-input>
                         </t-form-item>
-                        <t-form-item :label="$t('frame.confirmNew')" prop="input3">
+                        <t-form-item :label="$t('frame.confirmNew')" prop="input3" class="pt-15">
                             <t-input type="password"  v-model="formRight.input3" style="width: 214px" :maxlength="20"></t-input>
                         </t-form-item>
                     </t-form>
