@@ -590,12 +590,12 @@
             let routePath = this.$route.matched[0].path
             let currentSystemUrl = window.location.protocol + "//" + window.location.host;
             if (currentSystemUrl === systemUrl){
-              if (url.indexOf(routePath) === -1 && this.showMenuHead === 4){
-                let returnPath = this.$router.resolve(url)
-                this.changeToPage(returnPath)
-              } else {
-                this.$router.push(url)
-              }
+              // if (url.indexOf(routePath) === -1 && this.showMenuHead === 4){
+                // let returnPath = this.$router.resolve(url)
+                this.changeToPage(systemUrl + url)
+              // } else {
+              //   this.$router.push(url)
+              // }
             } else {
               this.isIframeContent = true
               this.iframeUrl = systemUrl + url;
@@ -1067,12 +1067,14 @@
 
             // 设置语言信息
             let fetchLang = await this.instance.get(this.authorization.langUri)
-            // console.log(JSON.stringify(fetchLang))
-            if (fetchLang.data === 'zh') {
+            console.log(' ====================  loginLanguage ==================')
+            console.log(JSON.stringify(fetchLang))
+          console.log(' ====================  loginLanguage ==================')
+            if (fetchLang.data.toLowerCase() === 'zh') {
                 this.lang = 'EN'
                 localStorage.set('aid-language', 'zh-CN')
                 this.$i18n.locale = 'zh-CN'
-            } else if (fetchLang.data === 'en') {
+            } else if (fetchLang.data.toLowerCase() === 'en') {
                 this.lang = 'ZH'
                 localStorage.set('aid-language', 'en-US')
                 this.$i18n.locale = 'en-US'
