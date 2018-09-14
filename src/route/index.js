@@ -21,7 +21,7 @@ export function beforeEach (to, from, next, authorization, requestInstance, cb) 
   let routeArr = ['/res', '/cust', '/order', '/acct','/mks', '/rpt', '/prod', '/odp', '/base', '/']
     if (to.meta && to.meta.requireAuth ) {
       if (accessToken && refreshToken && sessionTime) {
-        if (authorMenuArray === null || to.meta.permission  === undefined || to.meta.permission === null || to.meta.permission === false ){
+        if (authorMenuArray === null ){
           next()
           return;
         }
@@ -114,7 +114,7 @@ export function beforeEach (to, from, next, authorization, requestInstance, cb) 
           } else {
             let msg = {
               client_id: authorization.client_id,
-              redirect_uri: encodeURIComponent(locationHref),
+              redirect_uri: encodeURIComponent(authorization.redirect_uri),
               state: uuid(6, 16)
             }
             window.location.href = authorization.authorizeUri + '?client_id=' + msg.client_id + '&redirect_uri=' + msg.redirect_uri + '&response_type=code&scope=read&state=' + msg.state
@@ -122,7 +122,7 @@ export function beforeEach (to, from, next, authorization, requestInstance, cb) 
         }
       }
     } else {
-      if (authorMenuArray === null || to.meta.permission  === undefined || to.meta.permission === null || to.meta.permission === false){
+      if (authorMenuArray === null){
         next()
         return;
       }
