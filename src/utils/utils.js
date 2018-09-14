@@ -130,7 +130,8 @@ export function getQueryData (original, idField, pidField, path, name) {
       fieldName = original[k][fName]
       let item = original[k]
       while (item[pid] !== -1) {
-        let hashVP = hash[original[k][pid]]
+        let tempPid = item[pid]
+        let hashVP = hash[original[k][tempPid]]
         if (hashVP) {
           names.push(hashVP[fName])
         }
