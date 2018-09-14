@@ -121,8 +121,8 @@
                             <div class="row">
                                 <div class="col-8 pr-0">
                                     <t-select v-model="formRight.currency" clearable >
-                                        <t-option :value="option.value" v-for="option in currencyList" :key="option.value">
-                                            {{formRight.lang.indexOf('zh')!=-1 ? (option.label_zh?option.label_zh:option.label):option.label}}
+                                        <t-option :value="option.currencyName" v-for="option in currencyList" :key="option.currencyName">
+                                            {{option.currencyName}}
                                         </t-option>
                                     </t-select>
                                 </div>
