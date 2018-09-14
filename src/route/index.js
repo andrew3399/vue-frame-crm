@@ -21,7 +21,7 @@ export function beforeEach (to, from, next, authorization, requestInstance, cb) 
   let routeArr = ['/res', '/cust', '/order', '/acct','/mks', '/rpt', '/prod', '/odp', '/base', '/']
     if (to.meta && to.meta.requireAuth ) {
       if (accessToken && refreshToken && sessionTime) {
-        if (authorMenuArray === null || to.meta.permission  === undefined || to.meta.permission === null ){
+        if (authorMenuArray === null || to.meta.permission  === undefined || to.meta.permission === null || to.meta.permission === false ){
           next()
           return;
         }
