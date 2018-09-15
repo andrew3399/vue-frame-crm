@@ -25,7 +25,7 @@ export function beforeEach (to, from, next, authorization, requestInstance, cb) 
           next()
           return;
         }
-        if (to.meta.permission && authorMenuArray && authorMenuArray.length > 0 && authorMenuArray.indexOf(to.path) > -1 ){
+        if (authorMenuArray && authorMenuArray.length > 0 && (authorMenuArray.indexOf(to.path) > -1 || routeArr.indexOf(to.path) > -1 )){
           next()
         } else {
           if (authorMenuArray == null || authorMenuArray.length <= 0) {
@@ -126,7 +126,7 @@ export function beforeEach (to, from, next, authorization, requestInstance, cb) 
         next()
         return;
       }
-      if (to.meta.permission && authorMenuArray && authorMenuArray.length > 0 && authorMenuArray.indexOf(to.path) > -1 ){
+      if (authorMenuArray && authorMenuArray.length > 0 && (authorMenuArray.indexOf(to.path) > -1 || routeArr.indexOf(to.path) > -1 )){
          next()
       } else {
         if (to.matched != null && to.matched.length > 0 && to.matched[0].path ){

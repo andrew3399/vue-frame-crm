@@ -590,12 +590,12 @@
             let routePath = this.$route.matched[0].path
             let currentSystemUrl = window.location.protocol + "//" + window.location.host;
             if (currentSystemUrl === systemUrl){
-              // if (url.indexOf(routePath) === -1 && this.showMenuHead === 4){
+              if (url.indexOf(routePath) === -1 && this.showMenuHead === 4){
                 // let returnPath = this.$router.resolve(url)
                 this.changeToPage(systemUrl + url)
-              // } else {
-              //   this.$router.push(url)
-              // }
+              } else {
+                this.$router.push(url)
+              }
             } else {
               this.isIframeContent = true
               this.iframeUrl = systemUrl + url;
