@@ -1072,7 +1072,7 @@
             console.log(' ====================  loginLanguage ==================')
             console.log(JSON.stringify(fetchLang))
           console.log(' ====================  loginLanguage  END ==================')
-            if (fetchLang.data.toLowerCase() === 'zh') {
+            if (fetchLang.data.toLowerCase() === 'zh' || fetchLang.data.toLowerCase() === 'zh-cn') {
                 this.lang = 'EN'
                 localStorage.set('aid-language', 'zh-CN')
                 this.$i18n.locale = 'zh-CN'

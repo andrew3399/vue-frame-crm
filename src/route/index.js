@@ -19,7 +19,6 @@ export function beforeEach (to, from, next, authorization, requestInstance, cb) 
   //校验是否有菜单权限信息
   let authorMenuArray = JSON.parse(sessionStorage.getItem('authorMenuArray'))
   let routeArr = ['/res', '/cust', '/order', '/acct','/mks', '/rpt', '/prod', '/odp', '/base', '/']
-  let frameRouteView = ['notice-list','notice','change','personal']
   let toPath = to.path
   if (to.meta && to.meta.requireAuth ) {
       if (accessToken && refreshToken && sessionTime) {
@@ -48,6 +47,8 @@ export function beforeEach (to, from, next, authorization, requestInstance, cb) 
         sessionStorage.clear()
         let code = getQuery('code')
         let state = getQuery('state')
+        let showMenuHead = getQuery("showMenuHead");
+        let mpId = getQuery("mpId");
         if (code && state) {
           /**
            *  这里需要去请求token的值,并设置sessiion-time
@@ -69,8 +70,14 @@ export function beforeEach (to, from, next, authorization, requestInstance, cb) 
               redirect_uri: encodeURIComponent(locationHref),
               state: uuid(6, 16)
             }
-            window.location.href = authorization.authorizeUri + '?client_id=' + msg.client_id + '&redirect_uri=' + msg.redirect_uri + '&response_type=code&scope=read&state=' + msg.state
-            next()
+            let href = authorization.authorizeUri + '?client_id=' + msg.client_id + '&redirect_uri=' + msg.redirect_uri + '&response_type=code&scope=read&state=' + msg.state
+            if (showMenuHead !== ''){
+              href = href + '&showMenuHead=' + showMenuHead
+            }
+            if (mpId !== ''){
+              href = href + '&mpId=' + mpId
+            }
+            window.location.href = href
           })
         } else {
           /**
@@ -107,7 +114,14 @@ export function beforeEach (to, from, next, authorization, requestInstance, cb) 
                         redirect_uri: encodeURIComponent(locationHref),
                         state: uuid(6, 16)
                       }
-                      window.location.href = authorization.authorizeUri + '?client_id=' + msg.client_id + '&redirect_uri=' + msg.redirect_uri + '&response_type=code&scope=read&state=' + msg.state
+                      let href = authorization.authorizeUri + '?client_id=' + msg.client_id + '&redirect_uri=' + msg.redirect_uri + '&response_type=code&scope=read&state=' + msg.state
+                      if (showMenuHead !== ''){
+                        href = href + '&showMenuHead=' + showMenuHead
+                      }
+                      if (mpId !== ''){
+                        href = href + '&mpId=' + mpId
+                      }
+                      window.location.href = href
                     })
                     break
                 }
@@ -119,7 +133,14 @@ export function beforeEach (to, from, next, authorization, requestInstance, cb) 
               redirect_uri: encodeURIComponent(authorization.redirect_uri),
               state: uuid(6, 16)
             }
-            window.location.href = authorization.authorizeUri + '?client_id=' + msg.client_id + '&redirect_uri=' + msg.redirect_uri + '&response_type=code&scope=read&state=' + msg.state
+            let href = authorization.authorizeUri + '?client_id=' + msg.client_id + '&redirect_uri=' + msg.redirect_uri + '&response_type=code&scope=read&state=' + msg.state
+            if (showMenuHead !== ''){
+              href = href + '&showMenuHead=' + showMenuHead
+            }
+            if (mpId !== ''){
+              href = href + '&mpId=' + mpId
+            }
+            window.location.href = href
           }
         }
       }
