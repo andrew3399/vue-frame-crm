@@ -55,14 +55,14 @@ export function beforeEach (to, from, next, authorization, requestInstance, cb) 
            *  oauth2
            */
           // cb(code, state, next, localStorage, uuid(6, 16))
-          if (showMenuHead !== ''){
+          if (showMenuHead !== '' && locationHref.indexOf('showMenuHead=') < 0){
             if (locationHref.indexOf('?') > -1){
               locationHref = locationHref + '&showMenuHead=' + showMenuHead
             } else{
               locationHref = locationHref + '?showMenuHead=' + showMenuHead
             }
           }
-          if (mpId !== ''){
+          if (mpId !== '' && locationHref.indexOf('mpId=') < 0){
             if (locationHref.indexOf('?') > -1){
               locationHref = locationHref + '&mpId=' + mpId
             } else {
@@ -115,14 +115,14 @@ export function beforeEach (to, from, next, authorization, requestInstance, cb) 
                       // localStorage.set('refresh_token', res.data.refresh_token, Math.pow(2, 32))
                       next()
                     }).catch(res => {
-                      if (showMenuHead !== ''){
+                      if (showMenuHead !== '' && locationHref.indexOf('showMenuHead=') < 0){
                         if (locationHref.indexOf('?') > -1){
                           locationHref = locationHref + '&showMenuHead=' + showMenuHead
                         } else{
                           locationHref = locationHref + '?showMenuHead=' + showMenuHead
                         }
                       }
-                      if (mpId !== ''){
+                      if (mpId !== '' && locationHref.indexOf('mpId=') < 0){
                         if (locationHref.indexOf('?') > -1){
                           locationHref = locationHref + '&mpId=' + mpId
                         } else {
