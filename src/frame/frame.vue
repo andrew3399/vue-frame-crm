@@ -588,17 +588,22 @@
               url = url + "&mpId=" + this.mpId
             }
             let routePath = this.$route.matched[0].path
-            let currentSystemUrl = window.location.protocol + "//" + window.location.host;
-            if (currentSystemUrl === systemUrl){
+            //RAP路径信息
+            let rapPathStart = '/finance/page/';
+            if (url.indexOf(rapPathStart) <= -1){
               if (url.indexOf(routePath) === -1 && this.showMenuHead === 4){
-                // let returnPath = this.$router.resolve(url)
                 this.changeToPage(systemUrl + url)
               } else {
                 this.$router.push(url)
               }
             } else {
+              let aidLanguage = localStorage.get('aid-language');
               this.isIframeContent = true
-              this.iframeUrl = systemUrl + url;
+              if (url.indexOf('?') > -1 ){
+                this.iframeUrl = systemUrl + url + '&lang=' + aidLanguage;
+              } else {
+                this.iframeUrl = systemUrl + url + '?lang=' + aidLanguage;
+              }
             }
           },
           //ESOP集成涉及的菜单列表信息获取
@@ -613,24 +618,30 @@
               this.instance.post(this.authorization.getStaffMpMenue,{
                 mpId: pathParams.mpId
               }).then(function(ret){
+                console.log(ret)
                 if (ret.status === 200 && ret.data != null){
                   that.$store.state.storeModule.staffMpMenu = ret.data
                   that.staffMpMenu = ret.data
                   let menuList = ret.data.menulist
                   that.translateMpMenu(menuList)
                 }
+              }).catch(function(e){
+                console.error(e)
               })
             }
           },
           translateMpMenu(menuList){
-            if (menuList.length > 0) {
+            let that = this;
+            let routePath = this.$route.path
+            console.log('routePath: ' + routePath)
+            if (menuList !== null && menuList.length > 0) {
               let defaultMenu = menuList[0]
               let menuUrl = defaultMenu.menuUrl
               if (menuUrl.indexOf('/') > -1){
                 let menuRoutePath = menuUrl.substring(0,menuUrl.lastIndexOf("/"));
-                if (routePath.indexOf(menuRoutePath) > -1){
+                if (routePath != null && routePath.indexOf(menuRoutePath) > -1){
                   if(that.showMenuHead === '4' ){
-                    that.changeStaffMpMenu(menuUrl)
+                    that.changeStaffMpMenu(defaultMenu.systemUrl,menuUrl)
                   }
                 }
               }
@@ -1053,28 +1064,16 @@
             if (!accessToken || !refreshToken) return
             if (this.menuList && this.menuList.length) return
 
-            // 获取login处设置的语言
-            // let fetchLang = await this.instance.get(this.authorization.langUri)
-            // if (fetchLang.data === '中') {
-            //     this.lang = 'EN'
-            //     localStorage.set('aid-language', 'zh-CN')
-            //     this.$i18n.locale = 'zh-CN'
-            // } else if (fetchLang.data === 'en') {
-            //     this.lang = '中'
-            //     localStorage.set('aid-language', 'en-US')
-            //     this.$i18n.locale = 'en-US'
-            // }
-
             // 设置语言信息
             let fetchLang = await this.instance.get(this.authorization.langUri)
             console.log(' ====================  loginLanguage ==================')
             console.log(JSON.stringify(fetchLang))
-          console.log(' ====================  loginLanguage ==================')
+          console.log(' ====================  loginLanguage  END ==================')
             if (fetchLang.data.toLowerCase() === 'zh') {
                 this.lang = 'EN'
                 localStorage.set('aid-language', 'zh-CN')
                 this.$i18n.locale = 'zh-CN'
-            } else if (fetchLang.data.toLowerCase() === 'en') {
+            } else {
                 this.lang = 'ZH'
                 localStorage.set('aid-language', 'en-US')
                 this.$i18n.locale = 'en-US'
