@@ -591,8 +591,8 @@
             let routePath = this.$route.matched[0].path
             //RAP路径信息
             let rapPathStart = '/finance/page/';
-            if (url.indexOf(rapPathStart) <= -1){
-              if (url.indexOf(routePath) === -1 && this.showMenuHead === 4){
+            if (url.indexOf(rapPathStart) < 0){
+              if (url.indexOf(routePath) === -1 && this.showMenuHead === '4'){
                 this.changeToPage(systemUrl + url)
               } else {
                 this.$router.push(url)
