@@ -56,10 +56,18 @@ export function beforeEach (to, from, next, authorization, requestInstance, cb) 
            */
           // cb(code, state, next, localStorage, uuid(6, 16))
           if (showMenuHead !== ''){
-            locationHref = locationHref + '&showMenuHead=' + showMenuHead
+            if (locationHref.indexOf('?') > -1){
+              locationHref = locationHref + '&showMenuHead=' + showMenuHead
+            } else{
+              locationHref = locationHref + '?showMenuHead=' + showMenuHead
+            }
           }
           if (mpId !== ''){
-            locationHref = locationHref + '&mpId=' + mpId
+            if (locationHref.indexOf('?') > -1){
+              locationHref = locationHref + '&mpId=' + mpId
+            } else {
+              locationHref = locationHref + '?mpId=' + mpId
+            }
           }
           requestInstance.post(authorization.tokenUri + '?code=' + code + '&state=' + state +
             '&grant_type=authorization_code' + '&client_id=' + authorization.client_id + '&redirect_uri=' + encodeURIComponent(locationHref))
@@ -108,10 +116,18 @@ export function beforeEach (to, from, next, authorization, requestInstance, cb) 
                       next()
                     }).catch(res => {
                       if (showMenuHead !== ''){
-                        locationHref = locationHref + '&showMenuHead=' + showMenuHead
+                        if (locationHref.indexOf('?') > -1){
+                          locationHref = locationHref + '&showMenuHead=' + showMenuHead
+                        } else{
+                          locationHref = locationHref + '?showMenuHead=' + showMenuHead
+                        }
                       }
                       if (mpId !== ''){
-                        locationHref = locationHref + '&mpId=' + mpId
+                        if (locationHref.indexOf('?') > -1){
+                          locationHref = locationHref + '&mpId=' + mpId
+                        } else {
+                          locationHref = locationHref + '?mpId=' + mpId
+                        }
                       }
                       let msg = {
                         client_id: authorization.client_id,
@@ -127,10 +143,18 @@ export function beforeEach (to, from, next, authorization, requestInstance, cb) 
           } else {
             let redirectUri = authorization.redirect_uri
             if (showMenuHead !== ''){
-              redirectUri = redirectUri + '&showMenuHead=' + showMenuHead
+              if (redirectUri.indexOf('?') > -1){
+                redirectUri = redirectUri + '&showMenuHead=' + showMenuHead
+              } else {
+                redirectUri = redirectUri + '?showMenuHead=' + showMenuHead
+              }
             }
             if (mpId !== ''){
-              redirectUri = redirectUri + '&mpId=' + mpId
+              if (redirectUri.indexOf('?') > -1){
+                redirectUri = redirectUri + '&mpId=' + mpId
+              } else {
+                redirectUri = redirectUri + '?mpId=' + mpId
+              }
             }
             let msg = {
               client_id: authorization.client_id,
