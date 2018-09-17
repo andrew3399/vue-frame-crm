@@ -55,7 +55,12 @@ export function beforeEach (to, from, next, authorization, requestInstance, cb) 
            *  oauth2
            */
           // cb(code, state, next, localStorage, uuid(6, 16))
-
+          if (showMenuHead !== ''){
+            locationHref = locationHref + '&showMenuHead=' + showMenuHead
+          }
+          if (mpId !== ''){
+            locationHref = locationHref + '&mpId=' + mpId
+          }
           requestInstance.post(authorization.tokenUri + '?code=' + code + '&state=' + state +
             '&grant_type=authorization_code' + '&client_id=' + authorization.client_id + '&redirect_uri=' + encodeURIComponent(locationHref))
             .then(res => {
@@ -70,14 +75,7 @@ export function beforeEach (to, from, next, authorization, requestInstance, cb) 
               redirect_uri: encodeURIComponent(locationHref),
               state: uuid(6, 16)
             }
-            let href = authorization.authorizeUri + '?client_id=' + msg.client_id + '&redirect_uri=' + msg.redirect_uri + '&response_type=code&scope=read&state=' + msg.state
-            if (showMenuHead !== ''){
-              href = href + '&showMenuHead=' + showMenuHead
-            }
-            if (mpId !== ''){
-              href = href + '&mpId=' + mpId
-            }
-            window.location.href = href
+            window.location.href = authorization.authorizeUri + '?client_id=' + msg.client_id + '&redirect_uri=' + msg.redirect_uri + '&response_type=code&scope=read&state=' + msg.state
           })
         } else {
           /**
@@ -109,38 +107,37 @@ export function beforeEach (to, from, next, authorization, requestInstance, cb) 
                       // localStorage.set('refresh_token', res.data.refresh_token, Math.pow(2, 32))
                       next()
                     }).catch(res => {
+                      if (showMenuHead !== ''){
+                        locationHref = locationHref + '&showMenuHead=' + showMenuHead
+                      }
+                      if (mpId !== ''){
+                        locationHref = locationHref + '&mpId=' + mpId
+                      }
                       let msg = {
                         client_id: authorization.client_id,
                         redirect_uri: encodeURIComponent(locationHref),
                         state: uuid(6, 16)
                       }
-                      let href = authorization.authorizeUri + '?client_id=' + msg.client_id + '&redirect_uri=' + msg.redirect_uri + '&response_type=code&scope=read&state=' + msg.state
-                      if (showMenuHead !== ''){
-                        href = href + '&showMenuHead=' + showMenuHead
-                      }
-                      if (mpId !== ''){
-                        href = href + '&mpId=' + mpId
-                      }
-                      window.location.href = href
+                      window.location.href = authorization.authorizeUri + '?client_id=' + msg.client_id + '&redirect_uri=' + msg.redirect_uri + '&response_type=code&scope=read&state=' + msg.state
                     })
                     break
                 }
               }
             })
           } else {
-            let msg = {
-              client_id: authorization.client_id,
-              redirect_uri: encodeURIComponent(authorization.redirect_uri),
-              state: uuid(6, 16)
-            }
-            let href = authorization.authorizeUri + '?client_id=' + msg.client_id + '&redirect_uri=' + msg.redirect_uri + '&response_type=code&scope=read&state=' + msg.state
+            let redirectUri = authorization.redirect_uri
             if (showMenuHead !== ''){
-              href = href + '&showMenuHead=' + showMenuHead
+              redirectUri = redirectUri + '&showMenuHead=' + showMenuHead
             }
             if (mpId !== ''){
-              href = href + '&mpId=' + mpId
+              redirectUri = redirectUri + '&mpId=' + mpId
             }
-            window.location.href = href
+            let msg = {
+              client_id: authorization.client_id,
+              redirect_uri: encodeURIComponent(redirectUri),
+              state: uuid(6, 16)
+            }
+            window.location.href = authorization.authorizeUri + '?client_id=' + msg.client_id + '&redirect_uri=' + msg.redirect_uri + '&response_type=code&scope=read&state=' + msg.state
           }
         }
       }
