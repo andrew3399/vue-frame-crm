@@ -129,9 +129,9 @@ export function getQueryData (original, idField, pidField, path, name) {
     if (path === original[k].menuUrl) {
       fieldName = original[k][fName]
       let item = original[k]
-      while (item[pid] !== -1) {
+      while (item !== null && item[pid] !== -1) {
         let tempPid = item[pid]
-        let hashVP = hash[original[k][tempPid]]
+        let hashVP = hash[tempPid]
         if (hashVP) {
           names.push(hashVP[fName])
         }
