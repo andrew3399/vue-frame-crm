@@ -19,15 +19,17 @@ export function beforeEach (to, from, next, authorization, requestInstance, cb) 
   //校验是否有菜单权限信息
   let authorMenuArray = JSON.parse(sessionStorage.getItem('authorMenuArray'))
   let routeArr = ['/res', '/cust', '/order', '/acct','/mks', '/rpt', '/prod', '/odp', '/base', '/']
-    if (to.meta && to.meta.requireAuth ) {
+  let frameRouteView = ['notice-list','notice','change','personal']
+  let toPath = to.path
+  if (to.meta && to.meta.requireAuth ) {
       if (accessToken && refreshToken && sessionTime) {
-        if (authorMenuArray === null ){
+        if (authorMenuArray === null || to.meta.permission === null ||  to.meta.permission === undefined  ){
           next()
           return;
         }
-        if (authorMenuArray && authorMenuArray.length > 0 && (authorMenuArray.indexOf(to.path) > -1 || routeArr.indexOf(to.path) > -1 )){
+        if (to.meta.permission && authorMenuArray && authorMenuArray.length > 0 && (authorMenuArray.indexOf(toPath) > -1 || routeArr.indexOf(toPath) > -1 )){
           next()
-        } else {
+        } else{
           if (authorMenuArray == null || authorMenuArray.length <= 0) {
             next()
           }
@@ -122,11 +124,11 @@ export function beforeEach (to, from, next, authorization, requestInstance, cb) 
         }
       }
     } else {
-      if (authorMenuArray === null){
+      if (authorMenuArray === null || to.meta.permission === null ||  to.meta.permission === undefined || !to.meta.permission){
         next()
         return;
       }
-      if (authorMenuArray && authorMenuArray.length > 0 && (authorMenuArray.indexOf(to.path) > -1 || routeArr.indexOf(to.path) > -1 )){
+      if (to.meta.permission && authorMenuArray && authorMenuArray.length > 0 && (authorMenuArray.indexOf(toPath) > -1 || routeArr.indexOf(toPath) > -1 )){
          next()
       } else {
         if (to.matched != null && to.matched.length > 0 && to.matched[0].path ){

@@ -576,6 +576,7 @@
             this.staffMenuFuncMap = resData.staffMenuFunsMap
           },
           changeStaffMpMenu(systemUrl,url){
+            console.log('changeStaffMpMenu:  ' + url)
             this.staffMpMenuUrl = url
             if (url.indexOf('showMenuHead=4') === -1){
               if (url.indexOf('?') > -1){
@@ -598,6 +599,9 @@
               }
             } else {
               let aidLanguage = localStorage.get('aid-language');
+              if (aidLanguage === 'en-US'){
+                aidLanguage = 'en'
+              }
               this.isIframeContent = true
               if (url.indexOf('?') > -1 ){
                 this.iframeUrl = systemUrl + url + '&lang=' + aidLanguage;
@@ -635,15 +639,14 @@
             let routePath = this.$route.path
             console.log('routePath: ' + routePath)
             if (menuList !== null && menuList.length > 0) {
-              let defaultMenu = menuList[0]
-              let menuUrl = defaultMenu.menuUrl
-              if (menuUrl.indexOf('/') > -1){
-                let menuRoutePath = menuUrl.substring(0,menuUrl.lastIndexOf("/"));
-                if (routePath != null && routePath.indexOf(menuRoutePath) > -1){
-                  if(that.showMenuHead === '4' ){
-                    that.changeStaffMpMenu(defaultMenu.systemUrl,menuUrl)
-                  }
-                }
+              let staffMpMenuList = new Array();
+              for(let i = 0; i < menuList.length; i++){
+                staffMpMenuList.push(menuList[i].menuUrl)
+              }
+              if (staffMpMenuList.indexOf(routePath) < 0){
+                let defaultMenu = menuList[0]
+                let menuUrl = defaultMenu.menuUrl
+                that.changeStaffMpMenu(defaultMenu.systemUrl,menuUrl)
               }
             }
           },
@@ -853,7 +856,7 @@
                 this.instance.post(this.authorization.changeLangUri, {
                     language: this.lang
                 }).then(res => {
-                    // window.location.reload()
+                    window.location.reload()
                 }).catch(res => {
                     that.handleResponseExcept(res)
                 })
