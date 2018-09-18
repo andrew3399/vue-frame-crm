@@ -139,13 +139,13 @@
 
             <div class="layout-nav navbar navbar-expand-lg bg-white align-items-center layout-nav--top"  v-if="showMenuHead === '1' || showMenuHead === '2'">
                 <div class="row nav-row">
-                    <div class="col col-6 nav-col">
+                    <div class="col col-1 nav-col">
                         <a href="javascript:;" class="d-xm-block thumb-icon" v-show="!showMenu">
                             <t-icon type="menu" class="text-xxl text-black" @click.native="openOrClose"></t-icon>
                         </a>
                         <slot name="frame-nav-left"></slot>
                     </div>
-                    <div class="col col-6 nav-col nav-col--right">
+                    <div class="col col-11 nav-col nav-col--right">
                         <slot name="frame-nav">
                             <t-menu
                                     mode="horizontal"
