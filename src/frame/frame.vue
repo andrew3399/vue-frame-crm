@@ -601,6 +601,8 @@
               let aidLanguage = localStorage.get('aid-language');
               if (aidLanguage === 'en-US'){
                 aidLanguage = 'en'
+              } else if (aidLanguage === 'zh-CN'){
+                aidLanguage = 'zh_CN'
               }
               this.isIframeContent = true
               if (url.indexOf('?') > -1 ){
