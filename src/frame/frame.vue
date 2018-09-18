@@ -845,10 +845,8 @@
             handleChangeLang() {
                 let language = 'en-US'
                 if (this.lang === 'EN') {
-                    this.lang = 'ZH'
                     language = 'en-US'
                 } else if (this.lang === 'ZH') {
-                    this.lang = 'EN'
                     language = 'zh-CN'
                 }
                 localStorage.set('aid-language', language)
