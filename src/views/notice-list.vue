@@ -1,3 +1,7 @@
+<style>
+    .selectTable .table__row td:first-child{text-indent:0px !important;}
+    .table-aa.cmi-tab .table__cell{display: grid !important;}
+</style>
 <template>
     <div class="crm-wrapper">
         <!-- 面包屑start -->
@@ -118,7 +122,7 @@
                     </div>
                     <div  class="col-xs-12 col-sm-12 col-md-7 col-lg-7 col-xl-7">
                         <div class="d-flex justify-content-start">
-                            <div  class="col-xs-12 col-sm-12 col-md-3 col-lg-3 col-xl-3" style=" font-size: 15px; padding: 1.2% 0 0 0;  font-weight: 300;">
+                            <div  class="col-xs-12 col-sm-12 col-md-4 col-lg-4 col-xl-4" style=" font-size: .875rem; padding: 1.3% 0 0 0;  font-weight: 400;text-align:right;color:#868e8f">
                                 {{$t('my_task.taskListFilter')}}
                             </div>
                             <div  class="col-xs-12 col-sm-12 col-md-6 col-lg-6 col-xl-6">
@@ -134,19 +138,19 @@
                             </div>
                         </div>
                     </div>
-                    
+
                 </div>
             </div>
 
             <div  class="selectTable">
                 <!-- 查询结果tab star-->
                 <div class="enquiries-tab">
-                    <div class="cmi-tab mt-15">
+                    <div class="cmi-tab mt-15 table-aa">
                         <t-table  border :columns="columns" :data="queryData" :all-ellipsis="true"></t-table>
                     </div>
                     <!--  分页 star-->
                     <div class="notice-pager mt-10" style="margin: 20px 0px 5px 0px !important;">
-                        <t-pager :total="total" :page-size="pageSize"  @on-change="handleOnTaskPagerChange" @on-size-change="handleOnTaskPagerSizeChange" show-elevator show-sizer></t-pager>
+                        <t-pager :total="taskTotal" :page-size="taskPageSize"  @on-change="handleOnTaskPagerChange" @on-size-change="handleOnTaskPagerSizeChange" show-elevator show-sizer></t-pager>
 
                     </div>
                     <!-- 分页 star-->
@@ -173,12 +177,15 @@
               lang: storage.get("aid-language"),
               bulletinTitle:'',
               basicInfoDiv:true,
-
+              initFlag:false,
               chooseDateType:'',
                 total: 0,
+              taskTotal:0,
                 pageSize: 5,
+              taskPageSize:5,
                 sizerRange: [10, 15, 20, 50],
                 pageNo: 1,
+              taskPageNo:1,
                 items: [],
                 handleItems: [],
                 unHandleItems: [],
@@ -229,42 +236,51 @@
                 instance: state => state.storeModule.instance,
                 authorization: state => state.storeModule.authorization
             }),
-
           columns() {
             return [
               {
                 title: this.$t('my_task.dueDate'),
                 key: 'workCloseTime',
-                width: 150,
+                align: 'center',
+                width: 130,
                 render: (h, params) => {
                   return h('span', !params.row.workCloseTime ? '' : this.tranceDate(params.row.workCloseTime))
                 }
-
               },
               {
                 title: this.$t('my_task.status'),
                 key: 'workStatusName',
+                align: 'center',
+                width: 90,
               },
               {
                 title: this.$t('my_task.subject'),
                 key: 'subject',
+                width: 160,
+                align: 'center',
               },
               {
                 title: this.$t('my_task.name'),
                 key: 'contactName',
+                width: 160,
+                align: 'center',
               },
             {
               title: this.$t('my_task.relatedTo'),
                 key: 'relatedToName',
+              width: 120,
+              align: 'center',
             }, {
               title: this.$t('my_task.account'),
               key: 'relatedName',
-            },{
+                width: 180,
+                align: 'center',
+              },{
               title: this.$t('my_task.oper'),
               key: 'action',
-                width: 280,
+                width: 240,
                 fixed: 'right',
-                align: 'left',
+                align: 'center',
                 render: (h, params) => {
                   return h('div', [
                     h('t-button', {
@@ -312,9 +328,7 @@
                   ])
                 }
             },
-
             ]
-
           },
         },
       components: {
@@ -348,7 +362,7 @@
                 this.getBulletinList()
             },
           handleOnTaskPagerChange(item){
-            this.pageNo = item
+            this.taskPageNo = item
             this.queryMyTasks(this.filterType)
           },
             handleOnPagerSizeChange (item) {
@@ -357,8 +371,8 @@
                 this.getBulletinList()
             },
           handleOnTaskPagerSizeChange(item) {
-            this.pageSize = item
-            this.pageNo = 1
+            this.taskPageSize = item
+            this.taskPageNo = 1
             this.queryMyTasks(this.filterType)
           },
           initTasklistFilter(){
@@ -373,62 +387,64 @@
             })
            },
           changeTaskListFilter(){
-            this.queryMyTasks(this.filterType);
+            if(this.initFlag){
+              this.queryMyTasks(this.filterType);
+            }
           },
          queryMyTasks(val){
-              debugger
-             this.$nextTick(() => {
-               this.instance.get(this.authorization.queryMyTasks, {
-                 params: {
-                   lanager:this.lang,
-                   pageNum: this.pageNo,
-                   pageSize:this.pageSize,
-                   queryType:val
-                 }
-               }).then(res => {
-                 this.queryData = [];
-                 this.total = 0;
-                 if (res.data.success) {
-                   this.queryData = res.data.result.result == null ? [] : res.data.result.result;
-                   this.total = res.data.result.count;
-                 }
-               }).catch(res => {
-                 this.$Message.warning(this.$t('frame.warning'))
-               })
+           this.$nextTick(() => {
+             this.instance.get(this.authorization.queryMyTasks, {
+               params: {
+                 lanager: this.lang,
+                 pageNum: this.taskPageNo,
+                 pageSize: this.taskPageSize,
+                 queryType: val
+               }
+             }).then(res => {
+               this.queryData = [];
+               this.taskTotal = 0;
+               if (res.data.success) {
+                 this.queryData = res.data.result.result == null ? [] : res.data.result.result;
+                 this.taskTotal = res.data.result.count;
+               }
+             }).catch(res => {
+               this.$Message.warning(this.$t('frame.warning'))
              })
+             this.initFlag = true;
+           })
            },
           show(taskRow){
             window.open("/cust/detail-task?taskId="+taskRow.taskId +"&workId="+taskRow.workId,"_self");
           },
           modify(taskRow){
           //  this.$router.push({ name: 'newTask'})
-            window.open("/cust/new-task?oper=U&taskId="+taskRow.taskId +"&workId="+taskRow.workId,"_self");
+            window.open("/cust/mod-task?oper=U&taskId="+taskRow.taskId +"&workId="+taskRow.workId,"_self");
           },
           complete(taskRow){
-            window.open("/cust/new-task?oper=U&completeFlag=1&taskId="+taskRow.taskId +"&workId="+taskRow.workId,"_self");
+           window.open("/cust/mod-task?oper=U&completeFlag=1&taskId="+taskRow.taskId +"&workId="+taskRow.workId,"_self");
           },
             getBulletinList (params) {
-                this.$nextTick(() => {
-                    this.instance.get(this.authorization.bulletinListUri, {
-                        params: {
-                            pageNo: this.pageNo,
-                            pageSize: this.pageSize
-                        }
-                    }).then(res => {
-                        let data = res.data
-                        this.total = data.count
-                        this.pageSize = data.pageSize
-                        this.pageNo = data.pageNo
-                        this.items = data.result
-                     /*   if (data.result && data.result.length) {
+              this.$nextTick(() => {
+                this.instance.get(this.authorization.bulletinListUri, {
+                  params: {
+                    pageNo: this.pageNo,
+                    pageSize: this.pageSize
+                  }
+                }).then(res => {
+                  let data = res.data
+                  this.total = data.count
+                  this.pageSize = data.pageSize
+                  this.pageNo = data.pageNo
+                  this.items = data.result
+                  /*   if (data.result && data.result.length) {
                             this.items = data.result.sort((a,b) => {
                                 return parseInt(a.topFlag) - parseInt(b.topFlag)
                             })
                         }*/
-                    }).catch(res => {
-                        this.$Message.warning(this.$t('frame.warning'))
-                    })
+                }).catch(res => {
+                  this.$Message.warning(this.$t('frame.warning'))
                 })
+              })
             },
              getUnHandleList(){
                 debugger
@@ -494,27 +510,27 @@
 
           },
             handleChooseRole(bulletinTitle){
-                this.$nextTick(() => {
-                    this.instance.get(this.authorization.bulletinListUri, {
-                        params: {
-                            pageNo: this.pageNo,
-                            pageSize: this.pageSize,
-                            bulletinTitle:this.bulletinTitle,
-                        }
-                    }).then(res => {
-                        let data = res.data
-                        this.total = data.count
-                        this.pageSize = data.pageSize
-                        this.pageNo = data.pageNo
-                        if (data.result && data.result.length) {
-                            this.items = data.result.sort((a,b) => {
-                                return parseInt(a.topFlag) - parseInt(b.topFlag)
-                            })
-                        }
-                    }).catch(res => {
-                        this.$Message.warning(this.$t('frame.warning'))
+              this.$nextTick(() => {
+                this.instance.get(this.authorization.bulletinListUri, {
+                  params: {
+                    pageNo: this.pageNo,
+                    pageSize: this.pageSize,
+                    bulletinTitle: this.bulletinTitle,
+                  }
+                }).then(res => {
+                  let data = res.data
+                  this.total = data.count
+                  this.pageSize = data.pageSize
+                  this.pageNo = data.pageNo
+                  if (data.result && data.result.length) {
+                    this.items = data.result.sort((a, b) => {
+                      return parseInt(a.topFlag) - parseInt(b.topFlag)
                     })
+                  }
+                }).catch(res => {
+                  this.$Message.warning(this.$t('frame.warning'))
                 })
+              })
             },
             jumpToApproval(formKey){
                 // console.log(JSON.stringify(formKey))
@@ -528,9 +544,10 @@
                 //跳转到新增
               // this.$router.push({ name: 'newTask'})
               // console.log(url)
-              window.open("/cust/new-task?oper=C","_self");
+              window.open("/cust/new-task?oper=C&assign=home","_self");
             },
         },
+
         mounted () {
             /**
              * 等待首次加载生效
@@ -545,5 +562,5 @@
     }
 </script>
 <style lang="scss" scoped>
-	@import './notice.scss'
+	@import './notice.scss';
 </style>

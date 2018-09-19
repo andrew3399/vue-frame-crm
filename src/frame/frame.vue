@@ -136,30 +136,16 @@
             </div>
         </div>
         <div :class="['layout-content', 'layout-delete-dot',{'hidenMenu': showMenuHead !== '1' && showMenuHead !== '3'}]">
-            <div class="bg-white pt-10" style="padding-bottom: 10px;" v-if="showMenuHead === '4'">
-                <div class="bg-primary pl-10" style="color: white">
-                    <span >
-                        {{lang === 'EN' ? staffMpMenu.mpNameus : staffMpMenu.mpNamecn}}
-                    </span>
-                </div>
-                <div class="tab-menu" v-if="showMenuHead === '4'">
-                    <t-button-group>
-                        <t-button type="outline-primary" style="cursor: pointer;" v-for="staffMenu in staffMpMenu.menulist" @click="changeStaffMpMenu(staffMenu.menuUrl)">
-                            {{lang === 'EN'? staffMenu.menuEnName : staffMenu.menuName}}
-                        </t-button>
-                    </t-button-group>
-                </div>
-            </div>
 
             <div class="layout-nav navbar navbar-expand-lg bg-white align-items-center layout-nav--top"  v-if="showMenuHead === '1' || showMenuHead === '2'">
                 <div class="row nav-row">
-                    <div class="col col-6 nav-col">
+                    <div class="col col-1 nav-col">
                         <a href="javascript:;" class="d-xm-block thumb-icon" v-show="!showMenu">
                             <t-icon type="menu" class="text-xxl text-black" @click.native="openOrClose"></t-icon>
                         </a>
                         <slot name="frame-nav-left"></slot>
                     </div>
-                    <div class="col col-6 nav-col nav-col--right">
+                    <div class="col col-11 nav-col nav-col--right">
                         <slot name="frame-nav">
                             <t-menu
                                     mode="horizontal"
@@ -181,11 +167,15 @@
                                         </t-menu-item>
                                     </t-submenu>
                                     <t-menu-item :name="x" v-else>
+                                        <span v-if="x=='0'">
+                                            <t-icon type="clock">
+                                            </t-icon><font color="#0085D0">HK</font>&nbsp&nbsp{{formRight.HKTime}}&nbsp&nbsp&nbsp
+                                        </span>
                                         <t-badge dot state="danger" v-if="item.icon === 'bell' && count">
                                         <span @click="showSlipbox">
                                             <t-icon :type="item.icon" v-if="item.icon"></t-icon>
-                                        <span class="sub-text" v-if="item.name">{{item.name}}</span>
-                                    </span>
+                                            <span class="sub-text" v-if="item.name">{{item.name}}</span>
+                                        </span>
                                         </t-badge>
                                         <template v-else-if="item.icon === 'bell'">
                                     <span @click="showSlipbox">
@@ -208,8 +198,7 @@
                                         <t-dropdown>
                                             <t-badge class="ml-4" style="margin-left:0!important;">
                                                 <t-icon :type="item.icon" v-if="item.icon"></t-icon>
-                                                <!--{{staffName}}-->
-                                                {{formRight.staffName}}
+                                                <span style="width: 80px;overflow: hidden;">{{formRight.staffName}}</span>
                                                 <t-icon type="arrow-down-drop" size="20"></t-icon>
                                             </t-badge>
                                             <t-dropdown-menu slot="list" class="cl-frame-dropdown">
@@ -255,7 +244,7 @@
                                           <p class="nw-r-time">{{$t('frame.expiryDate')}}：{{item.activeTime | format}} {{$t('frame.to')}} {{item.inactiveTime | format}}</p>
                                       </span>
                                     </div>
-                                    <p class="notice__loading" v-if="notices.length > 0 "><a href="javascript:;" target="_self"
+                                    <p class="notice__loading" v-if="notices != null && notices.length > 0 "><a href="javascript:;" target="_self"
                                                                   @click="loadingMore">{{$t('frame.loadingMore')}}</a>
                                     </p>
                                 </t-tab-panel>
@@ -264,22 +253,36 @@
                     </div>
                 </div>
             </div>
-            <div :class="['layout-main',{'hidenNavTop': showMenuHead === '5'},{'showMoreNav': showMenuHead === '4'}]">
+            <div :class="[{'layout-main': showMenuHead !== '4'},{'hidenNavTop': showMenuHead === '5'},{'showMoreNav': showMenuHead === '4'}]">
                 <div class="layout-main--content">
                     <div class="bread-crumbs cmi-bread-crumbs-wrap" v-if="breadcrumbArr && showMenuHead !== '4' && showMenuHead !== '5'">
                         <div class="row ml-0 mr-0">
                             <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12 col-xl-12 pl-0">
-                                <t-breadcrumb separator=">" >
-                                    <t-breadcrumb-item v-for="(item, $idx) in breadcrumbArr" :key="$idx"
-                                                       :class="($idx == 0 || $idx == breadcrumbArr.length - 1) ? 'unclick' : ''"
-                                                       :href="($idx == 0 || $idx == breadcrumbArr.length - 1) ? '' : item.menuUrl">
-                                        {{lang === 'EN' ? item.menuName : item.menuEnName}}
-                                    </t-breadcrumb-item>
-                                </t-breadcrumb>
+                                <div class="breadcrumbs">
+                                    <p  v-for="(item, $idx) in breadcrumbArr" :key="$idx"
+                                        :class="($idx > 0 && $idx <= breadcrumbArr.length - 2) ? 'canclick' : 'unclick'"
+                                        @click="($idx === breadcrumbArr.length - 1)?'': changeToPage(item.menuUrl)"><span> {{lang === 'EN' ? item.menuName : item.menuEnName}}
+                                    </span><span v-if="$idx <= breadcrumbArr.length - 2">></span></p>
+                                </div>
                             </div>
                         </div>
                     </div>
-                    <router-view></router-view>
+                    <div class="bg-white pt-10" style="padding-bottom: 10px;" v-if="showMenuHead === '4'">
+                        <div class="customer-tt-title pl-10">
+                    <span >
+                        {{lang === 'EN' ? staffMpMenu.mpNamecn : staffMpMenu.mpNameus}}
+                    </span>
+                        </div>
+                        <div class="customer-tt-table">
+                            <ul class="menu" >
+                                <li v-for="staffMenu in staffMpMenu.menulist" @click="changeStaffMpMenu(staffMenu.systemUrl,staffMenu.menuUrl)" :class="{'z-crttab':staffMenu.menuUrl === staffMpMenuUrl}">
+                                    {{lang === 'EN'? staffMenu.menuName !== null && staffMenu.menuName !== '' ? staffMenu.menuName : staffMenu.menuEnName  : staffMenu.menuEnName}}
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                    <router-view v-if="!isIframeContent"></router-view>
+                    <iframe v-if="isIframeContent" :width="clientWidth" height="1000" :src="iframeUrl" frameborder="0"></iframe>
                     <div class="pager-footer" v-if="showMenuHead !== '4' && showMenuHead !== '5'">
                     <p>{{pagerFooter}}</p>
                     </div>
@@ -301,7 +304,7 @@
     import {Base64} from 'js-base64'
     import QueryString from 'query-string'
     // import EventHub from '../eventHub'
-    let sessionStorage = new SessionStorage ()
+    let sessionStorage = window.sessionStorage
     //test
     let localStorage = new LocalStorage()
 
@@ -436,8 +439,12 @@
                 needBackDrop: false,
                 hideSlip: true,
                 hideSlideWrapSlip: true,
+                isIframeContent: false,
+                iframeUrl: '',
+              staffMpMenuUrl: '',
                 accordion: true,
                 isActive: 0,
+                translateMenu:[],
                 menu: [],
                 count: 10,
                 notices: [],
@@ -445,6 +452,7 @@
                 queryOpenName: [],
                 lang: 'EN',
                 tabs: 'tab-1',
+                scheduleTime: 0,
               staffMpMenu:{
                 mpNameus: '',
                 mpNamecn: '',
@@ -459,10 +467,8 @@
                 return this.$store.state.storeModule.breadcrumbArr
             },
             treeData() {
-                if (this.menuList && this.menuList.length) {
-                    return this.menuList
-                } else if (this.menu && this.menu.length) {
-                    return this.menu
+                 if (this.translateMenu && this.translateMenu.length) {
+                    return this.translateMenu
                 }
                 return []
             },
@@ -517,13 +523,25 @@
           }
         },
         methods: {
+          getClientWidth(){
+            let clientWidth = document.body.clientWidth || document.body.offsetWidth
+            return clientWidth
+          },
+          setIframeHeight(iframe) {
+            if (iframe) {
+              var iframeWin = iframe.contentWindow || iframe.contentDocument.parentWindow;
+              if (iframeWin.document.body) {
+                iframe.height = iframeWin.document.documentElement.scrollHeight || iframeWin.document.body.scrollHeight;
+              }
+            }
+          },
           getBaseInfo(){
             let that = this
               if (this.authorization != undefined && this.authorization.baseInfoUrl != undefined
                 && this.authorization.baseInfoUrl != '') {
               this.instance.post(this.authorization.baseInfoUrl,{}).then(res=>{
                 let resData = res.data;
-                sessionStorage.set('frame-base-info',resData)
+                sessionStorage.setItem('frame-base-info',JSON.stringify(resData))
                 that.translateBaseInfo(resData);
               })
             }
@@ -549,27 +567,49 @@
             this.formRight.HKTime =  currentTime;
           },
           translateBaseInfo(resData){
-            this.menu = resData.staffMenue;
-            sessionStorage.set('menu_list',this.menu)
-            this.translateMenuInfo(this.menu);
-            this.formRight.staffName = resData.staffName
-            this.formRight.staffNO = resData.staffNo
-            this.notices = resData.bulletinList
+              this.menu = resData.staffMenue;
+              this.translateMenuInfo(this.menu);
+              this.formRight.staffName = resData.staffName
+              this.formRight.staffNO = resData.staffNo
+              // this.lang = resData.staffLanguage.toUpperCase()
+            // this.notices = resData.bulletinList
             this.staffMenuFuncMap = resData.staffMenuFunsMap
           },
-          changeStaffMpMenu(url){
-            if (url.indexOf('?') > -1){
-              url = url + "&showMenuHead=4"
-            } else{
-              url = url + "?showMenuHead=4"
+          changeStaffMpMenu(systemUrl,url){
+            console.log('changeStaffMpMenu:  ' + url)
+            this.staffMpMenuUrl = url
+            if (url.indexOf('showMenuHead=4') === -1){
+              if (url.indexOf('?') > -1){
+                url = url + "&showMenuHead=4"
+              } else{
+                url = url + "?showMenuHead=4"
+              }
             }
-            if(this.mpId != ''){
+            if(this.mpId !== '' && url.indexOf('mpId') === -1){
               url = url + "&mpId=" + this.mpId
             }
             let routePath = this.$route.matched[0].path
-            this.$router.push(url)
-            if (url.indexOf(routePath) == -1 && this.showMenuHead === 4){
-              this.$router.go(0)
+            //RAP路径信息
+            let rapPathStart = '/finance/page/';
+            if (url.indexOf(rapPathStart) < 0){
+              if (url.indexOf(routePath) === -1 && this.showMenuHead === '4'){
+                this.changeToPage(systemUrl + url)
+              } else {
+                this.$router.push(url)
+              }
+            } else {
+              let aidLanguage = localStorage.get('aid-language');
+              if (aidLanguage === 'en-US'){
+                aidLanguage = 'en'
+              } else if (aidLanguage === 'zh-CN'){
+                aidLanguage = 'zh_CN'
+              }
+              this.isIframeContent = true
+              if (url.indexOf('?') > -1 ){
+                this.iframeUrl = systemUrl + url + '&lang=' + aidLanguage;
+              } else {
+                this.iframeUrl = systemUrl + url + '?lang=' + aidLanguage;
+              }
             }
           },
           //ESOP集成涉及的菜单列表信息获取
@@ -577,37 +617,44 @@
             let that = this
             let routePath = this.$route.path
             let pathParams = this.$route.query
-            if (pathParams != null && pathParams != '' && pathParams.mpId != undefined
-                && pathParams.mpId != null && pathParams.mpId != ''
-                && this.authorization.getStaffMpMenue != undefined){
-                this.mpId = pathParams.mpId
-                this.instance.post(this.authorization.getStaffMpMenue,{
-                  mpId: pathParams.mpId
-                }).then(function(ret){
-                  console.log(ret)
-                  if (ret.status === 200 && ret.data != null){
-                    that.$store.state.storeModule.staffMpMenu = ret.data
-                    that.staffMpMenu = ret.data
-                    let menuList = ret.data.menulist
-                    if (menuList.length > 0) {
-                       let defaultMenu = menuList[0]
-                        let menuUrl = defaultMenu.menuUrl
-                      if (menuUrl.indexOf('/') > -1){
-                         let menuRoutePath = menuUrl.substring(0,menuUrl.lastIndexOf("/"));
-                         if (routePath.indexOf(menuRoutePath) > -1){
-                           if(that.showMenuHead === '4' ){
-                             that.changeStaffMpMenu(menuUrl)
-                           }
-                         }
-                      }
-                    }
-                  }
-                  // if (ret.data)
-                })
+            if (pathParams != null && pathParams !== '' && pathParams.mpId !== undefined
+                && pathParams.mpId != null && pathParams.mpId !== ''
+                && this.authorization.getStaffMpMenue !== undefined){
+               this.mpId = pathParams.mpId
+              this.instance.post(this.authorization.getStaffMpMenue,{
+                mpId: pathParams.mpId
+              }).then(function(ret){
+                console.log(ret)
+                if (ret.status === 200 && ret.data != null){
+                  that.$store.state.storeModule.staffMpMenu = ret.data
+                  that.staffMpMenu = ret.data
+                  let menuList = ret.data.menulist
+                  that.translateMpMenu(menuList)
+                }
+              }).catch(function(e){
+                console.error(e)
+              })
+            }
+          },
+          translateMpMenu(menuList){
+            let that = this;
+            let routePath = this.$route.path
+            console.log('routePath: ' + routePath)
+            if (menuList !== null && menuList.length > 0) {
+              let staffMpMenuList = new Array();
+              for(let i = 0; i < menuList.length; i++){
+                staffMpMenuList.push(menuList[i].menuUrl)
+              }
+              if (staffMpMenuList.indexOf(routePath) < 0){
+                let defaultMenu = menuList[0]
+                let menuUrl = defaultMenu.menuUrl
+                that.changeStaffMpMenu(defaultMenu.systemUrl,menuUrl)
+              }
             }
           },
           getParentMenu(){
             let that  = this
+            let frameBaseInfo = JSON.parse(sessionStorage.getItem('frame-base-info'))
             this.instance.post(this.authorization.parentMenuUri, {
               url: this.$route.path,
               params: this.$route.params
@@ -617,15 +664,15 @@
                 if (parthMenuArray != null && parthMenuArray.length > 0 && that.authorization.getStaffMenuFunc !== undefined) {
                   that.$store.state.storeModule.staffMenuFunc = []
                   let currentMenu = parthMenuArray[parthMenuArray.length - 1]
-
-                  let frameBaseInfo = sessionStorage.get('frame-base-info')
+                    // console.log(frameBaseInfo)
                   if (frameBaseInfo && frameBaseInfo != null && frameBaseInfo.staffMenuFunsMap != null
-                   && frameBaseInfo.staffMenuFunsMap != undefined){
+                   && frameBaseInfo.staffMenuFunsMap !== undefined){
                 //   let frameBaseInfo = localStorage.get('frame_base_info')
                 //   if (frameBaseInfo && frameBaseInfo != null){
                     that.$store.state.storeModule.staffMenuFunc = frameBaseInfo.staffMenuFunsMap[currentMenu.menuId]
+                    // console.log(that.$store.state.storeModule.staffMenuFunc )
                   }
-                  if (that.$store.state.storeModule.staffMenuFunc != undefined && that.$store.state.storeModule.staffMenuFunc.length <= 0){
+                  if (that.$store.state.storeModule.staffMenuFunc !== undefined && that.$store.state.storeModule.staffMenuFunc.length <= 0){
                     that.instance.post(that.authorization.getStaffMenuFunc, {
                       menuId: currentMenu.menuId
                     }).then(function (res) {
@@ -717,11 +764,11 @@
                 }
             },
             logoutAndRemoveSession() {
+                sessionStorage.removeItem('frame-base-info')
+                sessionStorage.clear()
                 localStorage.remove('access_token')
                 localStorage.remove('refresh_token')
                 localStorage.remove('session_time')
-                sessionStorage.remove('menu_list')
-                sessionStorage.remove('frame-base-info')
                 window.location.href = this.authorization.logout_uri
             },
             /* 到修改密码 */
@@ -765,6 +812,7 @@
                 this.$emit('on-click', item)
             },
             showSlipbox() {
+                this.getbulletinListCb()
                 this.hideSlip = false
             },
             hideSlipbox() {
@@ -799,10 +847,8 @@
             handleChangeLang() {
                 let language = 'en-US'
                 if (this.lang === 'EN') {
-                    this.lang = 'ZH'
                     language = 'en-US'
                 } else if (this.lang === 'ZH') {
-                    this.lang = 'EN'
                     language = 'zh-CN'
                 }
                 localStorage.set('aid-language', language)
@@ -810,7 +856,7 @@
                 this.instance.post(this.authorization.changeLangUri, {
                     language: this.lang
                 }).then(res => {
-                    // window.location.reload()
+                    window.location.reload()
                 }).catch(res => {
                     that.handleResponseExcept(res)
                 })
@@ -841,6 +887,9 @@
                 }
             },
             changeToPage(url){
+                if (url === '' || url === undefined ){
+                  return;
+                }
                 let alink = document.createElement('a')
                 alink.href = url
                 let path = alink.pathname.replace(/^([^\/])/, '/$1')
@@ -907,36 +956,31 @@
             // 获取menu数据
             getMenuCb() {
                 let that = this;
-              let menuListInfo = localStorage.get('menu_list')
-              if (menuListInfo != null && menuListInfo != ''){
-                that.translateMenuInfo(res);
+              let frameBaseInfo = JSON.parse(sessionStorage.getItem('frame_base_info'))
+              if (frameBaseInfo != null && frameBaseInfo != ''){
+                let menuListInfo = frameBaseInfo.staffMenue
+                that.translateMenuInfo(menuListInfo);
               }else{
-                this.instance.get(this.authorization.menuUri,
-                  {
-                    params: {
-                      language: this.lang
-                    }
-                  }).then(res => {
-                  localStorage.set('menu_list',res.data)
-                  that.translateMenuInfo(res.data);
-
-                }).catch(res => {
-                  that.handleResponseExcept(res)
-                })
+                that.getBaseInfo()
               }
 
             },
             translateMenuInfo(res){
+              if (res === null || res === undefined){
+                this.makeAlert(this.$t('frame.warning'));
+                return;
+              }
               /**
                * 先找出这一条数据，并将其 menuName 组成一个数组
                */
-              this.menu = transData(res, 'menuId', 'menuPid', 'children', 'menuOrder')
+              this.translateMenu = transData(res, 'menuId', 'menuPid', 'children', 'menuOrder')
               /**
                * 设置自动展开
                */
               this.$nextTick(() => {
                 let route = localStorage.get('aid-path') || this.$route.path || getQuery('path') || '/'
                 let queryName = getQueryData(res, 'menuId', 'menuPid', decodeURIComponent(route), 'menuName')
+                console.log(queryName)
                 this.queryActiveMenu = queryName.name
                 this.queryOpenName = queryName.names
                 let routeArr2 = ['/res', '/cust', '/order', '/acct','/mks', '/rpt', '/prod', '/odp', '/base', '/']
@@ -948,6 +992,22 @@
                   localStorage.remove('query-key')
                 }
               })
+              /**
+               * 将所有的菜单权限信息保存到sessionStorage当中
+               */
+               let authorMenuArray = new Array();
+              authorMenuArray = JSON.parse(sessionStorage.getItem("authorMenuArray"))
+              if (authorMenuArray == null || authorMenuArray.length < 0){
+                authorMenuArray = new Array();
+                for (let i = 0; i < res.length; i++){
+                  let menu = res[i];
+                  if(menu != null && menu.menuUrl !== null
+                    && menu.menuUrl !== undefined && menu.menuUrl !== ''){
+                    authorMenuArray.push(menu.menuUrl)
+                  }
+                }
+                sessionStorage.setItem("authorMenuArray",JSON.stringify((authorMenuArray)))
+              }
             },
             getbulletinListCb() {
                 this.instance.get(this.authorization.bulletinListUri,
@@ -1007,26 +1067,16 @@
             if (!accessToken || !refreshToken) return
             if (this.menuList && this.menuList.length) return
 
-            // 获取login处设置的语言
-            // let fetchLang = await this.instance.get(this.authorization.langUri)
-            // if (fetchLang.data === '中') {
-            //     this.lang = 'EN'
-            //     localStorage.set('aid-language', 'zh-CN')
-            //     this.$i18n.locale = 'zh-CN'
-            // } else if (fetchLang.data === 'en') {
-            //     this.lang = '中'
-            //     localStorage.set('aid-language', 'en-US')
-            //     this.$i18n.locale = 'en-US'
-            // }
-
             // 设置语言信息
             let fetchLang = await this.instance.get(this.authorization.langUri)
+            console.log(' ====================  loginLanguage ==================')
             console.log(JSON.stringify(fetchLang))
-            if (fetchLang.data === 'zh') {
+          console.log(' ====================  loginLanguage  END ==================')
+            if (fetchLang.data.toLowerCase() === 'zh' || fetchLang.data.toLowerCase() === 'zh-cn') {
                 this.lang = 'EN'
                 localStorage.set('aid-language', 'zh-CN')
                 this.$i18n.locale = 'zh-CN'
-            } else if (fetchLang.data === 'en') {
+            } else {
                 this.lang = 'ZH'
                 localStorage.set('aid-language', 'en-US')
                 this.$i18n.locale = 'en-US'
@@ -1034,16 +1084,18 @@
             // this.$i18n.locale = language
             // this.lang = language === 'en-US' ?  'ZH' : 'EN'
             // 获取基础信息
-            let baseInfo = sessionStorage.get('frame-base-info')
+          if (this.showMenuHead !== '4' && this.showMenuHead !== '5'){
+            let baseInfo = JSON.parse(sessionStorage.getItem('frame-base-info'))
             if (baseInfo != null ){
               this.translateBaseInfo(baseInfo)
             } else {
               this.getBaseInfo();
             }
+          }
         },
         beforeMount(){
             this.getParentMenu()
-            if (this.showMenu === '4'){
+            if (this.showMenuHead === '4'){
               this.getStaffMpMenue()
             }
         },
@@ -1058,6 +1110,7 @@
                 this.setAuthorization(this.authorization)
             })
             let clientWidth = document.body.clientWidth || document.body.offsetWidth
+            let clientHeight = window.innerHeight || document.documentElement.clientHeight || document.body.clientHeight;
             that.clientWidth = clientWidth
             if (this.clientWidth < 1200) {
                 this.openPosition = 'down'
@@ -1066,6 +1119,9 @@
                 that.showMenu = false
             } else {
                 that.showMenu = true
+            }
+            if (this.showMenuHead === '4'){
+              this.staffMpMenuUrl = this.$router.history.current.path
             }
 
             window.addEventListener('resize', () => {

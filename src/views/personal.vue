@@ -23,7 +23,7 @@
             <!--<div class="enquiries-form">-->
                 <div class="row">
                     <div class="col-xs-12 col-sm-12 col-md-6 col-lg-6 col-xl-6">
-                        <t-form-item :label="$t('frame.firstName')" class="mb-20" prop="firstName" label-span="220px">
+                        <t-form-item :label="$t('frame.firstName')"  prop="firstName" label-span="220px">
                             <div class="row">
                                 <div class="col-8 pr-0">
                                     <t-input  v-model="formRight.firstName"></t-input>
@@ -32,7 +32,7 @@
                         </t-form-item>
                     </div>
                     <div class="col-xs-12 col-sm-12 col-md-6 col-lg-6 col-xl-6">
-                        <t-form-item :label="$t('frame.lastName')" class="mb-20" prop="lastName"  label-span="220px">
+                        <t-form-item :label="$t('frame.lastName')" prop="lastName"  label-span="220px">
                             <div class="row">
                                 <div class="col-8 pr-0">
                                     <t-input  v-model="formRight.lastName"></t-input>
@@ -41,7 +41,7 @@
                         </t-form-item>
                     </div>
                     <div class="col-xs-12 col-sm-12 col-md-6 col-lg-6 col-xl-6">
-                        <t-form-item :label="$t('frame.alias')" class="mb-20" prop="alias"  label-span="220px">
+                        <t-form-item :label="$t('frame.alias')" class="pt-15" prop="alias"  label-span="220px">
                             <div class="row">
                                 <div class="col-8 pr-0">
                                     <t-input  v-model="formRight.alias"></t-input>
@@ -50,7 +50,7 @@
                         </t-form-item>
                     </div>
                     <div class="col-xs-12 col-sm-12 col-md-6 col-lg-6 col-xl-6">
-                        <t-form-item :label="$t('frame.email')" class="mb-20" prop="email"  label-span="220px">
+                        <t-form-item :label="$t('frame.email')" class="pt-15" prop="email"  label-span="220px">
                             <div class="row">
                                 <div class="col-8 pr-0">
                                     <t-input  v-model="formRight.email"></t-input>
@@ -59,7 +59,7 @@
                         </t-form-item>
                     </div>
                     <div class="col-xs-12 col-sm-12 col-md-6 col-lg-6 col-xl-6">
-                        <t-form-item :label="$t('frame.staffNO')" class="mb-20" prop="staffNO"  label-span="220px">
+                        <t-form-item :label="$t('frame.staffNO')" class="pt-15" prop="staffNO"  label-span="220px">
                             <div class="row">
                                 <div class="col-8 pr-0">
                                     <t-input  v-model="formRight.staffNO" disabled></t-input>
@@ -68,7 +68,7 @@
                         </t-form-item>
                     </div>
                     <div class="col-xs-12 col-sm-12 col-md-6 col-lg-6 col-xl-6">
-                        <t-form-item :label="$t('frame.nickname')" class="mb-20" prop="nickname"  label-span="220px">
+                        <t-form-item :label="$t('frame.nickname')" class="pt-15" prop="nickname"  label-span="220px">
                             <div class="row">
                                 <div class="col-8 pr-0">
                                     <t-input  v-model="formRight.nickname"></t-input>
@@ -77,7 +77,7 @@
                         </t-form-item>
                     </div>
                     <div class="col-xs-12 col-sm-12 col-md-6 col-lg-6 col-xl-6">
-                        <t-form-item :label="$t('frame.phone')" class="mb-20" prop="phone"  label-span="220px">
+                        <t-form-item :label="$t('frame.phone')" class="pt-15" prop="phone"  label-span="220px">
                             <div class="row">
                                 <div class="col-8 pr-0">
                                     <t-input  v-model="formRight.phone"></t-input>
@@ -86,7 +86,7 @@
                         </t-form-item>
                     </div>
                     <div class="col-xs-12 col-sm-12 col-md-6 col-lg-6 col-xl-6">
-                        <t-form-item :label="$t('frame.mobile')" class="mb-20" prop="mobile"  label-span="220px">
+                        <t-form-item :label="$t('frame.mobile')" class="pt-15" prop="mobile"  label-span="220px">
                             <div class="row">
                                 <div class="col-8 pr-0">
                                     <t-input  v-model="formRight.mobile"></t-input>
@@ -95,7 +95,7 @@
                         </t-form-item>
                     </div>
                     <div class="col-xs-12 col-sm-12 col-md-6 col-lg-6 col-xl-6">
-                        <t-form-item :label="$t('frame.fax')" class="mb-20" prop="fax"  label-span="220px">
+                        <t-form-item :label="$t('frame.fax')" class="pt-15" prop="fax"  label-span="220px">
                             <div class="row">
                                 <div class="col-8 pr-0">
                                     <t-input  v-model="formRight.fax"></t-input>
@@ -108,7 +108,7 @@
                 <!--选择框币种-->
                 <div class="row">
                     <div class="col-xs-12 col-sm-12 col-md-6 col-lg-6 col-xl-6">
-                        <t-form-item :label="$t('frame.department')" class="mb-20" prop="department"  label-span="220px">
+                        <t-form-item :label="$t('frame.department')" class="pt-15" prop="department"  label-span="220px">
                             <div class="row">
                                 <div class="col-8 pr-0">
                                     <t-input  v-model="formRight.department" disabled></t-input>
@@ -117,12 +117,12 @@
                         </t-form-item>
                     </div>
                     <div class="col-xs-12 col-sm-12 col-md-6 col-lg-6 col-xl-6">
-                        <t-form-item :label="$t('frame.currency')" class="mb-20" prop="currency"  label-span="220px" >
+                        <t-form-item :label="$t('frame.currency')" class="pt-15" prop="currency"  label-span="220px" >
                             <div class="row">
                                 <div class="col-8 pr-0">
                                     <t-select v-model="formRight.currency" clearable >
-                                        <t-option :value="option.value" v-for="option in currencyList" :key="option.value">
-                                            {{formRight.lang.indexOf('zh')!=-1 ? (option.label_zh?option.label_zh:option.label):option.label}}
+                                        <t-option :value="option.currencyName" v-for="option in currencyList" :key="option.currencyName">
+                                            {{option.currencyName}}
                                         </t-option>
                                     </t-select>
                                 </div>
@@ -132,7 +132,7 @@
                 </div>
                 <div class="row">
                     <div class="col-xs-12 col-sm-12 col-md-6 col-lg-6 col-xl-6">
-                        <t-form-item :label="$t('frame.countryRegion')" class="mb-20" prop="countryRegion"  label-span="220px">
+                        <t-form-item :label="$t('frame.countryRegion')" class="pt-15" prop="countryRegion"  label-span="220px">
                             <div class="row">
                                 <div class="col-8 pr-0">
                                     <t-input  v-model="formRight.countryRegion"></t-input>
@@ -141,7 +141,7 @@
                         </t-form-item>
                     </div>
                     <div class="col-xs-12 col-sm-12 col-md-6 col-lg-6 col-xl-6">
-                        <t-form-item :label="$t('frame.stateProvince')" class="mb-20" prop="stateProvince"  label-span="220px">
+                        <t-form-item :label="$t('frame.stateProvince')" class="pt-15" prop="stateProvince"  label-span="220px">
                             <div class="row">
                                 <div class="col-8 pr-0">
                                     <t-input  v-model="formRight.stateProvince"></t-input>
@@ -150,7 +150,7 @@
                         </t-form-item>
                     </div>
                     <div class="col-xs-12 col-sm-12 col-md-6 col-lg-6 col-xl-6">
-                        <t-form-item :label="$t('frame.city')" class="mb-20" prop="city"  label-span="220px">
+                        <t-form-item :label="$t('frame.city')" class="pt-15" prop="city"  label-span="220px">
                             <div class="row">
                                 <div class="col-8 pr-0">
                                     <t-input  v-model="formRight.city"></t-input>
@@ -159,7 +159,7 @@
                         </t-form-item>
                     </div>
                     <div class="col-xs-12 col-sm-12 col-md-6 col-lg-6 col-xl-6">
-                        <t-form-item :label="$t('frame.postCode')" class="mb-20" prop="postCode"  label-span="220px">
+                        <t-form-item :label="$t('frame.postCode')" class="pt-15" prop="postCode"  label-span="220px">
                             <div class="row">
                                 <div class="col-8 pr-0">
                                     <t-input  v-model="formRight.postCode" :maxlength="6"></t-input>
@@ -171,7 +171,7 @@
                 <!--街道/地址-->
                 <div class="row">
                     <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12 col-xl-12">
-                        <t-form-item :label="$t('frame.streetAddress')" class="mb-20" prop="streetAddress"  label-span="220px">
+                        <t-form-item :label="$t('frame.streetAddress')" class="pt-15" prop="streetAddress"  label-span="220px">
                             <div class="row">
                                 <div class="col-8 pr-0">
                                     <t-input :maxlength='500'  type="textarea" v-model="formRight.streetAddress"  :autosize="{minRows: 3,maxRows: 3}" ></t-input>
