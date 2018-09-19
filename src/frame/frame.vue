@@ -517,9 +517,7 @@
         watch: {
           '$route'(to,from){
             // 监听路由变化情况，切换对应的面包屑信息
-            if (this.showMenuHead != 4){
-              this.getParentMenu()
-            }
+            this.getParentMenu()
           }
         },
         methods: {
@@ -590,7 +588,7 @@
             }
             let routePath = this.$route.matched[0].path
             //RAP路径信息
-            let rapPathStart = '/finance/page/';
+            let rapPathStart = '.jsp';
             if (url.indexOf(rapPathStart) < 0){
               if (url.indexOf(routePath) === -1 && this.showMenuHead === '4'){
                 this.changeToPage(systemUrl + url)
@@ -664,13 +662,14 @@
                 if (parthMenuArray != null && parthMenuArray.length > 0 && that.authorization.getStaffMenuFunc !== undefined) {
                   that.$store.state.storeModule.staffMenuFunc = []
                   let currentMenu = parthMenuArray[parthMenuArray.length - 1]
-                    // console.log(frameBaseInfo)
+                    console.log(frameBaseInfo)
                   if (frameBaseInfo && frameBaseInfo != null && frameBaseInfo.staffMenuFunsMap != null
                    && frameBaseInfo.staffMenuFunsMap !== undefined){
                 //   let frameBaseInfo = localStorage.get('frame_base_info')
                 //   if (frameBaseInfo && frameBaseInfo != null){
+                    console.log('menuId:' + currentMenu.menuId)
                     that.$store.state.storeModule.staffMenuFunc = frameBaseInfo.staffMenuFunsMap[currentMenu.menuId]
-                    // console.log(that.$store.state.storeModule.staffMenuFunc )
+                    console.log(that.$store.state.storeModule.staffMenuFunc )
                   }
                   if (that.$store.state.storeModule.staffMenuFunc !== undefined && that.$store.state.storeModule.staffMenuFunc.length <= 0){
                     that.instance.post(that.authorization.getStaffMenuFunc, {
