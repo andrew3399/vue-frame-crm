@@ -202,9 +202,9 @@
       showDetail(agent){
         console.log(JSON.stringify(agent))
         var formkey1 = agent.formUrl
-        var url1 = "http://10.19.10.87:18080"
+        var url1 = window.location.host
+        console.log(url1)
         var url = url1.concat(formkey1);
-        console.log(url)
         window.open(url);
       },
       changePage(pageNum){

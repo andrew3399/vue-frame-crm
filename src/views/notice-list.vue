@@ -539,9 +539,8 @@
                 // console.log(jsonObject);
                 // console.log(JSON.stringify(formKey))
                 var formkey1 = formKey
-                var url1 = "http://10.19.10.87:18080"
+                var url1 = window.location.host
                 var url = url1.concat(formkey1);
-                console.log(url)
                 window.open(url);
             },
             handleJumpToAdd(){
