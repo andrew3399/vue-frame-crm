@@ -38,7 +38,7 @@
                             </div>
                         </div> -->
 
-                        <div class="notice-manage-content" @click="jumpToApproval(item.extAttr.formKey)">
+                        <div class="notice-manage-content" @click="jumpToApproval(item.formUrl)">
                             <div class="text-left content-title">
                                 <span>{{item.label}}</span>
                             </div>
@@ -69,7 +69,7 @@
                             </div>
                         </div> -->
 
-                        <div class="notice-manage-content" @click="jumpToApproval(item.extAttr.formKey)">
+                        <div class="notice-manage-content" @click="jumpToApproval(item.formUrl)">
                             <div class="text-left content-title">
                                 <span>{{item.label}}</span>
                             </div>
@@ -533,11 +533,15 @@
               })
             },
             jumpToApproval(formKey){
+                // debugger
+                // let jsonObject = JSON.parse(formKey);
+                console.log(formKey);
+                // console.log(jsonObject);
                 // console.log(JSON.stringify(formKey))
                 var formkey1 = formKey
                 var url1 = "http://10.19.10.87:18080"
                 var url = url1.concat(formkey1);
-                // console.log(url)
+                console.log(url)
                 window.open(url);
             },
             handleJumpToAdd(){

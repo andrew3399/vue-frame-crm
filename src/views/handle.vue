@@ -11,7 +11,7 @@
                     <div class="col-xs-12 col-sm-12 col-md-5 col-lg-5 col-xl-5">
                         <!-- 第一列 -->
                         <div class="row">
-                            <div class="col-12">
+                            <!-- <div class="col-12">
                                 <div class="row mb-20">
                                     <div class="col-6 text-right lh-40">
                                         {{$t('handle_local.handle.order_title')}}
@@ -20,7 +20,7 @@
                                         <t-input v-model="fromItem.label"></t-input>
                                     </div>
                                 </div>
-                            </div>
+                            </div> -->
                             <div class="col-12">
                                 <div class="row">
                                     <div class="col-6 text-right lh-40">
@@ -188,7 +188,7 @@
 
           that.queryData = ret.data.result.result
 
-          // that.total = ret.data.result.result.count
+          that.total = ret.data.result.count
           // that.fromItem.formKey = ret.data.result.result.extAttr.formKey
 
 
@@ -201,7 +201,7 @@
       },
       showDetail(agent){
         console.log(JSON.stringify(agent))
-        var formkey1 = agent.extAttr.formKey
+        var formkey1 = agent.formUrl
         var url1 = "http://10.19.10.87:18080"
         var url = url1.concat(formkey1);
         console.log(url)
@@ -228,7 +228,7 @@
 
           that.queryData = ret.data.result.result
 
-          // that.total = ret.data.result.count
+          that.total = ret.data.result.count
           // that.fromItem.formKey = ret.data.result.result.extAttr.formKey
 
 
