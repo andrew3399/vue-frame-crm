@@ -643,9 +643,9 @@
               for(let i = 0; i < menuList.length; i++){
                 staffMpMenuList.push(menuList[i].menuUrl)
               }
-              if (staffMpMenuList.indexOf(routePath) < 0){
-                let defaultMenu = menuList[0]
-                let menuUrl = defaultMenu.menuUrl
+              let defaultMenu = menuList[0]
+              let menuUrl = defaultMenu.menuUrl
+              if (staffMpMenuList.indexOf(routePath) < 0 && menuUrl.indexOf('.jsp') > 0){
                 that.changeStaffMpMenu(defaultMenu.systemUrl,menuUrl)
               }
             }
