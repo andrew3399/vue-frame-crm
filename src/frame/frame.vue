@@ -608,6 +608,14 @@
               } else {
                 this.iframeUrl = systemUrl + url + '?lang=' + aidLanguage;
               }
+              let loginUserName = sessionStorage.getItem('loginUserName')
+              if (loginUserName && loginUserName !== '' && this.iframeUrl.indexOf('loginUser=') < 0){
+                if (this.iframeUrl.indexOf('?') > -1) {
+                  this.iframeUrl = this.iframeUrl + '&loginUser='+loginUserName
+                } else {
+                  this.iframeUrl = this.iframeUrl + '?loginUser='+loginUserName
+                }
+              }
             }
           },
           //ESOP集成涉及的菜单列表信息获取

@@ -33,6 +33,10 @@ export function beforeEach (to, from, next, authorization, requestInstance, cb) 
     sessionStorage.clear()
     to.query.acd = 0
   }
+  let loginUserName = to.query.user
+  if (loginUserName && loginUserName !== ''){
+    sessionStorage.setItem('loginUserName',loginUserName)
+  }
   if(fromShowMenuHead && fromShowMenuHead !== '' && fromMpId && fromMpId !== '' && !to.query.showMenuHead && !to.query.mpId){
     to.query.showMenuHead = fromShowMenuHead
     to.query.mpId = fromMpId
