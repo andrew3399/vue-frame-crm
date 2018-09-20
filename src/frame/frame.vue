@@ -139,13 +139,13 @@
 
             <div class="layout-nav navbar navbar-expand-lg bg-white align-items-center layout-nav--top"  v-if="showMenuHead === '1' || showMenuHead === '2'">
                 <div class="row nav-row">
-                    <div class="col col-6 nav-col">
+                    <div class="col col-1 nav-col">
                         <a href="javascript:;" class="d-xm-block thumb-icon" v-show="!showMenu">
                             <t-icon type="menu" class="text-xxl text-black" @click.native="openOrClose"></t-icon>
                         </a>
                         <slot name="frame-nav-left"></slot>
                     </div>
-                    <div class="col col-6 nav-col nav-col--right">
+                    <div class="col col-11 nav-col nav-col--right">
                         <slot name="frame-nav">
                             <t-menu
                                     mode="horizontal"
@@ -517,9 +517,7 @@
         watch: {
           '$route'(to,from){
             // 监听路由变化情况，切换对应的面包屑信息
-            if (this.showMenuHead != 4){
-              this.getParentMenu()
-            }
+            this.getParentMenu()
           }
         },
         methods: {
@@ -576,6 +574,7 @@
             this.staffMenuFuncMap = resData.staffMenuFunsMap
           },
           changeStaffMpMenu(systemUrl,url){
+            console.log('changeStaffMpMenu:  ' + url)
             this.staffMpMenuUrl = url
             if (url.indexOf('showMenuHead=4') === -1){
               if (url.indexOf('?') > -1){
@@ -588,17 +587,35 @@
               url = url + "&mpId=" + this.mpId
             }
             let routePath = this.$route.matched[0].path
-            let currentSystemUrl = window.location.protocol + "//" + window.location.host;
-            if (currentSystemUrl === systemUrl){
-              if (url.indexOf(routePath) === -1 && this.showMenuHead === 4){
-                // let returnPath = this.$router.resolve(url)
+            //RAP路径信息
+            let rapPathStart = '.jsp';
+            if (url.indexOf(rapPathStart) < 0){
+              if (url.indexOf(routePath) === -1 && this.showMenuHead === '4'){
                 this.changeToPage(systemUrl + url)
               } else {
                 this.$router.push(url)
               }
             } else {
+              let aidLanguage = localStorage.get('aid-language');
+              if (aidLanguage === 'en-US'){
+                aidLanguage = 'en'
+              } else if (aidLanguage === 'zh-CN'){
+                aidLanguage = 'zh_CN'
+              }
               this.isIframeContent = true
-              this.iframeUrl = systemUrl + url;
+              if (url.indexOf('?') > -1 ){
+                this.iframeUrl = systemUrl + url + '&lang=' + aidLanguage;
+              } else {
+                this.iframeUrl = systemUrl + url + '?lang=' + aidLanguage;
+              }
+              let loginUserName = sessionStorage.getItem('loginUserName')
+              if (loginUserName && loginUserName !== '' && this.iframeUrl.indexOf('loginUser=') < 0){
+                if (this.iframeUrl.indexOf('?') > -1) {
+                  this.iframeUrl = this.iframeUrl + '&loginUser='+loginUserName
+                } else {
+                  this.iframeUrl = this.iframeUrl + '?loginUser='+loginUserName
+                }
+              }
             }
           },
           //ESOP集成涉及的菜单列表信息获取
@@ -613,26 +630,31 @@
               this.instance.post(this.authorization.getStaffMpMenue,{
                 mpId: pathParams.mpId
               }).then(function(ret){
+                console.log(ret)
                 if (ret.status === 200 && ret.data != null){
                   that.$store.state.storeModule.staffMpMenu = ret.data
                   that.staffMpMenu = ret.data
                   let menuList = ret.data.menulist
                   that.translateMpMenu(menuList)
                 }
+              }).catch(function(e){
+                console.error(e)
               })
             }
           },
           translateMpMenu(menuList){
-            if (menuList.length > 0) {
+            let that = this;
+            let routePath = this.$route.path
+            console.log('routePath: ' + routePath)
+            if (menuList !== null && menuList.length > 0) {
+              let staffMpMenuList = new Array();
+              for(let i = 0; i < menuList.length; i++){
+                staffMpMenuList.push(menuList[i].menuUrl)
+              }
               let defaultMenu = menuList[0]
               let menuUrl = defaultMenu.menuUrl
-              if (menuUrl.indexOf('/') > -1){
-                let menuRoutePath = menuUrl.substring(0,menuUrl.lastIndexOf("/"));
-                if (routePath.indexOf(menuRoutePath) > -1){
-                  if(that.showMenuHead === '4' ){
-                    that.changeStaffMpMenu(menuUrl)
-                  }
-                }
+              if (staffMpMenuList.indexOf(routePath) < 0 && menuUrl.indexOf('.jsp') > 0){
+                that.changeStaffMpMenu(defaultMenu.systemUrl,menuUrl)
               }
             }
           },
@@ -648,13 +670,14 @@
                 if (parthMenuArray != null && parthMenuArray.length > 0 && that.authorization.getStaffMenuFunc !== undefined) {
                   that.$store.state.storeModule.staffMenuFunc = []
                   let currentMenu = parthMenuArray[parthMenuArray.length - 1]
-                    // console.log(frameBaseInfo)
+                    console.log(frameBaseInfo)
                   if (frameBaseInfo && frameBaseInfo != null && frameBaseInfo.staffMenuFunsMap != null
                    && frameBaseInfo.staffMenuFunsMap !== undefined){
                 //   let frameBaseInfo = localStorage.get('frame_base_info')
                 //   if (frameBaseInfo && frameBaseInfo != null){
+                    console.log('menuId:' + currentMenu.menuId)
                     that.$store.state.storeModule.staffMenuFunc = frameBaseInfo.staffMenuFunsMap[currentMenu.menuId]
-                    // console.log(that.$store.state.storeModule.staffMenuFunc )
+                    console.log(that.$store.state.storeModule.staffMenuFunc )
                   }
                   if (that.$store.state.storeModule.staffMenuFunc !== undefined && that.$store.state.storeModule.staffMenuFunc.length <= 0){
                     that.instance.post(that.authorization.getStaffMenuFunc, {
@@ -831,10 +854,8 @@
             handleChangeLang() {
                 let language = 'en-US'
                 if (this.lang === 'EN') {
-                    this.lang = 'ZH'
                     language = 'en-US'
                 } else if (this.lang === 'ZH') {
-                    this.lang = 'EN'
                     language = 'zh-CN'
                 }
                 localStorage.set('aid-language', language)
@@ -842,7 +863,7 @@
                 this.instance.post(this.authorization.changeLangUri, {
                     language: this.lang
                 }).then(res => {
-                    // window.location.reload()
+                    window.location.reload()
                 }).catch(res => {
                     that.handleResponseExcept(res)
                 })
@@ -1053,28 +1074,16 @@
             if (!accessToken || !refreshToken) return
             if (this.menuList && this.menuList.length) return
 
-            // 获取login处设置的语言
-            // let fetchLang = await this.instance.get(this.authorization.langUri)
-            // if (fetchLang.data === '中') {
-            //     this.lang = 'EN'
-            //     localStorage.set('aid-language', 'zh-CN')
-            //     this.$i18n.locale = 'zh-CN'
-            // } else if (fetchLang.data === 'en') {
-            //     this.lang = '中'
-            //     localStorage.set('aid-language', 'en-US')
-            //     this.$i18n.locale = 'en-US'
-            // }
-
             // 设置语言信息
             let fetchLang = await this.instance.get(this.authorization.langUri)
             console.log(' ====================  loginLanguage ==================')
             console.log(JSON.stringify(fetchLang))
-          console.log(' ====================  loginLanguage ==================')
-            if (fetchLang.data.toLowerCase() === 'zh') {
+          console.log(' ====================  loginLanguage  END ==================')
+            if (fetchLang.data.toLowerCase() === 'zh' || fetchLang.data.toLowerCase() === 'zh-cn') {
                 this.lang = 'EN'
                 localStorage.set('aid-language', 'zh-CN')
                 this.$i18n.locale = 'zh-CN'
-            } else if (fetchLang.data.toLowerCase() === 'en') {
+            } else {
                 this.lang = 'ZH'
                 localStorage.set('aid-language', 'en-US')
                 this.$i18n.locale = 'en-US'

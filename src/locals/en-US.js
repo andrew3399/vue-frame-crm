@@ -200,7 +200,7 @@ export default {
       campaignName: 'Campaign Name',
       startDate: 'Start Date',
       status: 'Status',
-      updatedTime: 'Updated Time',
+      updatedTime: 'Updated Time'
     },
     opportunity: {
       opportunityInfo: 'Select Opportunity',
@@ -226,7 +226,7 @@ export default {
       customer_name: 'Cust Name',
       inter_account_manage: 'Internet Customer Manager',
       voice_account_manage: 'Voice Customer Manager',
-      mobile_account_manage: 'Mobile Customer Manager',
+      mobile_account_manage: 'Mobile Customer Manager'
     },
     subjectSelect: {
       selectSubjectInfo: 'Select a Subject below.'
@@ -235,10 +235,11 @@ export default {
   handle_local: {
     handle: {
       order_title: 'order title',
-      applicant: 'applicant',
+      applicant: 'applicant Number',
+      applicant_name: 'applicant',
       application_date: 'application date',
       query_btn: 'query',
-      application_form_title: 'application form title',
+      application_form_title: 'order title',
       operation: 'operation',
       unHandle: 'unHandle',
       handle: 'handle'

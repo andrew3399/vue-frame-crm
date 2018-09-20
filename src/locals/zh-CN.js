@@ -224,12 +224,13 @@ export default {
   handle_local: {
     handle: {
       order_title: '工单标题',
-      applicant: '申请人',
+      applicant: '申请工号',
+      applicant_name:'申请人',
       application_date: '申请日期',
       query_btn: '查询',
-      application_form_title: '申请单标题',
+      application_form_title: '工单标题',
       operation: '操作',
-      unHandle: '代办',
+      unHandle: '待办',
       handle: '已办'
     }
   }

@@ -9,25 +9,84 @@ import store from '../store/index.js'
 export function beforeEach (to, from, next, authorization, requestInstance, cb) {
   let localStorage = new LocalStorage()
   let sessionStorage = window.sessionStorage
-  let accessToken = localStorage.get('access_token')
-  let refreshToken = localStorage.get('refresh_token')
-  let sessionTime = localStorage.get('session_time')
+  let redirectUri = authorization.redirect_uri
   // 路由拦截 根据路由配置中meta.requireAuth判断是否需要登录
   let locationHref = window.location.href;
   locationHref = locationHref.replace(/[?]{0,}code=\w*[&]{0,}/g, '');
   locationHref = locationHref.replace(/state=\w*[&]{0,}/g, '');
+  locationHref = locationHref.replace(/acd=\w*[&]{0,}/g, '');
+  // 从EIP跳转过来的菜单需要携带参数信息
+  console.log('======================= from ========================')
+  console.log(from)
+  console.log('======================= from end ========================')
+  let fromQuery = from.query;
+  let toAcd = to.query.acd;
+  let fromShowMenuHead = fromQuery.showMenuHead;
+  let fromMpId = fromQuery.mpId;
+  if (toAcd){
+    redirectUri = locationHref
+  }
+  if (toAcd && toAcd !== undefined && toAcd !== '' && toAcd === '1'){
+    localStorage.remove('access_token')
+    localStorage.remove('refresh_token')
+    localStorage.remove('session_time')
+    sessionStorage.clear()
+    to.query.acd = 0
+  }
+  let loginUserName = to.query.user
+  if (loginUserName && loginUserName !== ''){
+    sessionStorage.setItem('loginUserName',loginUserName)
+  }
+  if(fromShowMenuHead && fromShowMenuHead !== '' && fromMpId && fromMpId !== '' && !to.query.showMenuHead && !to.query.mpId){
+    to.query.showMenuHead = fromShowMenuHead
+    to.query.mpId = fromMpId
+    next({
+      path: to.path,
+      query: to.query
+    })
+    return;
+  } else if(!to.query.showMenuHead && !to.query.mpId){
+    let documentReferrer = document.referrer
+    let refShowMenuHead = '';
+    let refMpId = '';
+    let referShowMenuHeadQuery = documentReferrer.match(new RegExp('[\?\&]showMenuHead=([^\&]+)', 'i'));
+    let referMpIdQuery = documentReferrer.match(new RegExp('[\?\&]mpId=([^\&]+)', 'i'));
+    if (referShowMenuHeadQuery !== null && referShowMenuHeadQuery.length > 1){
+      refShowMenuHead = referShowMenuHeadQuery[1]
+    }
+    if (referMpIdQuery !== null && referMpIdQuery.length > 1){
+      refMpId = referMpIdQuery[1]
+    }
+    if ( refShowMenuHead && refShowMenuHead !== '' && refMpId && refMpId !== '' ){
+      to.query.showMenuHead = refShowMenuHead
+      to.query.mpId = refMpId
+      next({
+        path: to.path,
+        query: to.query
+      })
+      return;
+    }
+  }
+
+  console.log('======================= to ========================')
+  console.log(to)
+  console.log('======================= to end ========================')
+  let accessToken = localStorage.get('access_token')
+  let refreshToken = localStorage.get('refresh_token')
+  let sessionTime = localStorage.get('session_time')
   //校验是否有菜单权限信息
   let authorMenuArray = JSON.parse(sessionStorage.getItem('authorMenuArray'))
   let routeArr = ['/res', '/cust', '/order', '/acct','/mks', '/rpt', '/prod', '/odp', '/base', '/']
-    if (to.meta && to.meta.requireAuth ) {
+  let toPath = to.path
+  if (to.meta && to.meta.requireAuth ) {
       if (accessToken && refreshToken && sessionTime) {
-        if (authorMenuArray === null ){
+        if (authorMenuArray === null || to.meta.permission === null ||  to.meta.permission === undefined || !to.meta.permission ){
           next()
           return;
         }
-        if (authorMenuArray && authorMenuArray.length > 0 && (authorMenuArray.indexOf(to.path) > -1 || routeArr.indexOf(to.path) > -1 )){
+        if (to.meta.permission && authorMenuArray && authorMenuArray.length > 0 && (authorMenuArray.indexOf(toPath) > -1 || routeArr.indexOf(toPath) > -1 )){
           next()
-        } else {
+        } else{
           if (authorMenuArray == null || authorMenuArray.length <= 0) {
             next()
           }
@@ -46,13 +105,28 @@ export function beforeEach (to, from, next, authorization, requestInstance, cb) 
         sessionStorage.clear()
         let code = getQuery('code')
         let state = getQuery('state')
+        let showMenuHead = getQuery("showMenuHead");
+        let mpId = getQuery("mpId");
         if (code && state) {
           /**
            *  这里需要去请求token的值,并设置sessiion-time
            *  oauth2
            */
           // cb(code, state, next, localStorage, uuid(6, 16))
-
+          if (showMenuHead !== '' && locationHref.indexOf('showMenuHead=') < 0){
+            if (locationHref.indexOf('?') > -1){
+              locationHref = locationHref + '&showMenuHead=' + showMenuHead
+            } else{
+              locationHref = locationHref + '?showMenuHead=' + showMenuHead
+            }
+          }
+          if (mpId !== '' && locationHref.indexOf('mpId=') < 0){
+            if (locationHref.indexOf('?') > -1){
+              locationHref = locationHref + '&mpId=' + mpId
+            } else {
+              locationHref = locationHref + '?mpId=' + mpId
+            }
+          }
           requestInstance.post(authorization.tokenUri + '?code=' + code + '&state=' + state +
             '&grant_type=authorization_code' + '&client_id=' + authorization.client_id + '&redirect_uri=' + encodeURIComponent(locationHref))
             .then(res => {
@@ -68,7 +142,6 @@ export function beforeEach (to, from, next, authorization, requestInstance, cb) 
               state: uuid(6, 16)
             }
             window.location.href = authorization.authorizeUri + '?client_id=' + msg.client_id + '&redirect_uri=' + msg.redirect_uri + '&response_type=code&scope=read&state=' + msg.state
-            next()
           })
         } else {
           /**
@@ -100,6 +173,20 @@ export function beforeEach (to, from, next, authorization, requestInstance, cb) 
                       // localStorage.set('refresh_token', res.data.refresh_token, Math.pow(2, 32))
                       next()
                     }).catch(res => {
+                      if (showMenuHead !== '' && locationHref.indexOf('showMenuHead=') < 0){
+                        if (locationHref.indexOf('?') > -1){
+                          locationHref = locationHref + '&showMenuHead=' + showMenuHead
+                        } else{
+                          locationHref = locationHref + '?showMenuHead=' + showMenuHead
+                        }
+                      }
+                      if (mpId !== '' && locationHref.indexOf('mpId=') < 0){
+                        if (locationHref.indexOf('?') > -1){
+                          locationHref = locationHref + '&mpId=' + mpId
+                        } else {
+                          locationHref = locationHref + '?mpId=' + mpId
+                        }
+                      }
                       let msg = {
                         client_id: authorization.client_id,
                         redirect_uri: encodeURIComponent(locationHref),
@@ -112,9 +199,23 @@ export function beforeEach (to, from, next, authorization, requestInstance, cb) 
               }
             })
           } else {
+            if (showMenuHead !== '' && redirectUri.indexOf('showMenuHead=') < 0){
+              if (redirectUri.indexOf('?') > -1){
+                redirectUri = redirectUri + '&showMenuHead=' + showMenuHead
+              } else {
+                redirectUri = redirectUri + '?showMenuHead=' + showMenuHead
+              }
+            }
+            if (mpId !== '' && redirectUri.indexOf('mpId=') < 0){
+              if (redirectUri.indexOf('?') > -1 ){
+                redirectUri = redirectUri + '&mpId=' + mpId
+              } else {
+                redirectUri = redirectUri + '?mpId=' + mpId
+              }
+            }
             let msg = {
               client_id: authorization.client_id,
-              redirect_uri: encodeURIComponent(authorization.redirect_uri),
+              redirect_uri: encodeURIComponent(redirectUri),
               state: uuid(6, 16)
             }
             window.location.href = authorization.authorizeUri + '?client_id=' + msg.client_id + '&redirect_uri=' + msg.redirect_uri + '&response_type=code&scope=read&state=' + msg.state
@@ -122,11 +223,11 @@ export function beforeEach (to, from, next, authorization, requestInstance, cb) 
         }
       }
     } else {
-      if (authorMenuArray === null){
+      if (authorMenuArray === null || to.meta.permission === null ||  to.meta.permission === undefined || !to.meta.permission){
         next()
         return;
       }
-      if (authorMenuArray && authorMenuArray.length > 0 && (authorMenuArray.indexOf(to.path) > -1 || routeArr.indexOf(to.path) > -1 )){
+      if (to.meta.permission && authorMenuArray && authorMenuArray.length > 0 && (authorMenuArray.indexOf(toPath) > -1 || routeArr.indexOf(toPath) > -1 )){
          next()
       } else {
         if (to.matched != null && to.matched.length > 0 && to.matched[0].path ){

@@ -30,12 +30,19 @@ export default new Router({
           path: '/personal',
           name: 'personal',
           component: require('../src/views/personal.vue')
+        },
+        //代办
+        {
+          path: '/unHandle',
+          name: 'unHandle',
+          component: require('../src/views/unHandle.vue')
+        },
+        //已办
+        {
+          path: '/handle',
+          name: 'handle',
+          component: require('../src/views/handle.vue')
         }
-        // {
-        //   path: '/unHandle',
-        //   name: 'unHandle',
-        //   component: require('../src/views/unHandle.vue')
-        // }
       ]
     }
   ]

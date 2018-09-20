@@ -23,6 +23,71 @@
             </div>
         </div> -->
         <!-- 面包屑end -->
+        <div class="row">
+            <div class="col-6">
+                <div class="enquiries notice-state-wrap">
+                    <!-- 标题 star-->
+                    <div class="enquiries-title">
+                        <span></span>{{$t('handle_local.handle.unHandle')}}
+                    </div>
+                    <!-- 标题 end-->
+                    <div class="notice-manage-wrap" v-for="item in handleItems">
+                        <!-- <div class="row notice-state-content">
+                            <div class="col-12 row mb8">
+                                <div class="col-6 text-left">已办流程标题</div>
+                                <div class="col-6 text-right"> 2018-05-14</div>
+                            </div>
+                            <div class="col-12 row mb8">
+                                <div class="col-6 text-left">已办流程标题</div>
+                                <div class="col-6 text-right"> 2018-05-14</div>
+                            </div>
+                        </div> -->
+
+                        <div class="notice-manage-content" @click="jumpToApproval(item.formUrl)">
+                            <div class="text-left content-title">
+                                <span>{{item.label}}</span>
+                            </div>
+                            <div class="text-right content-time">{{item.workflowCreateDate}}</div>
+                        </div>
+                    </div>
+                    <div class="d-flex flex-row-reverse mt-10">
+                        <t-button @click="jumpToUnHandle">more</t-button>
+                    </div>
+                </div>
+            </div>
+            <div class="col-6">
+                <div class="enquiries notice-state-wrap">
+                    <!-- 标题 star-->
+                    <div class="enquiries-title">
+                        <span></span>{{$t('handle_local.handle.handle')}}
+                    </div>
+                    <!-- 标题 end-->
+                    <div class="notice-manage-wrap" v-for="item in unHandleItems">
+                        <!-- <div class="row notice-state-content">
+                            <div class="col-12 row mb8">
+                                <div class="col-6 text-left">已办流程标题</div>
+                                <div class="col-6 text-right"> 2018-05-14</div>
+                            </div>
+                            <div class="col-12 row mb8">
+                                <div class="col-6 text-left">已办流程标题</div>
+                                <div class="col-6 text-right"> 2018-05-14</div>
+                            </div>
+                        </div> -->
+
+                        <div class="notice-manage-content" @click="jumpToApproval(item.formUrl)">
+                            <div class="text-left content-title">
+                                <span>{{item.label}}</span>
+                            </div>
+                            <div class="text-right content-time">{{item.workflowCreateDate}}</div>
+                        </div>
+
+                    </div>
+                    <div class="d-flex flex-row-reverse mt-10">
+                        <t-button @click="jumpToHandle">more</t-button>
+                    </div>
+                </div>
+            </div>
+        </div>
         <div class="enquiries mt-10" style="padding:0px 0px 15px 0px;">
             <!-- 标题 star-->
             <div class="notice-list-title" >
@@ -137,11 +202,11 @@
                     pageSize:5,
                     lang:'',
                     title:"",
-                    applyStaffId:"",
+                    applyOperId:"",
                     taskStaffId:"100000000",
                     applyTime:"",
                     queneId:"HAMWA",
-                    stationId:"23232",
+                    stationId:"",
                     formKey:"",
                  }
             }
@@ -386,6 +451,66 @@
                 })
               })
             },
+             getUnHandleList(){
+                debugger
+                let that = this
+                this.instance.get(this.authorization.queryUnhandle, {
+                    params: {
+                            taskStaffId:that.fromItem.taskStaffId,
+                            stationId:that.fromItem.stationId,
+                            queneId:that.fromItem.queneId,
+                            pageNum: that.fromItem.pageNum,
+                            pageSize: that.fromItem.pageSize,
+                            title:that.fromItem.title,
+                            lang:that.fromItem.lang,
+                            applyOperId:that.fromItem.applyOperId,
+                            applyTime:that.fromItem.applyTime
+                        }
+                }).then(ret => {
+                    // console.log(JSON.stringify(ret.data))
+
+
+                    // that.total = ret.data.result.count
+                    that.handleItems = ret.data.result.result
+                    // that.fromItem.formKey = ret.data.result.result.extAttr.formKey
+
+
+                    //if()
+
+                }).catch(ret => {
+                        this.$Message.warning(this.$t('frame.warning'))
+                })
+            },
+            getHandleList(){
+                 let that = this
+                 debugger
+                this.instance.get(this.authorization.queryHandle, {
+                    params: {
+                            taskStaffId:that.fromItem.taskStaffId,
+                            stationId:that.fromItem.stationId,
+                            queneId:that.fromItem.queneId,
+                            pageNum: that.fromItem.pageNum,
+                            pageSize: that.fromItem.pageSize,
+                            title:that.fromItem.title,
+                            lang:that.fromItem.lang,
+                            applyOperId:that.fromItem.applyOperId,
+                            applyTime:that.fromItem.applyTime
+                        }
+                }).then(ret => {
+                    // console.log(JSON.stringify(ret.data))
+
+                    debugger
+                    // that.total = ret.data.result.count
+                    that.unHandleItems = ret.data.result.result
+                    // that.fromItem.formKey = ret.data.result.result.extAttr.formKey
+
+
+                    //if()
+
+                }).catch(ret => {
+                        this.$Message.warning(this.$t('frame.warning'))
+                })
+            },
            handleChooseTask(){
 
           },
@@ -413,11 +538,15 @@
               })
             },
             jumpToApproval(formKey){
+                // debugger
+                // let jsonObject = JSON.parse(formKey);
+                console.log(formKey);
+                // console.log(jsonObject);
                 // console.log(JSON.stringify(formKey))
                 var formkey1 = formKey
                 var url1 = "http://10.19.10.87:18080"
                 var url = url1.concat(formkey1);
-                // console.log(url)
+                console.log(url)
                 window.open(url);
             },
             handleJumpToAdd(){
@@ -435,6 +564,8 @@
             setTimeout(() => {
                 this.getBulletinList()
                 this.initTasklistFilter()
+                this.getUnHandleList()
+                this.getHandleList()
             }, 300)
         },
     }
