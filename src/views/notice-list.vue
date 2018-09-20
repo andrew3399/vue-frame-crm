@@ -1,5 +1,10 @@
 <style>
-    .selectTable .table__row td:first-child{text-indent:0px !important;}
+    .res-selectTable .cmi-tab .table__header table th:first-child{
+        text-indent: 0px !important;
+    }
+    .res-selectTable .table__row td:first-child{
+        text-indent: 0px !important;
+    }
     .table-aa.cmi-tab .table__cell{display: grid !important;}
 </style>
 <template>
