@@ -149,7 +149,7 @@
 
             <div  class="selectTable">
                 <!-- 查询结果tab star-->
-                <div class="enquiries-tab">
+                <div class="enquiries-tab" class="res-selectTable">
                     <div class="cmi-tab mt-15 table-aa">
                         <t-table  border :columns="columns" :data="queryData" :all-ellipsis="true"></t-table>
                     </div>
