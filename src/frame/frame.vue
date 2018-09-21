@@ -269,9 +269,9 @@
                     </div>
                     <div class="bg-white pt-10" style="padding-bottom: 10px;" v-if="showMenuHead === '4'">
                         <div class="customer-tt-title pl-10">
-                    <span >
-                        {{lang === 'EN' ? staffMpMenu.mpNamecn : staffMpMenu.mpNameus}}
-                    </span>
+                            <span class="eipBread">
+                                {{lang === 'EN' ? staffMpMenu.mpNamecn : staffMpMenu.mpNameus}}
+                            </span>
                         </div>
                         <div class="customer-tt-table">
                             <ul class="menu" >

@@ -447,6 +447,13 @@
                 that.flag= false;
                 that.errorTipFlag = true;
               }
+
+              var result = JSON.parse(sessionStorage.getItem("frame-base-info"))
+              if(result != null){
+                result.staffName = that.formRight.nickname;
+                sessionStorage.setItem("frame-base-info",JSON.stringify(result));
+              }
+
             })
 
           }
@@ -455,17 +462,18 @@
       /**
        * 取消
        */
-      cancel(){
+      cancel(){$router.push
         // console.log(this.$router)
-        this.$router.push(this.$router.history.current.matched[0])
-       // this.$router.push({name: '/cust'});
+        // this.$router.push(this.$router.history.current.matched[0])
+        this.$router.push({name: '/cust'});
       },
       handleOk(){
         if(this.errorTipFlag){
           this.oneModal = false
         }else{
           this.oneModal = false
-          this.$router.push(this.$router.history.current.matched[0])
+          this.$router.push({name: '/cust'});
+          // this.$router.push(this.$router.history.current.matched[0])
         }
       },
       handleClose(){

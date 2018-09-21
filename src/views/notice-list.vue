@@ -1,5 +1,10 @@
 <style>
-    .selectTable .table__row td:first-child{text-indent:0px !important;}
+    .res-selectTable .cmi-tab .table__header table th:first-child{
+        text-indent: 0px !important;
+    }
+    .res-selectTable .table__row td:first-child{
+        text-indent: 0px !important;
+    }
     .table-aa.cmi-tab .table__cell{display: grid !important;}
 </style>
 <template>
@@ -144,7 +149,7 @@
 
             <div  class="selectTable">
                 <!-- 查询结果tab star-->
-                <div class="enquiries-tab">
+                <div class="enquiries-tab" class="res-selectTable">
                     <div class="cmi-tab mt-15 table-aa">
                         <t-table  border :columns="columns" :data="queryData" :all-ellipsis="true"></t-table>
                     </div>
