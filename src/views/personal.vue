@@ -462,18 +462,20 @@
       /**
        * 取消
        */
-      cancel(){$router.push
+      cancel(){
         // console.log(this.$router)
         // this.$router.push(this.$router.history.current.matched[0])
-        this.$router.push({name: '/cust'});
+        //this.$router.push({name: '/cust'});
+        this.$router.push({ name: 'notice-list' });
       },
       handleOk(){
         if(this.errorTipFlag){
           this.oneModal = false
         }else{
           this.oneModal = false
-          this.$router.push({name: '/cust'});
+          //this.$router.push({name: '/cust'});
           // this.$router.push(this.$router.history.current.matched[0])
+          this.$router.push({ name: 'notice-list' });
         }
       },
       handleClose(){
