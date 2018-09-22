@@ -740,3 +740,19 @@
 .mptype-layout .menu .menu__item {
     padding: 0 20px !important;
 }
+
+//下拉
+.w_100{
+    width: 100%;
+}
+.menu_eip{
+    display: block;
+    margin: 0;
+    padding: 0;
+    outline: none;
+    list-style: none;
+    position: relative;
+}
+.dropdown__menu{
+    margin:0;
+}

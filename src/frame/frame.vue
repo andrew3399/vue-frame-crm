@@ -278,11 +278,31 @@
                                 {{lang === 'EN' ? staffMpMenu.mpNamecn : staffMpMenu.mpNameus}}
                             </span>
                         </div>
-                        <div class="customer-tt-table" v-if="mpType === '1'">
+                        <!-- <div class="customer-tt-table" v-if="mpType === '1'">
                             <ul class="menu" >
                                 <li v-for="staffMenu in staffMpMenu.menulist" @click="changeStaffMpMenu(staffMenu.systemUrl,staffMenu.menuUrl)" :class="{'z-crttab':staffMenu.menuUrl === staffMpMenuUrl}">
                                     {{lang === 'EN'? staffMenu.menuName !== null && staffMenu.menuName !== '' ? staffMenu.menuName : staffMenu.menuEnName  : staffMenu.menuEnName}}
                                 </li>
+                            </ul>
+                        </div> -->
+                        <div class="customer-tt-table" v-if="mpType === '1'">
+                            <ul class="menu_eip">
+                                <!-- 在这里判断 -->
+                                <li v-for="staffMenu in staffMpMenu.menulist" @click="changeStaffMpMenu(staffMenu.systemUrl,staffMenu.menuUrl)" :class="{'z-crttab':staffMenu.menuUrl === staffMpMenuUrl}" :key="staffMenu">
+                                    {{lang === 'EN'? staffMenu.menuName !== null && staffMenu.menuName !== '' ? staffMenu.menuName : staffMenu.menuEnName  : staffMenu.menuEnName}}
+                                </li>
+                                 <!-- 有二级的菜单 -->
+                                <!-- <li v-for="staffMenu in staffMpMenu.menulist"  :class="{'z-crttab':staffMenu.menuUrl === staffMpMenuUrl}" :key="staffMenu">
+                                    <t-dropdown placement="bottom-start" style="width:100%">
+                                        <div class="menu__submenu-title" @click="changeStaffMpMenu(staffMenu.systemUrl,staffMenu.menuUrl)">
+                                            {{lang === 'EN'? staffMenu.menuName !== null && staffMenu.menuName !== '' ? staffMenu.menuName : staffMenu.menuEnName  : staffMenu.menuEnName}}
+                                        </div>
+                                        <t-dropdown-menu slot="list" class="dropdown__menu">
+                                            <t-dropdown-item>统计分析统计分析统计分析统计分析</t-dropdown-item>
+                                        </t-dropdown-menu>
+                                    </t-dropdown>
+                                </li> -->
+                                <!-- 有二级的菜单 -->
                             </ul>
                         </div>
                     </div>
