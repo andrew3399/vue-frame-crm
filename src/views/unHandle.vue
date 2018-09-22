@@ -2,7 +2,7 @@
     <div class="crm-wrapper">
         <!-- 查询部分 -->
         <div class="enquiries mt-10">
-            <!-- 标题 star-->
+            <!-- 标题 star-->       
             <div class="enquiries-title">
                 <span></span>
             </div>
@@ -103,7 +103,7 @@
           pageNum:1,
           pageSize:5,
           lang:'',
-          label:"",
+          title:"",
           applyOperId:"",
           taskStaffId:"100000000",
           applyTime:"",
@@ -122,11 +122,11 @@
         return [
           {
             title: this.$t('handle_local.handle.application_form_title'),
-            key: 'label',
+            key: 'title',
           },
           {
             title: this.$t('handle_local.handle.applicant_name'),
-            key: 'taskOperId',
+            key: 'applyOperId',
           },
           {
             title: this.$t('handle_local.handle.application_date'),
@@ -179,7 +179,7 @@
             queneId:that.fromItem.queneId,
             pageNum: that.fromItem.pageNum,
             pageSize: that.fromItem.pageSize,
-            label:that.fromItem.label,
+            title:that.fromItem.title,
             lang:that.fromItem.lang,
             applyOperId:that.fromItem.applyOperId,
             applyTime:that.fromItem.applyTime

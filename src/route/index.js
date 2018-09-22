@@ -100,7 +100,7 @@ export function beforeEach (to, from, next, authorization, requestInstance, cb) 
             })
           }
         }
-        
+
       } else {
         sessionStorage.clear()
         let code = getQuery('code')

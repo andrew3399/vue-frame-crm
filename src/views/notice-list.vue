@@ -45,7 +45,7 @@
 
                         <div class="notice-manage-content" @click="jumpToApproval(item.formUrl)">
                             <div class="text-left content-title">
-                                <span>{{item.label}}</span>
+                                <span>{{item.title}}</span>
                             </div>
                             <div class="text-right content-time">{{item.workflowCreateDate}}</div>
                         </div>
@@ -76,7 +76,7 @@
 
                         <div class="notice-manage-content" @click="jumpToApproval(item.formUrl)">
                             <div class="text-left content-title">
-                                <span>{{item.label}}</span>
+                                <span>{{item.title}}</span>
                             </div>
                             <div class="text-right content-time">{{item.workflowCreateDate}}</div>
                         </div>
