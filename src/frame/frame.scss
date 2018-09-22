@@ -675,7 +675,10 @@
     width: 100%;
     height: 40px;
     line-height: 40px;
-    background:#0084cf
+    background: url('../../assets/img/topbg1.png') no-repeat;
+}
+.customer-tt-title .eipBread{
+    font-size: 16px;
 }
 .customer-tt-table{
   width: 100%;
@@ -703,14 +706,13 @@
   border-top:1px solid #0085D0;
   border-bottom:1px solid #0085D0;
   color:#0085D0;
-  font-size:12px;
+  font-size:14px;
 }
 .customer-tt-table ul li:last-child{
   border-right:1px solid #0085D0;
   border-radius:0 5px 5px  0;
 }
 .customer-tt-table ul li:first-child{
-  border-right:1px solid #0085D0;
   border-radius:5px 0px 0px  5px;
 }
 .customer-tt-table ul .z-crttab{
@@ -735,3 +737,6 @@
     cursor:pointer;
 }
 
+.mptype-layout .menu .menu__item {
+    padding: 0 20px !important;
+}

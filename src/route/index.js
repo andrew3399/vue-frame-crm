@@ -9,13 +9,71 @@ import store from '../store/index.js'
 export function beforeEach (to, from, next, authorization, requestInstance, cb) {
   let localStorage = new LocalStorage()
   let sessionStorage = window.sessionStorage
-  let accessToken = localStorage.get('access_token')
-  let refreshToken = localStorage.get('refresh_token')
-  let sessionTime = localStorage.get('session_time')
+  let redirectUri = authorization.redirect_uri
   // 路由拦截 根据路由配置中meta.requireAuth判断是否需要登录
   let locationHref = window.location.href;
   locationHref = locationHref.replace(/[?]{0,}code=\w*[&]{0,}/g, '');
   locationHref = locationHref.replace(/state=\w*[&]{0,}/g, '');
+  locationHref = locationHref.replace(/acd=\w*[&]{0,}/g, '');
+  // 从EIP跳转过来的菜单需要携带参数信息
+  console.log('======================= from ========================')
+  console.log(from)
+  console.log('======================= from end ========================')
+  let fromQuery = from.query;
+  let toAcd = to.query.acd;
+  let fromShowMenuHead = fromQuery.showMenuHead;
+  let fromMpId = fromQuery.mpId;
+  if (toAcd){
+    redirectUri = locationHref
+  }
+  if (toAcd && toAcd !== undefined && toAcd !== '' && toAcd === '1'){
+    localStorage.remove('access_token')
+    localStorage.remove('refresh_token')
+    localStorage.remove('session_time')
+    sessionStorage.clear()
+    to.query.acd = 0
+  }
+  let loginUserName = to.query.user
+  if (loginUserName && loginUserName !== ''){
+    sessionStorage.setItem('loginUserName',loginUserName)
+  }
+  if(fromShowMenuHead && fromShowMenuHead !== '' && fromMpId && fromMpId !== '' && !to.query.showMenuHead && !to.query.mpId){
+    to.query.showMenuHead = fromShowMenuHead
+    to.query.mpId = fromMpId
+    next({
+      path: to.path,
+      query: to.query
+    })
+    return;
+  } else if(!to.query.showMenuHead && !to.query.mpId){
+    let documentReferrer = document.referrer
+    let refShowMenuHead = '';
+    let refMpId = '';
+    let referShowMenuHeadQuery = documentReferrer.match(new RegExp('[\?\&]showMenuHead=([^\&]+)', 'i'));
+    let referMpIdQuery = documentReferrer.match(new RegExp('[\?\&]mpId=([^\&]+)', 'i'));
+    if (referShowMenuHeadQuery !== null && referShowMenuHeadQuery.length > 1){
+      refShowMenuHead = referShowMenuHeadQuery[1]
+    }
+    if (referMpIdQuery !== null && referMpIdQuery.length > 1){
+      refMpId = referMpIdQuery[1]
+    }
+    if ( refShowMenuHead && refShowMenuHead !== '' && refMpId && refMpId !== '' ){
+      to.query.showMenuHead = refShowMenuHead
+      to.query.mpId = refMpId
+      next({
+        path: to.path,
+        query: to.query
+      })
+      return;
+    }
+  }
+
+  console.log('======================= to ========================')
+  console.log(to)
+  console.log('======================= to end ========================')
+  let accessToken = localStorage.get('access_token')
+  let refreshToken = localStorage.get('refresh_token')
+  let sessionTime = localStorage.get('session_time')
   //校验是否有菜单权限信息
   let authorMenuArray = JSON.parse(sessionStorage.getItem('authorMenuArray'))
   let routeArr = ['/res', '/cust', '/order', '/acct','/mks', '/rpt', '/prod', '/odp', '/base', '/']
@@ -141,16 +199,15 @@ export function beforeEach (to, from, next, authorization, requestInstance, cb) 
               }
             })
           } else {
-            let redirectUri = authorization.redirect_uri
-            if (showMenuHead !== ''){
+            if (showMenuHead !== '' && redirectUri.indexOf('showMenuHead=') < 0){
               if (redirectUri.indexOf('?') > -1){
                 redirectUri = redirectUri + '&showMenuHead=' + showMenuHead
               } else {
                 redirectUri = redirectUri + '?showMenuHead=' + showMenuHead
               }
             }
-            if (mpId !== ''){
-              if (redirectUri.indexOf('?') > -1){
+            if (mpId !== '' && redirectUri.indexOf('mpId=') < 0){
+              if (redirectUri.indexOf('?') > -1 ){
                 redirectUri = redirectUri + '&mpId=' + mpId
               } else {
                 redirectUri = redirectUri + '?mpId=' + mpId

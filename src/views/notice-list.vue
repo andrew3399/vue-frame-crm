@@ -1,5 +1,10 @@
 <style>
-    .selectTable .table__row td:first-child{text-indent:0px !important;}
+    .res-selectTable .cmi-tab .table__header table th:first-child{
+        text-indent: 0px !important;
+    }
+    .res-selectTable .table__row td:first-child{
+        text-indent: 0px !important;
+    }
     .table-aa.cmi-tab .table__cell{display: grid !important;}
 </style>
 <template>
@@ -144,7 +149,7 @@
 
             <div  class="selectTable">
                 <!-- 查询结果tab star-->
-                <div class="enquiries-tab">
+                <div class="enquiries-tab" class="res-selectTable">
                     <div class="cmi-tab mt-15 table-aa">
                         <t-table  border :columns="columns" :data="queryData" :all-ellipsis="true"></t-table>
                     </div>
@@ -393,23 +398,25 @@
           },
          queryMyTasks(val){
            this.$nextTick(() => {
-             this.instance.get(this.authorization.queryMyTasks, {
-               params: {
-                 lanager: this.lang,
-                 pageNum: this.taskPageNo,
-                 pageSize: this.taskPageSize,
-                 queryType: val
-               }
-             }).then(res => {
-               this.queryData = [];
-               this.taskTotal = 0;
-               if (res.data.success) {
-                 this.queryData = res.data.result.result == null ? [] : res.data.result.result;
-                 this.taskTotal = res.data.result.count;
-               }
-             }).catch(res => {
-               this.$Message.warning(this.$t('frame.warning'))
-             })
+             if(this.authorization.queryMyTasks && this.authorization.queryMyTasks !== ''){
+               this.instance.get(this.authorization.queryMyTasks, {
+                 params: {
+                   lanager: this.lang,
+                   pageNum: this.taskPageNo,
+                   pageSize: this.taskPageSize,
+                   queryType: val
+                 }
+               }).then(res => {
+                 this.queryData = [];
+                 this.taskTotal = 0;
+                 if (res.data.success) {
+                   this.queryData = res.data.result.result == null ? [] : res.data.result.result;
+                   this.taskTotal = res.data.result.count;
+                 }
+               }).catch(res => {
+                 this.$Message.warning(this.$t('frame.warning'))
+               })
+             }
              this.initFlag = true;
            })
            },
@@ -424,7 +431,8 @@
            window.open("/cust/mod-task?oper=U&completeFlag=1&taskId="+taskRow.taskId +"&workId="+taskRow.workId,"_self");
           },
             getBulletinList (params) {
-              this.$nextTick(() => {
+              let that = this
+              if (this.authorization.bulletinListUri && this.authorization.bulletinListUri !== ''){
                 this.instance.get(this.authorization.bulletinListUri, {
                   params: {
                     pageNo: this.pageNo,
@@ -444,67 +452,51 @@
                 }).catch(res => {
                   this.$Message.warning(this.$t('frame.warning'))
                 })
-              })
+              }
             },
              getUnHandleList(){
-                debugger
                 let that = this
-                this.instance.get(this.authorization.queryUnhandle, {
-                    params: {
-                            taskStaffId:that.fromItem.taskStaffId,
-                            stationId:that.fromItem.stationId,
-                            queneId:that.fromItem.queneId,
-                            pageNum: that.fromItem.pageNum,
-                            pageSize: that.fromItem.pageSize,
-                            title:that.fromItem.title,
-                            lang:that.fromItem.lang,
-                            applyOperId:that.fromItem.applyOperId,
-                            applyTime:that.fromItem.applyTime
-                        }
-                }).then(ret => {
-                    // console.log(JSON.stringify(ret.data))
-
-
-                    // that.total = ret.data.result.count
-                    that.handleItems = ret.data.result.result
-                    // that.fromItem.formKey = ret.data.result.result.extAttr.formKey
-
-
-                    //if()
-
-                }).catch(ret => {
-                        this.$Message.warning(this.$t('frame.warning'))
-                })
+               if (this.authorization.queryUnhandle && this.authorization.queryUnhandle !== ''){
+                 this.instance.get(this.authorization.queryUnhandle, {
+                   params: {
+                     taskStaffId:that.fromItem.taskStaffId,
+                     stationId:that.fromItem.stationId,
+                     queneId:that.fromItem.queneId,
+                     pageNum: that.fromItem.pageNum,
+                     pageSize: that.fromItem.pageSize,
+                     title:that.fromItem.title,
+                     lang:that.fromItem.lang,
+                     applyOperId:that.fromItem.applyOperId,
+                     applyTime:that.fromItem.applyTime
+                   }
+                 }).then(ret => {
+                   that.handleItems = ret.data.result.result
+                 }).catch(ret => {
+                   this.$Message.warning(this.$t('frame.warning'))
+                 })
+               }
             },
             getHandleList(){
                  let that = this
-                 debugger
-                this.instance.get(this.authorization.queryHandle, {
+                if (this.authorization.queryHandle && this.authorization.queryHandle !== ''){
+                  this.instance.get(this.authorization.queryHandle, {
                     params: {
-                            taskStaffId:that.fromItem.taskStaffId,
-                            stationId:that.fromItem.stationId,
-                            queneId:that.fromItem.queneId,
-                            pageNum: that.fromItem.pageNum,
-                            pageSize: that.fromItem.pageSize,
-                            title:that.fromItem.title,
-                            lang:that.fromItem.lang,
-                            applyOperId:that.fromItem.applyOperId,
-                            applyTime:that.fromItem.applyTime
-                        }
-                }).then(ret => {
-                    // console.log(JSON.stringify(ret.data))
-
-                    debugger
-                    // that.total = ret.data.result.count
+                      taskStaffId:that.fromItem.taskStaffId,
+                      stationId:that.fromItem.stationId,
+                      queneId:that.fromItem.queneId,
+                      pageNum: that.fromItem.pageNum,
+                      pageSize: that.fromItem.pageSize,
+                      title:that.fromItem.title,
+                      lang:that.fromItem.lang,
+                      applyOperId:that.fromItem.applyOperId,
+                      applyTime:that.fromItem.applyTime
+                    }
+                  }).then(ret => {
                     that.unHandleItems = ret.data.result.result
-                    // that.fromItem.formKey = ret.data.result.result.extAttr.formKey
-
-
-                    //if()
-
-                }).catch(ret => {
-                        this.$Message.warning(this.$t('frame.warning'))
-                })
+                  }).catch(ret => {
+                    this.$Message.warning(this.$t('frame.warning'))
+                  })
+                }
             },
            handleChooseTask(){
 
