@@ -255,6 +255,10 @@
             </div>
             <div :class="[{'layout-main': showMenuHead !== '4'},{'hidenNavTop': showMenuHead === '5'},{'showMoreNav': showMenuHead === '4'}]">
                 <div class="layout-main--content">
+                    <!--
+                        showMenuHead: 4  EIP集成隐藏菜单 头部信息
+                                      5  隐藏菜单栏 头部信息
+                    -->
                     <div class="bread-crumbs cmi-bread-crumbs-wrap" v-if="breadcrumbArr && showMenuHead !== '4' && showMenuHead !== '5'">
                         <div class="row ml-0 mr-0">
                             <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12 col-xl-12 pl-0">
@@ -267,19 +271,38 @@
                             </div>
                         </div>
                     </div>
+                    <!-- EIP 集成导航栏和菜单栏 -->
                     <div class="bg-white pt-10" style="padding-bottom: 10px;" v-if="showMenuHead === '4'">
                         <div class="customer-tt-title pl-10">
                             <span class="eipBread">
                                 {{lang === 'EN' ? staffMpMenu.mpNamecn : staffMpMenu.mpNameus}}
                             </span>
                         </div>
-                        <div class="customer-tt-table">
+                        <div class="customer-tt-table" v-if="mpType === '1'">
                             <ul class="menu" >
                                 <li v-for="staffMenu in staffMpMenu.menulist" @click="changeStaffMpMenu(staffMenu.systemUrl,staffMenu.menuUrl)" :class="{'z-crttab':staffMenu.menuUrl === staffMpMenuUrl}">
                                     {{lang === 'EN'? staffMenu.menuName !== null && staffMenu.menuName !== '' ? staffMenu.menuName : staffMenu.menuEnName  : staffMenu.menuEnName}}
                                 </li>
                             </ul>
                         </div>
+                    </div>
+                    <div class="crm-wrapper mptype-layout" v-if="mpType === '2' && mpTreeData && mpTreeData.length">
+                        <t-menu type="light" mode="horizontal"
+                                @on-select="selectMpMenu">
+                            <template v-for="item in mpTreeData">
+                                <t-menu-item v-if="!item.children || item.children.length < 0" :name="item.systemUrl + ';'+ item.menuUrl">
+                                    {{lang === 'EN' ? item.menuName : item.menuEnName}}
+                                </t-menu-item>
+                                <t-submenu v-else :name="item.menuUrl">
+                                    <template slot="title">
+                                        {{lang === 'EN' ? item.menuName : item.menuEnName}}
+                                    </template>
+                                    <t-menu-item v-for="childrenItem in item.children" :name="childrenItem.systemUrl + ';' + childrenItem.menuUrl">
+                                        {{lang === 'EN' ? childrenItem.menuName : childrenItem.menuEnName}}
+                                    </t-menu-item>
+                                </t-submenu>
+                            </template>
+                        </t-menu>
                     </div>
                     <router-view v-if="!isIframeContent"></router-view>
                     <iframe v-if="isIframeContent" :width="clientWidth" height="1000" :src="iframeUrl" frameborder="0"></iframe>
@@ -298,7 +321,7 @@
     import ClickoutSide from './clickoutside.js'
     import SessionStorage from '../utils/sessionStorage.js'
     import LocalStorage from '../utils/localStorage.js'
-    import {transData, getQueryData, getQuery, uuid} from '../utils/utils.js'
+    import {transData, getQueryData, getQuery, uuid, translateMpMenuData} from '../utils/utils.js'
     import * as Constant from '../store/constant.js'
     import {mapMutations, mapState} from 'vuex'
     import {Base64} from 'js-base64'
@@ -453,15 +476,21 @@
                 lang: 'EN',
                 tabs: 'tab-1',
                 scheduleTime: 0,
-              staffMpMenu:{
-                mpNameus: '',
-                mpNamecn: '',
-                menulist: []
-              },
-              staffMenuFuncMap: {}
+                staffMpMenu:{
+                   mpNameus: '',
+                   mpNamecn: '',
+                   menulist: []
+                },
+                staffMenuFuncMap: {},
+                mpType:'1',
+                translateMpMenuMap:{}
             }
         },
         computed: {
+            mpTreeData(){
+              console.log(this.staffMpMenu.menulist)
+              return this.staffMpMenu.menulist
+            },
             breadcrumbArr(){
                 debugger
                 return this.$store.state.storeModule.breadcrumbArr
@@ -518,9 +547,44 @@
           '$route'(to,from){
             // 监听路由变化情况，切换对应的面包屑信息
             this.getParentMenu()
+            // 判断跳转过来的路由信息上面是否有mpType
+            if (to.query.mpType && to.query.mpType !== ''){
+              this.mpType = to.query.mpType
+            } else {
+              this.mpType = '1'
+              this.staffMpMenu.menulist = []
+            }
+            console.log('mpType:'+this.mpType)
+            if (this.mpType === '2') {
+              let frameBaseInfo = JSON.parse(sessionStorage.getItem('frame_base_info'))
+              if (frameBaseInfo && frameBaseInfo !== '' && frameBaseInfo.staffMenue){
+                let menuListInfo = frameBaseInfo.staffMenue
+                this.translateMpMenuMap = translateMpMenuData(menuListInfo, 'menuId', 'menuPid', 'children', 'menuOrder')
+                let routePath = this.$route.path
+                console.log(this.translateMpMenuMap)
+                console.log('routePath:'+routePath)
+                for( let tempMpMenuInfoKey in this.translateMpMenuMap){
+                  if (tempMpMenuInfoKey.indexOf('_MENU_URL') >= 0
+                    && this.translateMpMenuMap[tempMpMenuInfoKey].indexOf(routePath) >= 0) {
+                    let menuId = tempMpMenuInfoKey.substring(0,tempMpMenuInfoKey.indexOf('_MENU_URL'))
+                    this.staffMpMenu.menulist = this.translateMpMenuMap[menuId + '_MENU']
+                    break;
+                  }
+                }
+                console.log(this.translateMpMenuMap)
+              }
+            }
           }
         },
         methods: {
+          selectMpMenu(name){
+            if (name === null || name === undefined
+              || name === '' || name.indexOf(';') < 0){
+              return;
+            }
+            let urlInfoArray = name.split(';')
+            this.changeStaffMpMenu(urlInfoArray[0],urlInfoArray[1] + '?mpType=2')
+          },
           getClientWidth(){
             let clientWidth = document.body.clientWidth || document.body.offsetWidth
             return clientWidth
@@ -535,8 +599,8 @@
           },
           getBaseInfo(){
             let that = this
-              if (this.authorization != undefined && this.authorization.baseInfoUrl != undefined
-                && this.authorization.baseInfoUrl != '') {
+              if (this.authorization !== undefined && this.authorization.baseInfoUrl !== undefined
+                && this.authorization.baseInfoUrl !== '') {
               this.instance.post(this.authorization.baseInfoUrl,{}).then(res=>{
                 let resData = res.data;
                 sessionStorage.setItem('frame-base-info',JSON.stringify(resData))
@@ -576,14 +640,14 @@
           changeStaffMpMenu(systemUrl,url){
             console.log('changeStaffMpMenu:  ' + url)
             this.staffMpMenuUrl = url
-            if (url.indexOf('showMenuHead=4') === -1){
+            if (url.indexOf('showMenuHead=4') === -1 && this.$route.query.showMenuHead){
               if (url.indexOf('?') > -1){
                 url = url + "&showMenuHead=4"
               } else{
                 url = url + "?showMenuHead=4"
               }
             }
-            if(this.mpId !== '' && url.indexOf('mpId') === -1){
+            if(this.mpId && this.mpId !== '' && url.indexOf('mpId') === -1 && this.$route.query.mpId){
               url = url + "&mpId=" + this.mpId
             }
             let routePath = this.$route.matched[0].path
@@ -631,11 +695,26 @@
                 mpId: pathParams.mpId
               }).then(function(ret){
                 console.log(ret)
-                if (ret.status === 200 && ret.data != null){
+                if (ret.status === 200 && ret.data != null && that.mpType === '1'){
                   that.$store.state.storeModule.staffMpMenu = ret.data
                   that.staffMpMenu = ret.data
                   let menuList = ret.data.menulist
                   that.translateMpMenu(menuList)
+                } else if(ret.status === 200 && ret.data != null && that.mpType === '2'){
+                  that.$store.state.storeModule.staffMpMenu = ret.data
+                  that.staffMpMenu = ret.data
+                  that.translateMpMenuMap = translateMpMenuData(that.staffMpMenu.menulist, 'menuId', 'menuPid', 'children', 'menuOrder')
+                  let routePath = that.$route.path
+                  console.log(that.translateMpMenuMap)
+                  console.log('routePath:'+routePath)
+                  for( let tempMpMenuInfoKey in this.translateMpMenuMap){
+                    if (tempMpMenuInfoKey.indexOf('_MENU_URL') >= 0
+                      && that.translateMpMenuMap[tempMpMenuInfoKey].indexOf(routePath) >= 0) {
+                      let menuId = tempMpMenuInfoKey.substring(0,tempMpMenuInfoKey.indexOf('_MENU_URL'))
+                      that.staffMpMenu.menulist = that.translateMpMenuMap[menuId + '_MENU']
+                      break;
+                    }
+                  }
                 }
               }).catch(function(e){
                 console.error(e)
@@ -670,14 +749,9 @@
                 if (parthMenuArray != null && parthMenuArray.length > 0 && that.authorization.getStaffMenuFunc !== undefined) {
                   that.$store.state.storeModule.staffMenuFunc = []
                   let currentMenu = parthMenuArray[parthMenuArray.length - 1]
-                    console.log(frameBaseInfo)
                   if (frameBaseInfo && frameBaseInfo != null && frameBaseInfo.staffMenuFunsMap != null
                    && frameBaseInfo.staffMenuFunsMap !== undefined){
-                //   let frameBaseInfo = localStorage.get('frame_base_info')
-                //   if (frameBaseInfo && frameBaseInfo != null){
-                    console.log('menuId:' + currentMenu.menuId)
                     that.$store.state.storeModule.staffMenuFunc = frameBaseInfo.staffMenuFunsMap[currentMenu.menuId]
-                    console.log(that.$store.state.storeModule.staffMenuFunc )
                   }
                   if (that.$store.state.storeModule.staffMenuFunc !== undefined && that.$store.state.storeModule.staffMenuFunc.length <= 0){
                     that.instance.post(that.authorization.getStaffMenuFunc, {
@@ -688,6 +762,34 @@
                       }
                     })
                   }
+                } else {
+                  that.instance.post(that.authorization.parentMenuUri, {
+                    url: that.$route.fullPath,
+                    params: that.$route.params
+                  }).then(function (ret) {
+                    if (ret.data.success) {
+                      let parthMenuArray = ret.data.result
+                      if (parthMenuArray != null && parthMenuArray.length > 0 && that.authorization.getStaffMenuFunc !== undefined) {
+                        that.$store.state.storeModule.staffMenuFunc = []
+                        let currentMenu = parthMenuArray[parthMenuArray.length - 1]
+                        if (frameBaseInfo && frameBaseInfo != null && frameBaseInfo.staffMenuFunsMap != null
+                          && frameBaseInfo.staffMenuFunsMap !== undefined){
+                          that.$store.state.storeModule.staffMenuFunc = frameBaseInfo.staffMenuFunsMap[currentMenu.menuId]
+                        }
+                        if (that.$store.state.storeModule.staffMenuFunc !== undefined && that.$store.state.storeModule.staffMenuFunc.length <= 0){
+                          that.instance.post(that.authorization.getStaffMenuFunc, {
+                            menuId: currentMenu.menuId
+                          }).then(function (res) {
+                            if (res != null && res !== '') {
+                              that.$store.state.storeModule.staffMenuFunc = res.data
+                            }
+                          })
+                        }
+                      }
+                      that.$store.state.storeModule.breadcrumbArr = []
+                      that.$store.state.storeModule.breadcrumbArr = ret.data.result
+                    }
+                  })
                 }
                 that.$store.state.storeModule.breadcrumbArr = []
                 that.$store.state.storeModule.breadcrumbArr = ret.data.result
@@ -981,13 +1083,25 @@
                * 先找出这一条数据，并将其 menuName 组成一个数组
                */
               this.translateMenu = transData(res, 'menuId', 'menuPid', 'children', 'menuOrder')
+              this.translateMpMenuMap = translateMpMenuData(res, 'menuId', 'menuPid', 'children', 'menuOrder')
+              let routePath = this.$route.path
+              console.log(this.translateMpMenuMap)
+              console.log('routePath:'+routePath)
+              for( let tempMpMenuInfoKey in this.translateMpMenuMap){
+                 if (tempMpMenuInfoKey.indexOf('_MENU_URL') >= 0
+                    && this.translateMpMenuMap[tempMpMenuInfoKey].indexOf(routePath) >= 0) {
+                   let menuId = tempMpMenuInfoKey.substring(0,tempMpMenuInfoKey.indexOf('_MENU_URL'))
+                   this.staffMpMenu.menulist = this.translateMpMenuMap[menuId + '_MENU']
+                   break;
+                 }
+              }
+              console.log(this.translateMpMenuMap)
               /**
                * 设置自动展开
                */
               this.$nextTick(() => {
                 let route = localStorage.get('aid-path') || this.$route.path || getQuery('path') || '/'
                 let queryName = getQueryData(res, 'menuId', 'menuPid', decodeURIComponent(route), 'menuName')
-                console.log(queryName)
                 this.queryActiveMenu = queryName.name
                 this.queryOpenName = queryName.names
                 let routeArr2 = ['/res', '/cust', '/order', '/acct','/mks', '/rpt', '/prod', '/odp', '/base', '/']
@@ -1099,6 +1213,11 @@
               this.getBaseInfo();
             }
           }
+          let routeQuery = this.$route.query
+          if (routeQuery.mpType && routeQuery.mpType !== ''){
+              this.mpType = routeQuery.mpType
+          }
+          console.log('mpType:' + this.mpType)
         },
         beforeMount(){
             this.getParentMenu()
