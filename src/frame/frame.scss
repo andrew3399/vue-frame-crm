@@ -742,9 +742,6 @@
 }
 
 //下拉
-.w_100{
-    width: 100%;
-}
 .menu_eip{
     display: block;
     margin: 0;
@@ -754,5 +751,5 @@
     position: relative;
 }
 .dropdown__menu{
-    margin:0;
+    margin:0!important;
 }
