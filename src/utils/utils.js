@@ -66,20 +66,20 @@ export function transData (original, idField, pidField, childrenField, orderFiel
    * 第一层将对象数组转化成JSON数据
    */
   for (; i < len; i++) {
-    if (!hash[original[i][id]] && original[i].treeDisplay === 'Y') {
+    if (!hash[original[i][id]] && original[i].treeDisplay === 'Y' && original[i].menuType !== '5' ) {
       hash[original[i][id]] = original[i]
     }
   }
   for (; j < len; j++) {
     let aVal = original[j]
     let hashVP = hash[aVal[pid]]
-    if (hashVP && 'Y' === aVal.treeDisplay) {
+    if (hashVP && 'Y' === aVal.treeDisplay && aVal.menuType !== '5') {
       !hashVP[children] && (hashVP[children] = [])
       hashVP[children].push(aVal)
       hashVP[children].sort((a, b) => {
         return a[menuOrder] - b[menuOrder]
       })
-    } else if ('Y' === aVal.treeDisplay) {
+    } else if ('Y' === aVal.treeDisplay && aVal.menuType !== '5') {
       result.push(aVal)
     }
   }
@@ -145,3 +145,79 @@ export function getQueryData (original, idField, pidField, path, name) {
     names: names
   }
 }
+
+
+
+
+/**
+ * 先将数组转化成有序数组
+ * json格式转树状结构
+ * @param   {json}      json数据
+ * @param   {String}    id的字符串
+ * @param   {String}    父id的字符串
+ * @param   {String}    children的字符串
+ * @return  {Array}     数组
+ */
+export function translateMpMenuData (original, idField, pidField, childrenField, orderField) {
+  if (original && original.length) {
+    /* 做升序处理 Array.sort() */
+    original.sort((a, b) => {
+      return a[idField] - b[idField]
+    })
+  } else {
+    return {}
+  }
+  let result = []
+  let hash = {}
+  const id = idField
+  const pid = pidField
+  const children = childrenField
+  const menuOrder = orderField
+  let i = 0
+  let j = 0
+  let len = original.length
+  /**
+   * 第一层将对象数组转化成JSON数据
+   */
+  for (; i < len; i++) {
+    if (!hash[original[i][id]] && original[i].treeDisplay === 'Y' && original[i].menuType === '5') {
+      hash[original[i][id]] = original[i]
+    }
+  }
+  for (; j < len; j++) {
+    let aVal = original[j]
+    let hashVP = hash[aVal[pid]]
+    if (hashVP && 'Y' === aVal.treeDisplay && aVal.menuType === '5') {
+      !hashVP[children] && (hashVP[children] = [])
+      hashVP[children].push(aVal)
+      hashVP[children].sort((a, b) => {
+        return a[menuOrder] - b[menuOrder]
+      })
+    } else if ('Y' === aVal.treeDisplay && aVal.menuType === '5') {
+      result.push(aVal)
+    }
+  }
+  /* 做升序处理 */
+  result.sort((a, b) => {
+    return a[menuOrder] - b[menuOrder]
+  })
+  /**
+   * 遍历结果 切换成对象的形式进行保存
+   */
+  let resultMap = {}
+  for(let k = 0; k < result.length; k++){
+    let tempResult = result[k]
+    let menuKey = tempResult[pid]
+    if (!resultMap[menuKey]) {
+      resultMap[menuKey] = new Array()
+    }
+    resultMap[menuKey].push(tempResult)
+
+    let tempMenuUrl = tempResult.menuUrl
+    if (tempMenuUrl && tempMenuUrl.indexOf('?') >= 0) {
+      tempMenuUrl = tempMenuUrl.substring(0,tempMenuUrl.indexOf('?'))
+    }
+  }
+  return resultMap
+}
+

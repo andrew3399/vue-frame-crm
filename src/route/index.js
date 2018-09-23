@@ -7,6 +7,7 @@ import {Base64} from 'js-base64'
 import store from '../store/index.js'
 
 export function beforeEach (to, from, next, authorization, requestInstance, cb) {
+  let routeArr = ['/res', '/cust', '/order', '/acct','/mks', '/rpt', '/prod', '/odp', '/base', '/']
   let localStorage = new LocalStorage()
   let sessionStorage = window.sessionStorage
   let redirectUri = authorization.redirect_uri
@@ -21,6 +22,7 @@ export function beforeEach (to, from, next, authorization, requestInstance, cb) 
   console.log('======================= from end ========================')
   let fromQuery = from.query;
   let toAcd = to.query.acd;
+  let toApMenu = to.query.apMenu;
   let fromShowMenuHead = fromQuery.showMenuHead;
   let fromMpId = fromQuery.mpId;
   if (toAcd){
@@ -37,16 +39,41 @@ export function beforeEach (to, from, next, authorization, requestInstance, cb) 
   if (loginUserName && loginUserName !== ''){
     sessionStorage.setItem('loginUserName',loginUserName)
   }
+  let documentReferrer = document.referrer
+  let fromMpType = fromQuery.mpType
+  let fromMenuId = fromQuery.menuId
+  let mustChangePage = false;
+  if (fromMpType && fromMpType !== '' && fromMenuId && fromMenuId !== ''
+    && !to.query.mpType && !to.query.menuId && !toApMenu && routeArr.indexOf(to.path) < 0){
+    to.query.mpType = fromMpType
+    to.query.menuId = fromMenuId
+    mustChangePage = true
+  } else if(!to.query.mpType && !to.query.menuId && !toApMenu && routeArr.indexOf(to.path) < 0){
+    let referMpTypeQuery = documentReferrer.match(new RegExp('[\?\&]mpType=([^\&]+)', 'i'));
+    let referMenuIdQuery = documentReferrer.match(new RegExp('[\?\&]menuId=([^\&]+)', 'i'));
+    if (referMpTypeQuery && referMpTypeQuery !== '' && referMpTypeQuery.length
+      && referMenuIdQuery && referMenuIdQuery !== '' && referMenuIdQuery.length){
+      to.query.mpType = referMpTypeQuery[1]
+      to.query.menuId = referMenuIdQuery[1]
+      mustChangePage = true
+    }
+  }
+
+  //去除切换参数
+  locationHref = locationHref.replace(/[?]{0,}apMenu=\w*[&]{0,}/g, '');
   if(fromShowMenuHead && fromShowMenuHead !== '' && fromMpId && fromMpId !== '' && !to.query.showMenuHead && !to.query.mpId){
     to.query.showMenuHead = fromShowMenuHead
     to.query.mpId = fromMpId
+    mustChangePage = false
     next({
       path: to.path,
-      query: to.query
+      query: to.query,
+      params: to.params,
+      meta: to.meta,
+      name: to.name
     })
     return;
   } else if(!to.query.showMenuHead && !to.query.mpId){
-    let documentReferrer = document.referrer
     let refShowMenuHead = '';
     let refMpId = '';
     let referShowMenuHeadQuery = documentReferrer.match(new RegExp('[\?\&]showMenuHead=([^\&]+)', 'i'));
@@ -58,16 +85,30 @@ export function beforeEach (to, from, next, authorization, requestInstance, cb) 
       refMpId = referMpIdQuery[1]
     }
     if ( refShowMenuHead && refShowMenuHead !== '' && refMpId && refMpId !== '' ){
+      mustChangePage = false
       to.query.showMenuHead = refShowMenuHead
       to.query.mpId = refMpId
       next({
         path: to.path,
-        query: to.query
+        query: to.query,
+        params: to.params,
+        meta: to.meta,
+        name: to.name
       })
       return;
     }
   }
+  if (mustChangePage){
+    next({
+      path: to.path,
+      query: to.query,
+      params: to.params,
+      meta: to.meta,
+      name: to.name
+    })
+    return
 
+  }
   console.log('======================= to ========================')
   console.log(to)
   console.log('======================= to end ========================')
@@ -76,7 +117,6 @@ export function beforeEach (to, from, next, authorization, requestInstance, cb) 
   let sessionTime = localStorage.get('session_time')
   //校验是否有菜单权限信息
   let authorMenuArray = JSON.parse(sessionStorage.getItem('authorMenuArray'))
-  let routeArr = ['/res', '/cust', '/order', '/acct','/mks', '/rpt', '/prod', '/odp', '/base', '/']
   let toPath = to.path
   if (to.meta && to.meta.requireAuth ) {
       if (accessToken && refreshToken && sessionTime) {

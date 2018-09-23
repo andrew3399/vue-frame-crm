@@ -683,7 +683,7 @@
 .customer-tt-table{
   width: 100%;
   display: inline-block;
-  padding:10px 10px;
+  padding:10px 15px;
   background:#E5F1FE;
 
 }
@@ -697,7 +697,6 @@
   float:left;
   cursor: pointer;
   width: 16.666%;
-  margin-bottom:4px;
   padding:0 10px;
   height:40px;
   line-height: 40px;
@@ -707,6 +706,35 @@
   border-bottom:1px solid #0085D0;
   color:#0085D0;
   font-size:14px;
+}
+
+.customer-tt-table-low{
+    width: 100%;
+    display: inline-block;
+    padding:10px 15px;
+    background:#E5F1FE;
+
+}
+.customer-tt-table-low ul{
+    float:left;
+    width:100%;
+    //border-right:1px solid #0085D0;
+
+}
+
+.customer-tt-table-low ul li{
+    float:left;
+    cursor: pointer;
+    margin-bottom:4px;
+    padding:0 20px;
+    height:40px;
+    line-height: 40px;
+    background: #EFF7FF;
+    border-left:1px solid #0085D0;
+    border-top:1px solid #0085D0;
+    border-bottom:1px solid #0085D0;
+    color:#0085D0;
+    font-size:14px;
 }
 .customer-tt-table ul li:last-child{
   border-right:1px solid #0085D0;
@@ -720,6 +748,17 @@
   color:#fff;
 }
 
+.customer-tt-table-low ul li:last-child{
+    border-right:1px solid #0085D0;
+    border-radius:0 5px 5px  0;
+}
+.customer-tt-table-low ul li:first-child{
+    border-radius:5px 0px 0px  5px;
+}
+.customer-tt-table-low ul .z-crttab{
+    background: #0085D0;
+    color:#fff;
+}
 
 .breadcrumbs{
     width: 100%;
@@ -731,6 +770,9 @@
 .breadcrumbs p a{
     padding-right: 6px;
     color:#48524f;
+}
+.canclick {
+    color: #48524f !important
 }
 .canclick:hover{
     color:#0085D0;

@@ -36,7 +36,7 @@
                                     <t-icon :type="item1.menuIcon" v-if="item1.menuIcon"></t-icon>
                                     <t-avatar size="sm" bg-state="success" :text="item1.rightTag" :dot="false"
                                               v-else></t-avatar>
-                                    <router-link :to="{ path: item1.menuUrl }"
+                                    <router-link :to="{ path: getRouterLinkUrl(item1.menuUrl) }"
                                                  v-if="item1.rightTag === tag && item1.menuUrl">
                                         <span class="sub-text" :title="lang === 'ZH'?item1.menuName:item1.menuEnName">{{lang === 'EN'?item1.menuName:item1.menuEnName}}</span>
                                     </router-link>
@@ -51,7 +51,7 @@
                                     <t-submenu v-if="item2.children && item2.children.length" :name="item2.menuName"
                                                class="second-submenu">
                                         <template slot="title">
-                                            <router-link :to="{ path: item2.menuUrl}"
+                                            <router-link :to="{ path: getRouterLinkUrl(item2.menuUrl)}"
                                                          v-if="item2.rightTag === tag && item2.menuUrl">
                                                 <span class="sub-text" :title="lang === 'ZH'?item2.menuName:item2.menuEnName">{{lang === 'EN'?item2.menuName:item2.menuEnName}}</span>
                                             </router-link>
@@ -68,7 +68,7 @@
                                                        :name="item3.menuName" :id="x + '' +y" class="second-submenu">
                                                 <t-menu-item v-for="(item4, w) in item3.children" :name="item4.menuName"
                                                              :key="w" @click.native="getMenu(item4)" class="sec-item">
-                                                    <router-link :to="{ path: item4.menuUrl }"
+                                                    <router-link :to="{ path: getRouterLinkUrl(item4.menuUrl) }"
                                                                  v-if="item4.rightTag === tag && item4.menuUrl">
                                                         <span class="sub-text" :title="lang === 'EN'?item4.menuName:item4.menuEnName">{{lang === 'EN'?item4.menuName:item4.menuEnName}}</span>
                                                     </router-link>
@@ -84,7 +84,7 @@
                                             </t-submenu>
                                             <t-menu-item :name="item3.menuName" :key="z" @click.native="getMenu(item3)"
                                                          class="sec-item" v-else>
-                                                <router-link :to="{ path: item3.menuUrl }"
+                                                <router-link :to="{ path: getRouterLinkUrl(item3.menuUrl) }"
                                                              v-if="item3.rightTag === tag && item3.menuUrl">
                                                     <span class="sub-text"
                                                           :title="lang === 'EN'?item3.menuName:item3.menuEnName">{{lang === 'EN'?item3.menuName:item3.menuEnName}}</span>
@@ -102,7 +102,7 @@
                                         </template>
                                     </t-submenu>
                                     <t-menu-item :name="item2.menuName" v-else>
-                                        <router-link :to="{ path: item2.menuUrl }"
+                                        <router-link :to="{ path: getRouterLinkUrl(item2.menuUrl) }"
                                                      v-if="item2.rightTag === tag && item2.menuUrl">
                                             <span class="sub-text" :title="lang === 'ZH'?item2.menuName:item2.menuEnName">{{lang === 'EN'?item2.menuName:item2.menuEnName}}</span>
                                         </router-link>
@@ -119,7 +119,7 @@
                                 <t-icon :type="item1.menuIcon" v-if="item1.menuIcon"></t-icon>
                                 <t-avatar size="sm" bg-state="success" :text="item1.rightTag" :dot="false"
                                           v-else></t-avatar>
-                                <router-link :to="{ path: item1.menuUrl }"
+                                <router-link :to="{ path: getRouterLinkUrl(item1.menuUrl) }"
                                              v-if="item1.rightTag === tag && item1.menuUrl">
                                     <span class="sub-text" :title="lang === 'ZH'?item1.menuName:item1.menuEnName">{{lang === 'EN'?item1.menuName:item1.menuEnName}}</span>
                                 </router-link>
@@ -263,69 +263,77 @@
                         <div class="row ml-0 mr-0">
                             <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12 col-xl-12 pl-0">
                                 <div class="breadcrumbs">
-                                    <p  v-for="(item, $idx) in breadcrumbArr" :key="$idx"
-                                        :class="($idx > 0 && $idx <= breadcrumbArr.length - 2) ? 'canclick' : 'unclick'"
-                                        @click="($idx === breadcrumbArr.length - 1)?'': changeToPage(item.menuUrl)"><span> {{lang === 'EN' ? item.menuName : item.menuEnName}}
-                                    </span><span v-if="$idx <= breadcrumbArr.length - 2">></span></p>
+                                    <template v-for="(item, $idx) in breadcrumbArr" >
+                                        <router-link :to="{ path: getRouterLinkUrl(item.menuUrl) }" class="canclick"
+                                                v-if="item.rightTag === tag && $idx > 0 && $idx <= breadcrumbArr.length - 2 && item.menuUrl">
+                                            <span> {{lang === 'EN' ? item.menuName : item.menuEnName}}</span>
+                                            <span v-if="$idx <= breadcrumbArr.length - 2">></span>
+                                        </router-link>
+                                        <a  :key="$idx" v-else
+                                            class="unclick"
+                                            @click="($idx === breadcrumbArr.length - 1) && item.menuUrl ? '': changeToPage(item.menuUrl)">
+                                            <span> {{lang === 'EN' ? item.menuName : item.menuEnName}}</span>
+                                            <span v-if="$idx <= breadcrumbArr.length - 2">></span>
+                                        </a>
+                                    </template>
                                 </div>
                             </div>
                         </div>
                     </div>
                     <!-- EIP 集成导航栏和菜单栏 -->
-                    <div class="bg-white pt-10" style="padding-bottom: 10px;" v-if="showMenuHead === '4'">
+                    <div class="bg-white pt-10"  v-if="showMenuHead === '4'">
                         <div class="customer-tt-title pl-10">
                             <span class="eipBread">
                                 {{lang === 'EN' ? staffMpMenu.mpNamecn : staffMpMenu.mpNameus}}
                             </span>
                         </div>
-                        <!-- <div class="customer-tt-table" v-if="mpType === '1'">
+                         <div :class="{'customer-tt-table': mpTreeData && mpTreeData.length > 7,
+                                    'customer-tt-table-low': mpTreeData && mpTreeData.length <= 7}"
+                              v-if="mpType === '1'">
                             <ul class="menu" >
                                 <li v-for="staffMenu in staffMpMenu.menulist" @click="changeStaffMpMenu(staffMenu.systemUrl,staffMenu.menuUrl)" :class="{'z-crttab':staffMenu.menuUrl === staffMpMenuUrl}">
                                     {{lang === 'EN'? staffMenu.menuName !== null && staffMenu.menuName !== '' ? staffMenu.menuName : staffMenu.menuEnName  : staffMenu.menuEnName}}
                                 </li>
                             </ul>
-                        </div> -->
-                        <div class="customer-tt-table" v-if="mpType === '1'">
-                            <ul class="menu_eip">
-                                <!-- 在这里判断 -->
-                                <li v-for="staffMenu in staffMpMenu.menulist" @click="changeStaffMpMenu(staffMenu.systemUrl,staffMenu.menuUrl)" :class="{'z-crttab':staffMenu.menuUrl === staffMpMenuUrl}" :key="staffMenu">
-                                    {{lang === 'EN'? staffMenu.menuName !== null && staffMenu.menuName !== '' ? staffMenu.menuName : staffMenu.menuEnName  : staffMenu.menuEnName}}
-                                </li>
-                                 <!-- 有二级的菜单 -->
-                                <!-- <li v-for="staffMenu in staffMpMenu.menulist"  :class="{'z-crttab':staffMenu.menuUrl === staffMpMenuUrl}" :key="staffMenu">
-                                    <t-dropdown placement="bottom-start" style="width:100%">
-                                        <div class="menu__submenu-title" @click="changeStaffMpMenu(staffMenu.systemUrl,staffMenu.menuUrl)">
-                                            {{lang === 'EN'? staffMenu.menuName !== null && staffMenu.menuName !== '' ? staffMenu.menuName : staffMenu.menuEnName  : staffMenu.menuEnName}}
-                                        </div>
-                                        <t-dropdown-menu slot="list" class="dropdown__menu">
-                                            <t-dropdown-item>统计分析统计分析统计分析统计分析</t-dropdown-item>
-                                        </t-dropdown-menu>
-                                    </t-dropdown>
-                                </li> -->
-                                <!-- 有二级的菜单 -->
-                            </ul>
                         </div>
                     </div>
-                    <div class="crm-wrapper mptype-layout" v-if="mpType === '2' && mpTreeData && mpTreeData.length">
-                        <t-menu type="light" mode="horizontal"
-                                @on-select="selectMpMenu">
-                            <template v-for="item in mpTreeData">
-                                <t-menu-item v-if="!item.children || item.children.length < 0" :name="item.systemUrl + ';'+ item.menuUrl">
+                    <div :class="{'customer-tt-table': mpTreeData && mpTreeData.length > 7,
+                                    'customer-tt-table-low': mpTreeData && mpTreeData.length <= 7}"
+                         v-if="mpType === '2' && mpTreeData && mpTreeData.length">
+                        <ul class="menu_eip">
+                            <!-- 在这里判断 -->
+                            <template  v-for="item in mpTreeData">
+                                <li :class="{'z-crttab':item.menuUrl === $route.path}"
+                                          :key="item.menuId" @click="selectMpMenu(item.systemUrl + ';' + item.menuUrl,lang === 'EN' ? item.menuName : item.menuEnName)"
+                                          v-if="!item.children || item.children.length < 0">
                                     {{lang === 'EN' ? item.menuName : item.menuEnName}}
-                                </t-menu-item>
-                                <t-submenu v-else :name="item.menuUrl">
-                                    <template slot="title">
-                                        {{lang === 'EN' ? item.menuName : item.menuEnName}}
-                                    </template>
-                                    <t-menu-item v-for="childrenItem in item.children" :name="childrenItem.systemUrl + ';' + childrenItem.menuUrl">
-                                        {{lang === 'EN' ? childrenItem.menuName : childrenItem.menuEnName}}
-                                    </t-menu-item>
-                                </t-submenu>
+                                </li>
+                                <!-- 有二级的菜单 -->
+                                <li v-else :class="{'z-crttab':item.menuUrl === $route.path}" :key="item.menuId">
+                                    <t-dropdown placement="bottom" style="width: 100%;" v-on:on-visible-change="dropDownIconChange">
+                                        <div class="menu__submenu-title" >
+                                            {{lang === 'EN' ? item.menuName : item.menuEnName}}
+                                            <t-icon type="chevron-down"></t-icon>
+                                        </div>
+                                        <t-dropdown-menu slot="list" >
+                                            <t-dropdown-item  v-for="staffMenu in item.children" :key="staffMenu.menuId"
+                                                              v-on:on-click="selectMpMenu(staffMenu.systemUrl + ';' + staffMenu.menuUrl,
+                                                                                        lang === 'EN' ? '>' + item.menuName +  '>' + staffMenu.menuName
+                                                                                                      : '>' + item.menuEnName +  '>' + staffMenu.menuEnName)"
+                                                              :selected="staffMenu.menuUrl === $route.path"
+                                                              divided
+                                                              :name="staffMenu.systemUrl + ';' + staffMenu.menuUrl" :value="staffMenu.menuUrl">
+                                                {{lang === 'EN' ? staffMenu.menuName : staffMenu.menuEnName}}
+                                            </t-dropdown-item>
+                                        </t-dropdown-menu>
+                                    </t-dropdown>
+                                </li>
+                                <!-- 有二级的菜单 -->
                             </template>
-                        </t-menu>
+                        </ul>
                     </div>
-                    <router-view v-if="!isIframeContent"></router-view>
-                    <iframe v-if="isIframeContent" :width="clientWidth" height="1000" :src="iframeUrl" frameborder="0"></iframe>
+                    <router-view v-if="!isIframeContent" class="pt-10"></router-view>
+                    <iframe v-if="isIframeContent" class="pt-10" :width="clientWidth" height="1000" :src="iframeUrl" frameborder="0"></iframe>
                     <div class="pager-footer" v-if="showMenuHead !== '4' && showMenuHead !== '5'">
                     <p>{{pagerFooter}}</p>
                     </div>
@@ -474,6 +482,7 @@
                     staffNo: '',
                     HKTime:'',
                 },
+                dropDownIcon:'chevron-down',
                 isOpen: true,
                 isOpenOnMinWin: true,
                 openPosition: 'down',
@@ -501,6 +510,7 @@
                    mpNamecn: '',
                    menulist: []
                 },
+                tempStaffMpMenuName: '',
                 staffMenuFuncMap: {},
                 mpType:'1',
                 translateMpMenuMap:{}
@@ -508,7 +518,6 @@
         },
         computed: {
             mpTreeData(){
-              console.log(this.staffMpMenu.menulist)
               return this.staffMpMenu.menulist
             },
             breadcrumbArr(){
@@ -572,38 +581,49 @@
               this.mpType = to.query.mpType
             } else {
               this.mpType = '1'
-              this.staffMpMenu.menulist = []
             }
-            console.log('mpType:'+this.mpType)
-            if (this.mpType === '2') {
-              let frameBaseInfo = JSON.parse(sessionStorage.getItem('frame_base_info'))
+            this.staffMpMenu.menulist = []
+            if (this.mpType && this.mpType === '2') {
+              //解析菜单对应的MENU信息
+              let frameBaseInfo = JSON.parse(sessionStorage.getItem('frame-base-info'))
               if (frameBaseInfo && frameBaseInfo !== '' && frameBaseInfo.staffMenue){
                 let menuListInfo = frameBaseInfo.staffMenue
                 this.translateMpMenuMap = translateMpMenuData(menuListInfo, 'menuId', 'menuPid', 'children', 'menuOrder')
-                let routePath = this.$route.path
-                console.log(this.translateMpMenuMap)
-                console.log('routePath:'+routePath)
-                for( let tempMpMenuInfoKey in this.translateMpMenuMap){
-                  if (tempMpMenuInfoKey.indexOf('_MENU_URL') >= 0
-                    && this.translateMpMenuMap[tempMpMenuInfoKey].indexOf(routePath) >= 0) {
-                    let menuId = tempMpMenuInfoKey.substring(0,tempMpMenuInfoKey.indexOf('_MENU_URL'))
-                    this.staffMpMenu.menulist = this.translateMpMenuMap[menuId + '_MENU']
-                    break;
-                  }
-                }
-                console.log(this.translateMpMenuMap)
+                let menuId = this.$route.query.menuId
+                this.staffMpMenu.menulist = this.translateMpMenuMap[menuId ]
               }
             }
           }
         },
         methods: {
-          selectMpMenu(name){
-            if (name === null || name === undefined
-              || name === '' || name.indexOf(';') < 0){
+          dropDownIconChange(visible){
+            if (visible){
+              this.dropDownIcon = "chevron-up"
+            } else {
+              this.dropDownIcon = "chevron-down"
+            }
+          },
+          getRouterLinkUrl(url){
+            if(url.indexOf('?') > 0){
+               return url + '&apMenu=1'
+            } else {
+              return url + '?apMenu=1'
+            }
+          },
+          selectMpMenu(url,mpMenuName){
+            if (url === null || url === undefined
+              || url === '' || url.indexOf(';') < 0){
               return;
             }
-            let urlInfoArray = name.split(';')
-            this.changeStaffMpMenu(urlInfoArray[0],urlInfoArray[1] + '?mpType=2')
+
+            if (this.lang === 'EN'){
+              this.staffMpMenu.mpNamecn = this.tempStaffMpMenuName + mpMenuName
+            } else {
+              this.staffMpMenu.mpNameus = this.tempStaffMpMenuName + mpMenuName
+            }
+            console.log('selectMpMenu:' + url)
+            let urlInfoArray = url.split(';')
+            this.changeStaffMpMenu(urlInfoArray[0],urlInfoArray[1] + '?mpType=2&menuId=' + this.$route.query.menuId)
           },
           getClientWidth(){
             let clientWidth = document.body.clientWidth || document.body.offsetWidth
@@ -653,18 +673,16 @@
               this.translateMenuInfo(this.menu);
               this.formRight.staffName = resData.staffName
               this.formRight.staffNO = resData.staffNo
-              // this.lang = resData.staffLanguage.toUpperCase()
-            // this.notices = resData.bulletinList
-            this.staffMenuFuncMap = resData.staffMenuFunsMap
+              this.staffMenuFuncMap = resData.staffMenuFunsMap
           },
           changeStaffMpMenu(systemUrl,url){
             console.log('changeStaffMpMenu:  ' + url)
             this.staffMpMenuUrl = url
-            if (url.indexOf('showMenuHead=4') === -1 && this.$route.query.showMenuHead){
+            if (url.indexOf('showMenuHead=') === -1 && this.$route.query.showMenuHead){
               if (url.indexOf('?') > -1){
-                url = url + "&showMenuHead=4"
+                url = url + "&showMenuHead=" + this.$route.query.showMenuHead
               } else{
-                url = url + "?showMenuHead=4"
+                url = url + "?showMenuHead=" + this.$route.query.showMenuHead
               }
             }
             if(this.mpId && this.mpId !== '' && url.indexOf('mpId') === -1 && this.$route.query.mpId){
@@ -674,7 +692,7 @@
             //RAP路径信息
             let rapPathStart = '.jsp';
             if (url.indexOf(rapPathStart) < 0){
-              if (url.indexOf(routePath) === -1 && this.showMenuHead === '4'){
+              if (url.indexOf(routePath) === -1){
                 this.changeToPage(systemUrl + url)
               } else {
                 this.$router.push(url)
@@ -714,7 +732,6 @@
               this.instance.post(this.authorization.getStaffMpMenue,{
                 mpId: pathParams.mpId
               }).then(function(ret){
-                console.log(ret)
                 if (ret.status === 200 && ret.data != null && that.mpType === '1'){
                   that.$store.state.storeModule.staffMpMenu = ret.data
                   that.staffMpMenu = ret.data
@@ -723,18 +740,10 @@
                 } else if(ret.status === 200 && ret.data != null && that.mpType === '2'){
                   that.$store.state.storeModule.staffMpMenu = ret.data
                   that.staffMpMenu = ret.data
+                  that.tempStaffMpMenuName = that.lang === 'EN' ? that.staffMpMenu.mpNamecn : that.staffMpMenu.mpNameus
                   that.translateMpMenuMap = translateMpMenuData(that.staffMpMenu.menulist, 'menuId', 'menuPid', 'children', 'menuOrder')
-                  let routePath = that.$route.path
-                  console.log(that.translateMpMenuMap)
-                  console.log('routePath:'+routePath)
-                  for( let tempMpMenuInfoKey in this.translateMpMenuMap){
-                    if (tempMpMenuInfoKey.indexOf('_MENU_URL') >= 0
-                      && that.translateMpMenuMap[tempMpMenuInfoKey].indexOf(routePath) >= 0) {
-                      let menuId = tempMpMenuInfoKey.substring(0,tempMpMenuInfoKey.indexOf('_MENU_URL'))
-                      that.staffMpMenu.menulist = that.translateMpMenuMap[menuId + '_MENU']
-                      break;
-                    }
-                  }
+                  let menuId = that.$route.query.menuId
+                  that.staffMpMenu.menulist = that.translateMpMenuMap[menuId]
                 }
               }).catch(function(e){
                 console.error(e)
@@ -997,7 +1006,11 @@
                 let sessionTime = localStorage.get('session_time')
                 let refreshToken = localStorage.get('refresh_token')
                 let that = this
-
+                if (url.indexOf('?') > -1){
+                  url = url + '&apMenu=1'
+                } else {
+                  url = url + '?apMenu=1'
+                }
                 if (sessionTime && !accessToken) {
                     that.instance.post(that.authorization.tokenUri +
                         '?grant_type=refresh_token' + '&refresh_token=' + encodeURIComponent(refreshToken) + '&scope=read', '', {
@@ -1085,7 +1098,7 @@
             // 获取menu数据
             getMenuCb() {
                 let that = this;
-              let frameBaseInfo = JSON.parse(sessionStorage.getItem('frame_base_info'))
+              let frameBaseInfo = JSON.parse(sessionStorage.getItem('frame-base-info'))
               if (frameBaseInfo != null && frameBaseInfo != ''){
                 let menuListInfo = frameBaseInfo.staffMenue
                 that.translateMenuInfo(menuListInfo);
@@ -1104,18 +1117,8 @@
                */
               this.translateMenu = transData(res, 'menuId', 'menuPid', 'children', 'menuOrder')
               this.translateMpMenuMap = translateMpMenuData(res, 'menuId', 'menuPid', 'children', 'menuOrder')
-              let routePath = this.$route.path
-              console.log(this.translateMpMenuMap)
-              console.log('routePath:'+routePath)
-              for( let tempMpMenuInfoKey in this.translateMpMenuMap){
-                 if (tempMpMenuInfoKey.indexOf('_MENU_URL') >= 0
-                    && this.translateMpMenuMap[tempMpMenuInfoKey].indexOf(routePath) >= 0) {
-                   let menuId = tempMpMenuInfoKey.substring(0,tempMpMenuInfoKey.indexOf('_MENU_URL'))
-                   this.staffMpMenu.menulist = this.translateMpMenuMap[menuId + '_MENU']
-                   break;
-                 }
-              }
-              console.log(this.translateMpMenuMap)
+              let menuId = this.$route.query.menuId
+              this.staffMpMenu.menulist = this.translateMpMenuMap[menuId ]
               /**
                * 设置自动展开
                */
