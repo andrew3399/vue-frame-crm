@@ -44,10 +44,14 @@
                         </div> -->
 
                         <div class="notice-manage-content" @click="jumpToApproval(item.formUrl)">
-                            <div class="text-left content-title">
-                                <span>{{item.title}}</span>
+                            <div class="d-flex justify-content-between">
+                              <div style="width:60%;">
+                                <t-tooltip :content="item.title" placement="bottom">
+                                  <span class="do-left">{{item.title}}</span>
+                                </t-tooltip>
+                              </div>
+                              <div class="text-right">{{item.workflowCreateDate}}</div>
                             </div>
-                            <div class="text-right content-time">{{item.workflowCreateDate}}</div>
                         </div>
                     </div>
                     <div class="d-flex flex-row-reverse mt-10">
@@ -73,14 +77,16 @@
                                 <div class="col-6 text-right"> 2018-05-14</div>
                             </div>
                         </div> -->
-
                         <div class="notice-manage-content" @click="jumpToApproval(item.formUrl)">
-                            <div class="text-left content-title">
-                                <span>{{item.title}}</span>
+                            <div class="d-flex justify-content-between">
+                              <div style="width:60%;">
+                                <t-tooltip :content="item.title" placement="bottom">
+                                  <span class="do-left">{{item.title}}</span>
+                                </t-tooltip>
+                              </div>
+                              <div class="text-right">{{item.workflowCreateDate}}</div>
                             </div>
-                            <div class="text-right content-time">{{item.workflowCreateDate}}</div>
                         </div>
-
                     </div>
                     <div class="d-flex flex-row-reverse mt-10">
                         <t-button @click="jumpToHandle">more</t-button>

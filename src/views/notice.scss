@@ -333,3 +333,10 @@
         }
     }
 }
+.do-left{
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    width: 60%;
+    display: inline-block;
+}
