@@ -304,7 +304,7 @@
                             <!-- 在这里判断 -->
                             <template  v-for="item in mpTreeData">
                                 <li :class="{'z-crttab':item.menuUrl === $route.path}"
-                                          :key="item.menuId" @click="selectMpMenu(item.systemUrl + ';' + item.menuUrl,lang === 'EN' ? item.menuName : item.menuEnName)"
+                                          :key="item.menuId" @click="selectMpMenu(item.systemUrl + ';' + item.menuUrl,lang === 'EN' ? ' > '+item.menuName : ' > '+item.menuEnName)"
                                           v-if="!item.children || item.children.length < 0">
                                     {{lang === 'EN' ? item.menuName : item.menuEnName}}
                                 </li>
@@ -318,8 +318,8 @@
                                         <t-dropdown-menu slot="list" >
                                             <t-dropdown-item  v-for="staffMenu in item.children" :key="staffMenu.menuId"
                                                               v-on:on-click="selectMpMenu(staffMenu.systemUrl + ';' + staffMenu.menuUrl,
-                                                                                        lang === 'EN' ? '>' + item.menuName +  '>' + staffMenu.menuName
-                                                                                                      : '>' + item.menuEnName +  '>' + staffMenu.menuEnName)"
+                                                                                        lang === 'EN' ? ' > ' + item.menuName +  ' > ' + staffMenu.menuName
+                                                                                                      : ' > ' + item.menuEnName +  ' > ' + staffMenu.menuEnName)"
                                                               :selected="staffMenu.menuUrl === $route.path"
                                                               divided
                                                               :name="staffMenu.systemUrl + ';' + staffMenu.menuUrl" :value="staffMenu.menuUrl">
@@ -349,7 +349,7 @@
     import ClickoutSide from './clickoutside.js'
     import SessionStorage from '../utils/sessionStorage.js'
     import LocalStorage from '../utils/localStorage.js'
-    import {transData, getQueryData, getQuery, uuid, translateMpMenuData} from '../utils/utils.js'
+    import {transData, getQueryData, getQuery, uuid, translateMpMenuData, transDataToJson} from '../utils/utils.js'
     import * as Constant from '../store/constant.js'
     import {mapMutations, mapState} from 'vuex'
     import {Base64} from 'js-base64'
@@ -741,7 +741,36 @@
                   that.$store.state.storeModule.staffMpMenu = ret.data
                   that.staffMpMenu = ret.data
                   that.tempStaffMpMenuName = that.lang === 'EN' ? that.staffMpMenu.mpNamecn : that.staffMpMenu.mpNameus
-                  that.translateMpMenuMap = translateMpMenuData(that.staffMpMenu.menulist, 'menuId', 'menuPid', 'children', 'menuOrder')
+                  if (that.showMenuHead === '4'){
+                    let routePath = that.$route.path
+                    let menuJson = transDataToJson(ret.data.menulist, 'menuId')
+                    let menuInfo = menuJson[routePath]
+                    let parentMenuInfo = {}
+                    if (menuInfo && menuInfo.menuPid){
+                      let menuPid = menuInfo.menuPid
+                      parentMenuInfo = menuJson[menuPid]
+                    }
+                    if (that.lang === 'EN'){
+                      if (parentMenuInfo ){
+                        that.staffMpMenu.mpNamecn = that.tempStaffMpMenuName + ' > ' + parentMenuInfo.menuName
+                        if (menuInfo){
+                          that.staffMpMenu.mpNamecn = that.staffMpMenu.mpNamecn + ' > ' + menuInfo.menuName
+                        }
+                      } else if (menuInfo){
+                        that.staffMpMenu.mpNamecn = that.tempStaffMpMenuName + ' > ' + menuInfo.menuName
+                      }
+                    } else {
+                      if (parentMenuInfo ){
+                        that.staffMpMenu.mpNameus = that.tempStaffMpMenuName + ' > ' + parentMenuInfo.menuEnName
+                        if (menuInfo ){
+                          that.staffMpMenu.mpNameus =  that.staffMpMenu.mpNameus + ' > ' + menuInfo.menuEnName
+                        }
+                      }else if (menuInfo ){
+                        that.staffMpMenu.mpNameus = that.tempStaffMpMenuName + ' > ' + menuInfo.menuEnName
+                      }
+                    }
+                  }
+                  that.translateMpMenuMap = translateMpMenuData(ret.data.menulist, 'menuId', 'menuPid', 'children', 'menuOrder')
                   let menuId = that.$route.query.menuId
                   that.staffMpMenu.menulist = that.translateMpMenuMap[menuId]
                 }
@@ -753,7 +782,6 @@
           translateMpMenu(menuList){
             let that = this;
             let routePath = this.$route.path
-            console.log('routePath: ' + routePath)
             if (menuList !== null && menuList.length > 0) {
               let staffMpMenuList = new Array();
               for(let i = 0; i < menuList.length; i++){

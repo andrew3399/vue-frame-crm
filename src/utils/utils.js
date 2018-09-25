@@ -146,7 +146,42 @@ export function getQueryData (original, idField, pidField, path, name) {
   }
 }
 
-
+/**
+ * 先将数组转化成有序数组
+ * json格式转树状结构
+ * @param   {json}      json数据
+ * @param   {String}    id的字符串
+ * @param   {String}    父id的字符串
+ * @param   {String}    children的字符串
+ * @return  {Array}     数组
+ */
+export function transDataToJson (original, idField) {
+  if (original && original.length) {
+    /* 做升序处理 Array.sort() */
+    original.sort((a, b) => {
+      return a[idField] - b[idField]
+    })
+  } else {
+    return {}
+  }
+  let hash = {}
+  const id = idField
+  let i = 0
+  let j = 0
+  let len = original.length
+  /**
+   * 第一层将对象数组转化成JSON数据
+   */
+  for (; i < len; i++) {
+    if (!hash[original[i][id]]) {
+      hash[original[i][id]] = original[i]
+    }
+    if (!hash[original[i]['menuUrl']]){
+      hash[original[i]['menuUrl']] = original[i]
+    }
+  }
+  return hash
+}
 
 
 /**
@@ -197,10 +232,6 @@ export function translateMpMenuData (original, idField, pidField, childrenField,
       result.push(aVal)
     }
   }
-  /* 做升序处理 */
-  result.sort((a, b) => {
-    return a[menuOrder] - b[menuOrder]
-  })
   /**
    * 遍历结果 切换成对象的形式进行保存
    */
@@ -212,7 +243,9 @@ export function translateMpMenuData (original, idField, pidField, childrenField,
       resultMap[menuKey] = new Array()
     }
     resultMap[menuKey].push(tempResult)
-
+    resultMap[menuKey].sort((a, b) => {
+      return a[menuOrder] - b[menuOrder]
+    })
     let tempMenuUrl = tempResult.menuUrl
     if (tempMenuUrl && tempMenuUrl.indexOf('?') >= 0) {
       tempMenuUrl = tempMenuUrl.substring(0,tempMenuUrl.indexOf('?'))
