@@ -763,21 +763,21 @@
                       parentMenuInfo = menuJson[menuPid]
                     }
                     if (that.lang === 'EN'){
-                      if (parentMenuInfo ){
+                      if (parentMenuInfo && parentMenuInfo.menuName){
                         that.staffMpMenu.mpNamecn = that.tempStaffMpMenuName + ' > ' + parentMenuInfo.menuName
-                        if (menuInfo){
+                        if (menuInfo && menuInfo.menuName){
                           that.staffMpMenu.mpNamecn = that.staffMpMenu.mpNamecn + ' > ' + menuInfo.menuName
                         }
-                      } else if (menuInfo){
+                      } else if (menuInfo &&  menuInfo.menuName){
                         that.staffMpMenu.mpNamecn = that.tempStaffMpMenuName + ' > ' + menuInfo.menuName
                       }
                     } else {
-                      if (parentMenuInfo ){
+                      if (parentMenuInfo && parentMenuInfo.menuEnName){
                         that.staffMpMenu.mpNameus = that.tempStaffMpMenuName + ' > ' + parentMenuInfo.menuEnName
-                        if (menuInfo ){
+                        if (menuInfo && menuInfo.menuEnName){
                           that.staffMpMenu.mpNameus =  that.staffMpMenu.mpNameus + ' > ' + menuInfo.menuEnName
                         }
-                      }else if (menuInfo ){
+                      }else if (menuInfo && menuInfo.menuEnName){
                         that.staffMpMenu.mpNameus = that.tempStaffMpMenuName + ' > ' + menuInfo.menuEnName
                       }
                     }
