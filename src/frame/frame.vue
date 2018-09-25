@@ -623,7 +623,19 @@
             }
             console.log('selectMpMenu:' + url)
             let urlInfoArray = url.split(';')
-            this.changeStaffMpMenu(urlInfoArray[0],urlInfoArray[1] + '?mpType=2&menuId=' + this.$route.query.menuId)
+            let systemUrl = urlInfoArray[0]
+            let menuUrl = urlInfoArray[1]
+            if (menuUrl.indexOf('?') > -1){
+              if(menuUrl.indexOf('mpType=') < 0 && this.$route.query.mpType){
+                menuUrl = menuUrl + '&mpType=' + this.$route.query.mpType
+              }
+              if (menuUrl.indexOf('menuId=') < 0 && this.$route.query.menuId){
+                menuUrl = menuUrl + '&menuId=' + this.$route.query.menuId
+              }
+            } else {
+              menuUrl = menuUrl + '?mpType=' + this.$route.query.mpType + '&menuId=' + this.$route.query.menuId
+            }
+            this.changeStaffMpMenu(systemUrl,menuUrl)
           },
           getClientWidth(){
             let clientWidth = document.body.clientWidth || document.body.offsetWidth
@@ -798,60 +810,62 @@
             let that  = this
             let frameBaseInfo = JSON.parse(sessionStorage.getItem('frame-base-info'))
             this.instance.post(this.authorization.parentMenuUri, {
-              url: this.$route.path,
+              url: this.$route.fullPath,
               params: this.$route.params
             }).then(function (ret) {
-              if (ret.data.success) {
-                let parthMenuArray = ret.data.result
-                if (parthMenuArray != null && parthMenuArray.length > 0 && that.authorization.getStaffMenuFunc !== undefined) {
-                  that.$store.state.storeModule.staffMenuFunc = []
-                  let currentMenu = parthMenuArray[parthMenuArray.length - 1]
-                  if (frameBaseInfo && frameBaseInfo != null && frameBaseInfo.staffMenuFunsMap != null
-                   && frameBaseInfo.staffMenuFunsMap !== undefined){
-                    that.$store.state.storeModule.staffMenuFunc = frameBaseInfo.staffMenuFunsMap[currentMenu.menuId]
-                  }
-                  if (that.$store.state.storeModule.staffMenuFunc !== undefined && that.$store.state.storeModule.staffMenuFunc.length <= 0){
-                    that.instance.post(that.authorization.getStaffMenuFunc, {
-                      menuId: currentMenu.menuId
-                    }).then(function (res) {
-                      if (res != null && res !== '') {
-                        that.$store.state.storeModule.staffMenuFunc = res.data
+              if (ret.data && ret.data.success && ret.data.result && ret.data.result.length > 0) {
+                that.translateParentMenu(frameBaseInfo, ret.data.result)
+                that.$store.state.storeModule.breadcrumbArr = []
+                that.$store.state.storeModule.breadcrumbArr = ret.data.result
+              } else {
+                let fullPath = that.$route.fullPath
+                fullPath = fullPath.replace(/[?,&]{0,}apMenu=\w*/g, '');
+                fullPath = fullPath.replace(/[?,&]{0,}acd=\w*/g, '');
+                fullPath = fullPath.replace(/[?,&]{0,}code=\w*/g, '');
+                fullPath = fullPath.replace(/[?,&]{0,}state=\w*/g, '');
+                fullPath = fullPath.replace(/[?,&]{0,}mpType=\w*/g, '');
+                fullPath = fullPath.replace(/[?,&]{0,}menuId=\w*/g, '');
+                that.instance.post(that.authorization.parentMenuUri, {
+                  url: fullPath,
+                  params: that.$route.params
+                }).then(function (ret) {
+                  if (ret.data && ret.data.success && ret.data.result && ret.data.result.length > 0) {
+                    that.translateParentMenu(frameBaseInfo, ret.data.result)
+                    that.$store.state.storeModule.breadcrumbArr = []
+                    that.$store.state.storeModule.breadcrumbArr = ret.data.result
+                  } else {
+                    that.instance.post(that.authorization.parentMenuUri, {
+                      url: that.$route.path,
+                      params: that.$route.params
+                    }).then(function (ret) {
+                      if (ret.data && ret.data.success && ret.data.result && ret.data.result.length > 0) {
+                        that.translateParentMenu(frameBaseInfo, ret.data.result)
+                        that.$store.state.storeModule.breadcrumbArr = []
+                        that.$store.state.storeModule.breadcrumbArr = ret.data.result
                       }
                     })
                   }
-                } else {
-                  that.instance.post(that.authorization.parentMenuUri, {
-                    url: that.$route.fullPath,
-                    params: that.$route.params
-                  }).then(function (ret) {
-                    if (ret.data.success) {
-                      let parthMenuArray = ret.data.result
-                      if (parthMenuArray != null && parthMenuArray.length > 0 && that.authorization.getStaffMenuFunc !== undefined) {
-                        that.$store.state.storeModule.staffMenuFunc = []
-                        let currentMenu = parthMenuArray[parthMenuArray.length - 1]
-                        if (frameBaseInfo && frameBaseInfo != null && frameBaseInfo.staffMenuFunsMap != null
-                          && frameBaseInfo.staffMenuFunsMap !== undefined){
-                          that.$store.state.storeModule.staffMenuFunc = frameBaseInfo.staffMenuFunsMap[currentMenu.menuId]
-                        }
-                        if (that.$store.state.storeModule.staffMenuFunc !== undefined && that.$store.state.storeModule.staffMenuFunc.length <= 0){
-                          that.instance.post(that.authorization.getStaffMenuFunc, {
-                            menuId: currentMenu.menuId
-                          }).then(function (res) {
-                            if (res != null && res !== '') {
-                              that.$store.state.storeModule.staffMenuFunc = res.data
-                            }
-                          })
-                        }
-                      }
-                      that.$store.state.storeModule.breadcrumbArr = []
-                      that.$store.state.storeModule.breadcrumbArr = ret.data.result
-                    }
-                  })
-                }
-                that.$store.state.storeModule.breadcrumbArr = []
-                that.$store.state.storeModule.breadcrumbArr = ret.data.result
+                })
               }
             })
+          },
+          translateParentMenu(frameBaseInfo,parthMenuArray){
+            let that = this
+            that.$store.state.storeModule.staffMenuFunc = []
+            let currentMenu = parthMenuArray[parthMenuArray.length - 1]
+            if (frameBaseInfo && frameBaseInfo != null && frameBaseInfo.staffMenuFunsMap != null
+              && frameBaseInfo.staffMenuFunsMap !== undefined){
+              that.$store.state.storeModule.staffMenuFunc = frameBaseInfo.staffMenuFunsMap[currentMenu.menuId]
+            }
+            if (that.$store.state.storeModule.staffMenuFunc !== undefined && that.$store.state.storeModule.staffMenuFunc.length <= 0){
+              that.instance.post(that.authorization.getStaffMenuFunc, {
+                menuId: currentMenu.menuId
+              }).then(function (res) {
+                if (res != null && res !== '') {
+                  that.$store.state.storeModule.staffMenuFunc = res.data
+                }
+              })
+            }
           },
           /* 消息点击触发 */
             handleNoticeClick(index, item) {
