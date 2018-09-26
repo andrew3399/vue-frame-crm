@@ -284,7 +284,7 @@
                     <div class="bg-white pt-10"  v-if="showMenuHead === '4'">
                         <div class="customer-tt-title pl-10">
                             <span class="eipBread">
-                                {{lang === 'EN' ? staffMpMenu.mpNamecn : staffMpMenu.mpNameus}}
+                                {{staffMpMenuName}}
                             </span>
                         </div>
                          <div :class="{'customer-tt-table': mpTreeData && mpTreeData.length > 7,
@@ -517,6 +517,9 @@
             }
         },
         computed: {
+            staffMpMenuName(){
+               return  this.lang === 'EN' ? this.staffMpMenu.mpNamecn : this.staffMpMenu.mpNameus
+            },
             mpTreeData(){
               return this.staffMpMenu.menulist
             },
@@ -583,7 +586,8 @@
               this.mpType = '1'
             }
             this.staffMpMenu.menulist = []
-            if (this.mpType && this.mpType === '2') {
+            console.log('watch  $route:' + to.query.showMenuHead )
+            if (this.mpType && this.mpType === '2' && (!to.query.showMenuHead ||to.query.showMenuHead !== '4')) {
               //解析菜单对应的MENU信息
               let frameBaseInfo = JSON.parse(sessionStorage.getItem('frame-base-info'))
               if (frameBaseInfo && frameBaseInfo !== '' && frameBaseInfo.staffMenue){
@@ -592,6 +596,8 @@
                 let menuId = this.$route.query.menuId
                 this.staffMpMenu.menulist = this.translateMpMenuMap[menuId ]
               }
+            } else if(to.query.showMenuHead && to.query.showMenuHead === '4'){
+              this.getStaffMpMenue()
             }
           }
         },
@@ -735,6 +741,9 @@
           //ESOP集成涉及的菜单列表信息获取
           getStaffMpMenue(){
             let that = this
+            console.log('===================  getStaffMpMenue ==============')
+            console.log(this.$route)
+            console.log('===================  getStaffMpMenue end ==============')
             let routePath = this.$route.path
             let pathParams = this.$route.query
             if (pathParams != null && pathParams !== '' && pathParams.mpId !== undefined
@@ -757,6 +766,22 @@
                     let routePath = that.$route.path
                     let menuJson = transDataToJson(ret.data.menulist, 'menuId')
                     let menuInfo = menuJson[routePath]
+                    if (menuInfo === null || menuInfo === undefined){
+                      let fullPath = that.$route.fullPath
+                      menuInfo = menuJson[fullPath]
+                      if (menuInfo === null || menuInfo === undefined){
+                        fullPath = fullPath.replace(/[?,&]{0,}apMenu=\w*/g, '');
+                        fullPath = fullPath.replace(/[?,&]{0,}acd=\w*/g, '');
+                        fullPath = fullPath.replace(/[?,&]{0,}code=\w*/g, '');
+                        fullPath = fullPath.replace(/[?,&]{0,}state=\w*/g, '');
+                        fullPath = fullPath.replace(/[?,&]{0,}mpType=\w*/g, '');
+                        fullPath = fullPath.replace(/[?,&]{0,}menuId=\w*/g, '');
+                        fullPath = fullPath.replace(/[?,&]{0,}showMenuHead=\w*/g, '');
+                        fullPath = fullPath.replace(/[?,&]{0,}mpId=\w*/g, '');
+                        console.log('fullPath:' + fullPath)
+                        menuInfo = menuJson[fullPath]
+                      }
+                    }
                     let parentMenuInfo = {}
                     if (menuInfo && menuInfo.menuPid){
                       let menuPid = menuInfo.menuPid
@@ -1236,6 +1261,10 @@
              */
             const parsed = QueryString.parse(window.location.search)
             localStorage.set('query-key', JSON.stringify(parsed))
+          //禁止页面右键点击
+          document.oncontextmenu = function(){
+            return false;
+          }
             /**
              * 用于监测用户点击和输入行为
              */
@@ -1267,6 +1296,7 @@
                 localStorage.set('aid-language', 'en-US')
                 this.$i18n.locale = 'en-US'
             }
+            console.log('lang: ' + this.lang)
             // this.$i18n.locale = language
             // this.lang = language === 'en-US' ?  'ZH' : 'EN'
             // 获取基础信息
@@ -1282,10 +1312,10 @@
           if (routeQuery.mpType && routeQuery.mpType !== ''){
               this.mpType = routeQuery.mpType
           }
-          console.log('mpType:' + this.mpType)
         },
         beforeMount(){
             this.getParentMenu()
+            console.log('showMenuHead:' + this.showMenuHead)
             if (this.showMenuHead === '4'){
               this.getStaffMpMenue()
             }
