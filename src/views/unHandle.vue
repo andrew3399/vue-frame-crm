@@ -2,7 +2,7 @@
     <div class="crm-wrapper">
         <!-- 查询部分 -->
         <div class="enquiries mt-10">
-            <!-- 标题 star-->       
+            <!-- 标题 star-->
             <div class="enquiries-title">
                 <span></span>
             </div>
@@ -202,7 +202,7 @@
       },
       showDetail(agent){
         var formkey1 = agent.formUrl
-        var url1 = window.location.host
+        var url1 = window.location.host.trim()
         console.log(url1)
         var url = url1.concat(formkey1);
         window.open(url);

@@ -202,7 +202,7 @@
       showDetail(agent){
         console.log(JSON.stringify(agent))
         var formkey1 = agent.formUrl
-        var url1 = window.location.host
+        var url1 = window.location.host.trim()
         console.log(url1)
         var url = url1.concat(formkey1);
         window.open(url);
