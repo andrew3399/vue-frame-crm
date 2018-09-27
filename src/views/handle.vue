@@ -225,8 +225,11 @@
           }
         }).then(ret => {
           // console.log(JSON.stringify(ret.data))
-
+          if(!ret.data.result){
+            return
+          }
           that.queryData = ret.data.result.result
+
 
           that.total = ret.data.result.count
           // that.fromItem.formKey = ret.data.result.result.extAttr.formKey

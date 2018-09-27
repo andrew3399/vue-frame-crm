@@ -476,6 +476,9 @@
                      applyTime:that.fromItem.applyTime
                    }
                  }).then(ret => {
+                    if(!ret.data.result){
+                      return
+                    }
                    that.handleItems = ret.data.result.result
                  }).catch(ret => {
                    this.$Message.warning(this.$t('frame.warning'))
@@ -498,6 +501,9 @@
                       applyTime:that.fromItem.applyTime
                     }
                   }).then(ret => {
+                    if(!ret.data.result){
+                      return
+                    }
                     that.unHandleItems = ret.data.result.result
                   }).catch(ret => {
                     this.$Message.warning(this.$t('frame.warning'))
