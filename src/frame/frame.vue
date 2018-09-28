@@ -292,7 +292,7 @@
                               v-if="mpType === '1'">
                             <ul class="menu" >
                                 <li v-for="staffMenu in staffMpMenu.menulist" @click="changeStaffMpMenu(staffMenu.systemUrl,staffMenu.menuUrl)" :class="{'z-crttab':staffMenu.menuUrl === staffMpMenuUrl}">
-                                    lang:{{lang}}====menuName:{{staffMenu.menuName}} ===menuEnName:{{staffMenu.menuEnName }}====={{lang === 'EN'? (staffMenu.menuName !== null && staffMenu.menuName !== '' ? staffMenu.menuName : staffMenu.menuEnName ) : staffMenu.menuEnName}}
+                                    {{lang === 'EN'? staffMenu.menuName !== null && staffMenu.menuName !== '' ? staffMenu.menuName : staffMenu.menuEnName  : staffMenu.menuEnName}}
                                 </li>
                             </ul>
                         </div>
@@ -518,7 +518,6 @@
         },
         computed: {
             staffMpMenuName(){
-                console.log( "lang:"+this.lang  + "staffMpMenu.mpNamecn:" +this.staffMpMenu.mpNamecn + "staffMpMenu.mpNameus:" + this.staffMpMenu.mpNameus)
                return  this.lang === 'EN' ? this.staffMpMenu.mpNamecn : this.staffMpMenu.mpNameus
             },
             mpTreeData(){
@@ -1287,7 +1286,7 @@
             let fetchLang = await this.instance.get(this.authorization.langUri)
             console.log(' ====================  loginLanguage ==================')
             console.log(JSON.stringify(fetchLang))
-            console.log(' ====================  loginLanguage  END ==================')
+          console.log(' ====================  loginLanguage  END ==================')
             if (fetchLang.data.toLowerCase() === 'zh' || fetchLang.data.toLowerCase() === 'zh-cn') {
                 this.lang = 'EN'
                 localStorage.set('aid-language', 'zh-CN')
