@@ -4,6 +4,9 @@ import * as httpHandle from './http'
 import * as locals from './locals'
 import views from './notices'
 import storeModule from './store'
+//引用iconfont
+import '../assets/iconfont/iconfont.css'
+import '../assets/iconfont/iconfont.js'
 // import EventHub from './eventHub'
 
 const TFrame = function (Vue, opts = {}) {
