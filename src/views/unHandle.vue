@@ -206,7 +206,8 @@
         var formkey1 = agent.formUrl
         var url1 = window.location.host.trim()
         console.log(url1)
-        var url = url1.concat(formkey1);
+        var url = "http://"+url1.concat(formkey1);
+        console.log("url==="+url);
         window.open(url);
       },
       changePage(pageNum){
