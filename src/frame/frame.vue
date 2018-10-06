@@ -616,10 +616,12 @@
         methods: {
           getMusterMenu(){
               let that = this
-              this.instance.post(this.authorization.getMusterMenu,{}).then(res=>{
+              if (this.authorization && this.authorization.getMusterMenu){
+                this.instance.post(this.authorization.getMusterMenu,{}).then(res=>{
                   let resData = res.data.result;
                   that.musterMenuList = resData
-              })
+                })
+              }
           },
           dropDownIconChange(visible){
             if (visible){

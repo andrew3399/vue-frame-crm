@@ -13,9 +13,9 @@ export function beforeEach (to, from, next, authorization, requestInstance, cb) 
   let redirectUri = authorization.redirect_uri
   // 路由拦截 根据路由配置中meta.requireAuth判断是否需要登录
   let locationHref = window.location.href;
-  locationHref = locationHref.replace(/[?]{0,}code=\w*[&]{0,}/g, '');
-  locationHref = locationHref.replace(/state=\w*[&]{0,}/g, '');
-  locationHref = locationHref.replace(/acd=\w*[&]{0,}/g, '');
+  locationHref = locationHref.replace(/[?,&]{0,}code=\w*/g, '');
+  locationHref = locationHref.replace(/[?,&]{0,}state=\w*/g, '');
+  locationHref = locationHref.replace(/[?,&]{0,}acd=\w*/g, '');
   // 从EIP跳转过来的菜单需要携带参数信息
   console.log('======================= from ========================')
   console.log(from)
@@ -25,7 +25,7 @@ export function beforeEach (to, from, next, authorization, requestInstance, cb) 
   let toApMenu = to.query.apMenu;
   let fromShowMenuHead = fromQuery.showMenuHead;
   let fromMpId = fromQuery.mpId;
-  if (toAcd){
+  if (toAcd !== undefined && toAcd !== null){
     redirectUri = locationHref
   }
   if (toAcd && toAcd !== undefined && toAcd !== '' && toAcd === '1'){
