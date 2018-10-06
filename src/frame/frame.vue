@@ -297,40 +297,50 @@
                             </ul>
                         </div>
                     </div>
-                    <div :class="{'customer-tt-table': mpTreeData && mpTreeData.length > 7,
-                                    'customer-tt-table-low': mpTreeData && mpTreeData.length <= 7}"
-                         v-if="mpType === '2' && mpTreeData && mpTreeData.length">
-                        <ul class="menu_eip">
-                            <!-- 在这里判断 -->
-                            <template  v-for="item in mpTreeData">
-                                <li :class="{'z-crttab':item.menuUrl === $route.path}"
-                                          :key="item.menuId" @click="selectMpMenu(item.systemUrl + ';' + item.menuUrl,lang === 'EN' ? ' > '+item.menuName : ' > '+item.menuEnName)"
-                                          v-if="!item.children || item.children.length < 0">
-                                    {{lang === 'EN' ? item.menuName : item.menuEnName}}
-                                </li>
-                                <!-- 有二级的菜单 -->
-                                <li v-else :class="{'z-crttab':item.menuUrl === $route.path}" :key="item.menuId">
-                                    <t-dropdown placement="bottom" style="width: 100%;" v-on:on-visible-change="dropDownIconChange">
-                                        <div class="menu__submenu-title" >
-                                            {{lang === 'EN' ? item.menuName : item.menuEnName}}
-                                            <t-icon type="chevron-down"></t-icon>
-                                        </div>
-                                        <t-dropdown-menu slot="list" >
-                                            <t-dropdown-item  v-for="staffMenu in item.children" :key="staffMenu.menuId"
-                                                              v-on:on-click="selectMpMenu(staffMenu.systemUrl + ';' + staffMenu.menuUrl,
-                                                                                        lang === 'EN' ? ' > ' + item.menuName +  ' > ' + staffMenu.menuName
-                                                                                                      : ' > ' + item.menuEnName +  ' > ' + staffMenu.menuEnName)"
-                                                              :selected="staffMenu.menuUrl === $route.path"
-                                                              divided
-                                                              :name="staffMenu.systemUrl + ';' + staffMenu.menuUrl" :value="staffMenu.menuUrl">
-                                                {{lang === 'EN' ? staffMenu.menuName : staffMenu.menuEnName}}
-                                            </t-dropdown-item>
-                                        </t-dropdown-menu>
-                                    </t-dropdown>
-                                </li>
-                                <!-- 有二级的菜单 -->
-                            </template>
-                        </ul>
+                    <div class="crm-wrapper" style="padding: 0 10px 15px!important;">
+                        <div :class="{'customer-tt-table': mpTreeData && mpTreeData.length > 7,
+                                        'customer-tt-table-low': mpTreeData && mpTreeData.length <= 7}"
+                             v-if="mpType === '2' && mpTreeData && mpTreeData.length">
+                            <ul class="menu_eip ">
+                                <!-- 在这里判断 -->
+                                <template  v-for="item in mpTreeData">
+                                    <li :class="{'z-crttab':item.menuUrl === $route.path}"
+                                              :key="item.menuId" @click="selectMpMenu(item.systemUrl + ';' + item.menuUrl,lang === 'EN' ? ' > '+item.menuName : ' > '+item.menuEnName)"
+                                              v-if="!item.children || item.children.length < 0">
+                                        <svg class="icon glyph-icon" aria-hidden="true">
+                                            <use :xlink:href="item.menuIcon"></use>
+                                        </svg>
+                                        <span class="glyph-name">{{lang === 'EN' ? item.menuName : item.menuEnName}}</span>
+                                        <i class="glygh-line"></i>
+                                    </li>
+                                    <!-- 有二级的菜单 -->
+                                    <li v-else :class="{'z-crttab':item.menuUrl === $route.path}" :key="item.menuId">
+                                        <t-dropdown placement="bottom" style="width: 100%;" v-on:on-visible-change="dropDownIconChange">
+                                            <div class="menu__submenu-title" >
+                                                <svg class="icon glyph-icon" aria-hidden="true">
+                                                    <use :xlink:href="item.menuIcon"></use>
+                                                </svg>
+
+                                                <span class="glyph-name">{{lang === 'EN' ? item.menuName : item.menuEnName}}</span>
+                                                <i class="glygh-line"></i>
+                                            </div>
+                                            <t-dropdown-menu slot="list" >
+                                                <t-dropdown-item  v-for="staffMenu in item.children" :key="staffMenu.menuId"
+                                                                  v-on:on-click="selectMpMenu(staffMenu.systemUrl + ';' + staffMenu.menuUrl,
+                                                                                            lang === 'EN' ? ' > ' + item.menuName +  ' > ' + staffMenu.menuName
+                                                                                                          : ' > ' + item.menuEnName +  ' > ' + staffMenu.menuEnName)"
+                                                                  :selected="staffMenu.menuUrl === $route.path"
+                                                                  divided
+                                                                  :name="staffMenu.systemUrl + ';' + staffMenu.menuUrl" :value="staffMenu.menuUrl">
+                                                    {{lang === 'EN' ? staffMenu.menuName : staffMenu.menuEnName}}
+                                                </t-dropdown-item>
+                                            </t-dropdown-menu>
+                                        </t-dropdown>
+                                    </li>
+                                    <!-- 有二级的菜单 -->
+                                </template>
+                            </ul>
+                        </div>
                     </div>
                     <router-view v-if="!isIframeContent" class="pt-10"></router-view>
                     <iframe v-if="isIframeContent" class="pt-10" :width="clientWidth" height="1000" :src="iframeUrl" frameborder="0"></iframe>
