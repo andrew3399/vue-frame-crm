@@ -697,7 +697,7 @@
     width: 100%;
     height: 40px;
     line-height: 40px;
-    background: #0084cf;
+    background: url('../../assets/img/topbg1.png') no-repeat;
 }
 .customer-tt-title .eipBread{
     font-size: 16px;
@@ -762,11 +762,11 @@
     cursor: pointer;
     margin-bottom:4px;
     //width: 44px;
-    margin-right: 80px;
+    margin-right: 7%;
     position: relative;
     display: inline-block;
     text-align: center;
-    width: 97px;
+    width: 8%;
     border-radius: 50%;
     height: 97px;
 }
@@ -841,7 +841,7 @@
     .glygh-line{
         background: #D5E8FD;
         height: 3px;
-        width:90px;
+        width:100%;
         position: absolute;
         display: inline-block;
         left: 94px;

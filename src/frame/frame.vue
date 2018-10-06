@@ -303,10 +303,10 @@
                              v-if="mpType === '2' && mpTreeData && mpTreeData.length">
                             <ul class="menu_eip ">
                                 <!-- 在这里判断 -->
-                                <template  v-for="item in mpTreeData">
-                                    <li :class="{'z-crttab':item.menuUrl === $route.path}"
-                                              :key="item.menuId" @click="selectMpMenu(item.systemUrl + ';' + item.menuUrl,lang === 'EN' ? ' > '+item.menuName : ' > '+item.menuEnName)"
-                                              v-if="!item.children || item.children.length < 0">
+                                <template  v-for="item in musterMenuList">
+                                    <li :class="{'z-crttab':item.url === $route.path}"
+                                              :key="item.menuId" @click="selectMpMenu(item.url + ';' + item.url,lang === 'EN' ? ' > '+item.menuName : ' > '+item.menuEnName,authMenuList.indexOf(item.menuId)>-1?false:true)"
+                                              v-if="!item.childMenu || item.childMenu.length < 0">
                                         <svg class="icon glyph-icon" aria-hidden="true">
                                             <use :xlink:href="item.menuIcon"></use>
                                         </svg>
@@ -314,7 +314,7 @@
                                         <i class="glygh-line"></i>
                                     </li>
                                     <!-- 有二级的菜单 -->
-                                    <li v-else :class="{'z-crttab':item.menuUrl === $route.path}" :key="item.menuId">
+                                    <li else :class="{'z-crttab':item.menuUrl === $route.path}" :key="item.menuId">
                                         <t-dropdown placement="bottom" style="width: 100%;" v-on:on-visible-change="dropDownIconChange">
                                             <div class="menu__submenu-title" >
                                                 <svg class="icon glyph-icon" aria-hidden="true">
@@ -325,13 +325,13 @@
                                                 <i class="glygh-line"></i>
                                             </div>
                                             <t-dropdown-menu slot="list" >
-                                                <t-dropdown-item  v-for="staffMenu in item.children" :key="staffMenu.menuId"
-                                                                  v-on:on-click="selectMpMenu(staffMenu.systemUrl + ';' + staffMenu.menuUrl,
+                                                <t-dropdown-item  v-for="staffMenu in item.childMenu" :key="staffMenu.menuId"
+                                                                  v-on:on-click="selectMpMenu(staffMenu.url + ';' + staffMenu.url,
                                                                                             lang === 'EN' ? ' > ' + item.menuName +  ' > ' + staffMenu.menuName
-                                                                                                          : ' > ' + item.menuEnName +  ' > ' + staffMenu.menuEnName)"
-                                                                  :selected="staffMenu.menuUrl === $route.path"
+                                                                                                          : ' > ' + item.menuEnName +  ' > ' + staffMenu.menuEnName,authMenuList.indexOf(staffMenu.menuId)>-1?false:true)"
+                                                                  :selected="staffMenu.url === $route.path"
                                                                   divided
-                                                                  :name="staffMenu.systemUrl + ';' + staffMenu.menuUrl" :value="staffMenu.menuUrl">
+                                                                  :name="staffMenu.url + ';' + staffMenu.url" :value="staffMenu.url" :disabled="authMenuList.indexOf(staffMenu.menuId)>-1?false:true">
                                                     {{lang === 'EN' ? staffMenu.menuName : staffMenu.menuEnName}}
                                                 </t-dropdown-item>
                                             </t-dropdown-menu>
@@ -487,6 +487,8 @@
         },
         data() {
             return {
+                musterMenuList:[],
+                authMenuList:[],
                 formRight:{
                     staffName: '',
                     staffNo: '',
@@ -612,6 +614,13 @@
           }
         },
         methods: {
+          getMusterMenu(){
+              let that = this
+              this.instance.post(this.authorization.getMusterMenu,{}).then(res=>{
+                  let resData = res.data.result;
+                  that.musterMenuList = resData
+              })
+          },
           dropDownIconChange(visible){
             if (visible){
               this.dropDownIcon = "chevron-up"
@@ -626,7 +635,10 @@
               return url + '?apMenu=1'
             }
           },
-          selectMpMenu(url,mpMenuName){
+          selectMpMenu(url,mpMenuName,authorizaFlag){
+              if(authorizaFlag){
+                  return
+              }
             if (url === null || url === undefined
               || url === '' || url.indexOf(';') < 0){
               return;
@@ -702,6 +714,15 @@
               this.formRight.staffName = resData.staffName
               this.formRight.staffNO = resData.staffNo
               this.staffMenuFuncMap = resData.staffMenuFunsMap
+              let authMenuList = []
+              this.menu.filter(item=>{
+                  if(item.menuId){
+                      authMenuList.push(item.menuId.toString())
+                  }
+              })
+
+              sessionStorage.setItem('musterMenuList',authMenuList)
+
           },
           changeStaffMpMenu(systemUrl,url){
             console.log('changeStaffMpMenu:  ' + url)
@@ -1310,7 +1331,7 @@
             // this.$i18n.locale = language
             // this.lang = language === 'en-US' ?  'ZH' : 'EN'
             // 获取基础信息
-          if (this.showMenuHead !== '4' && this.showMenuHead !== '5'){
+          if (this.showMenuHead && this.showMenuHead !== '5'){
             let baseInfo = JSON.parse(sessionStorage.getItem('frame-base-info'))
             if (baseInfo != null ){
               this.translateBaseInfo(baseInfo)
@@ -1322,6 +1343,9 @@
           if (routeQuery.mpType && routeQuery.mpType !== ''){
               this.mpType = routeQuery.mpType
           }
+
+          this.authMenuList = sessionStorage.getItem('musterMenuList')
+          this.getMusterMenu()
         },
         beforeMount(){
             this.getParentMenu()
