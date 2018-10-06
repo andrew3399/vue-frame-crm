@@ -823,7 +823,6 @@
         height: 44px;
         line-height: 44px;
         width: 64px;
-        border-radius: 50%;
         color: #7b93a7;
         cursor: pointer;
         margin-top: 12px;
@@ -857,6 +856,14 @@
 //.dropdown__menu{
 //    margin:0!important;
 //}
-.dropdown__item:focus, .select__item:focus, .select__tips:focus, .dropdown__item:hover, .select__item:hover, .select__tips:hover{
-    background: #EFF7FF!important;
+.cl-menu-dropdown{
+    .dropdown__menu, .select__menu{
+        border-radius: inherit;
+    }
+    a:not([href]):not([tabindex]):focus, a:not([href]):not([tabindex]):hover{
+        color: #0085D0!important;
+    }
+    .dropdown__item i, .select__item i, .select__tips i{
+        margin-right:0.625rem;
+    }
 }
