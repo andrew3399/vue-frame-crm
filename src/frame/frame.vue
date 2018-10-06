@@ -530,7 +530,7 @@
         },
         computed: {
             staffMpMenuName(){
-               return  this.lang === 'EN' ? this.staffMpMenu.mpNamecn : this.staffMpMenu.mpNameus
+               return  sessionStorage.getItem('staffMpMenuName')
             },
             mpTreeData(){
               return this.staffMpMenu.menulist
@@ -648,8 +648,10 @@
 
             if (this.lang === 'EN'){
               this.staffMpMenu.mpNamecn = this.tempStaffMpMenuName + mpMenuName
+              sessionStorage.setItem('staffMpMenuName',this.staffMpMenu.mpNamecn)
             } else {
               this.staffMpMenu.mpNameus = this.tempStaffMpMenuName + mpMenuName
+              sessionStorage.setItem('staffMpMenuName',this.staffMpMenu.mpNameus)
             }
             console.log('selectMpMenu:' + url)
             let urlInfoArray = url.split(';')
