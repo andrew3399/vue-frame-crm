@@ -768,7 +768,8 @@
     text-align: center;
     width: 8%;
     border-radius: 50%;
-    height: 97px;
+    height: 0;
+    padding-bottom: 8%;
 }
 
 .customer-tt-table-low ul li:last-child{
@@ -822,7 +823,7 @@
         font-size: 44px;
         height: 44px;
         line-height: 44px;
-        width: 64px;
+        width: 100%;
         color: #7b93a7;
         cursor: pointer;
         margin-top: 12px;
@@ -843,12 +844,12 @@
         width:100%;
         position: absolute;
         display: inline-block;
-        left: 94px;
+        left: 95%;
         top: 35px;
     }
 }
 .customer-tt-table-low ul li:hover{
-    background:#E5F1FE;
+    background:#d5e8fd;
 }
 .customer-tt-table-low ul li:hover .glyph-name{
     color:#0085D0;
@@ -866,4 +867,10 @@
     .dropdown__item i, .select__item i, .select__tips i{
         margin-right:0.625rem;
     }
+}
+.content-icon{
+    flex-direction: column;
+    display:flex;
+    display: -webkit-flex;
+    align-self:center;
 }

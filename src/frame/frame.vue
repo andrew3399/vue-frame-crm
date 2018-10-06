@@ -314,13 +314,12 @@
                                         <i class="glygh-line"></i>
                                     </li>
                                     <!-- 有二级的菜单 -->
-                                    <li else :class="{'z-crttab':item.menuUrl === $route.path}" :key="item.menuId">
+                                    <li v-else :class="{'z-crttab':item.menuUrl === $route.path}" :key="item.menuId">
                                         <t-dropdown placement="bottom" style="width: 100%;" v-on:on-visible-change="dropDownIconChange">
-                                            <div class="menu__submenu-title" >
+                                            <div class="menu__submenu-title">
                                                 <svg class="icon glyph-icon" aria-hidden="true">
                                                     <use :xlink:href="item.menuIcon"></use>
                                                 </svg>
-
                                                 <span class="glyph-name" :style="{fontSize:lang === 'EN'?'16px':'12px'}">{{lang === 'EN' ? item.menuName : item.menuEnName}}</span>
                                                 <i class="glygh-line"></i>
                                             </div>
