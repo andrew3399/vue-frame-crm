@@ -301,7 +301,7 @@
                         <div :class="{'customer-tt-table': mpTreeData && mpTreeData.length > 7,
                                         'customer-tt-table-low': mpTreeData && mpTreeData.length <= 7}"
                              v-if="mpType === '2' && mpTreeData && mpTreeData.length">
-                            <ul class="menu_eip ">
+                            <ul class="menu_eip">
                                 <!-- 在这里判断 -->
                                 <template  v-for="item in musterMenuList">
                                     <li :class="{'z-crttab':item.url === $route.path}"
@@ -310,7 +310,7 @@
                                         <svg class="icon glyph-icon" aria-hidden="true">
                                             <use :xlink:href="item.menuIcon"></use>
                                         </svg>
-                                        <span class="glyph-name">{{lang === 'EN' ? item.menuName : item.menuEnName}}</span>
+                                        <span class="glyph-name" :style="{fontSize:lang === 'EN'?'16px':'12px'}">{{lang === 'EN' ? item.menuName : item.menuEnName}}</span>
                                         <i class="glygh-line"></i>
                                     </li>
                                     <!-- 有二级的菜单 -->
@@ -321,10 +321,10 @@
                                                     <use :xlink:href="item.menuIcon"></use>
                                                 </svg>
 
-                                                <span class="glyph-name">{{lang === 'EN' ? item.menuName : item.menuEnName}}</span>
+                                                <span class="glyph-name" :style="{fontSize:lang === 'EN'?'16px':'12px'}">{{lang === 'EN' ? item.menuName : item.menuEnName}}</span>
                                                 <i class="glygh-line"></i>
                                             </div>
-                                            <t-dropdown-menu slot="list" >
+                                            <t-dropdown-menu slot="list" class="cl-frame-dropdown">
                                                 <t-dropdown-item  v-for="staffMenu in item.childMenu" :key="staffMenu.menuId"
                                                                   v-on:on-click="selectMpMenu(staffMenu.url + ';' + staffMenu.url,
                                                                                             lang === 'EN' ? ' > ' + item.menuName +  ' > ' + staffMenu.menuName
