@@ -13,9 +13,12 @@ export function beforeEach (to, from, next, authorization, requestInstance, cb) 
   let redirectUri = authorization.redirect_uri
   // 路由拦截 根据路由配置中meta.requireAuth判断是否需要登录
   let locationHref = window.location.href;
-  locationHref = locationHref.replace(/[?,&]{0,}code=\w*/g, '');
-  locationHref = locationHref.replace(/[?,&]{0,}state=\w*/g, '');
-  locationHref = locationHref.replace(/[?,&]{0,}acd=\w*/g, '');
+  locationHref = locationHref.replace(/[?]{1}code=\w*[&]{1,}/g, '?');
+  locationHref = locationHref.replace(/[?]{1}state=\w*[&]{1,}/g, '?');
+  locationHref = locationHref.replace(/[?]{1}acd=\w*[&]{1,}/g, '?');
+  locationHref = locationHref.replace(/[&]{0,}code=\w*/g, '');
+  locationHref = locationHref.replace(/[&]{0,}state=\w*/g, '');
+  locationHref = locationHref.replace(/[&]{0,}acd=\w*/g, '');
   // 从EIP跳转过来的菜单需要携带参数信息
   console.log('======================= from ========================')
   console.log(from)

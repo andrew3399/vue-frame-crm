@@ -328,10 +328,10 @@
                                                 <t-dropdown-item  v-for="staffMenu in item.childMenu" :key="staffMenu.menuId"
                                                                   v-on:on-click="selectMpMenu(staffMenu.url + ';' + staffMenu.url,
                                                                                             lang === 'EN' ? ' > ' + item.menuName +  ' > ' + staffMenu.menuName
-                                                                                                          : ' > ' + item.menuEnName +  ' > ' + staffMenu.menuEnName,authMenuList.indexOf(staffMenu.menuId)>-1?false:true)"
+                                                                                                          : ' > ' + item.menuEnName +  ' > ' + staffMenu.menuEnName,authMenuList && authMenuList.length > 0 && authMenuList.indexOf(staffMenu.menuId)>-1?false:true)"
                                                                   :selected="staffMenu.url === $route.path"
                                                                   divided
-                                                                  :name="staffMenu.url + ';' + staffMenu.url" :value="staffMenu.url" :disabled="authMenuList.indexOf(staffMenu.menuId)>-1?false:true">
+                                                                  :name="staffMenu.url + ';' + staffMenu.url" :value="staffMenu.url" :disabled="authMenuList && authMenuList.length > 0 && authMenuList.indexOf(staffMenu.menuId)>-1?false:true">
                                                     {{lang === 'EN' ? staffMenu.menuName : staffMenu.menuEnName}}
                                                 </t-dropdown-item>
                                             </t-dropdown-menu>
