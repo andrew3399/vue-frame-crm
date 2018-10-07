@@ -264,8 +264,8 @@
                             <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12 col-xl-12 pl-0">
                                 <div class="breadcrumbs">
                                     <template v-for="(item, $idx) in breadcrumbArr" >
-                                        <router-link :to="{ path: getRouterLinkUrl(item.menuUrl) }" class="canclick"
-                                                v-if="item.rightTag === tag && $idx > 0 && $idx <= breadcrumbArr.length - 2 && item.menuUrl">
+                                        <router-link :to="{ path: getRouterLinkUrl(item.menuUrl) }" class="canclick" style="cursor: pointer"
+                                                v-if="$idx > 0 && $idx <= breadcrumbArr.length - 2 && item.menuUrl">
                                             <span> {{lang === 'EN' ? item.menuName : item.menuEnName}}</span>
                                             <span v-if="$idx <= breadcrumbArr.length - 2">></span>
                                         </router-link>
@@ -287,8 +287,7 @@
                                 {{staffMpMenuName}}
                             </span>
                         </div>
-                         <div :class="{'customer-tt-table': mpTreeData && mpTreeData.length > 7,
-                                    'customer-tt-table-low': mpTreeData && mpTreeData.length <= 7}"
+                         <div class="customer-tt-table"
                               v-if="mpType === '1'">
                             <ul class="menu" >
                                 <li v-for="staffMenu in staffMpMenu.menulist" @click="changeStaffMpMenu(staffMenu.systemUrl,staffMenu.menuUrl)" :class="{'z-crttab':staffMenu.menuUrl === staffMpMenuUrl}">
