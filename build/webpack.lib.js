@@ -57,7 +57,7 @@ module.exports = merge(baseConfig, {
       test: /\.(gif|jpg|png)\??.*$/,
       loader: 'url-loader',
       options: {
-        limit: 1000,
+        // limit: 8000,
         outputPath: 'image/',
         publicPath: './image/',
         name: '[name].[ext]?[hash]'
