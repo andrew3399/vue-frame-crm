@@ -9,11 +9,12 @@ let chalk = require('chalk')
 let ProgressBarPlugin = require('progress-bar-webpack-plugin')
 module.exports = merge(baseConfig, {
   module: {
-    rules: [{
-      test: /\.(css|jpg|png|gif)$/,
-      loader: 'style-loader!css-loader',
-      use: 'url-loader?limit=8000'
-    }]
+    rules: [
+      {
+        test: /\.css$/,
+        loader: 'style-loader!css-loader'
+      }
+    ]
   },
   entry: {
     main: ['./example/main.js'],

@@ -52,6 +52,16 @@ module.exports = merge(baseConfig, {
       options: {
         cacheDirectory: true
       }
+    },
+    {
+      test: /\.(gif|jpg|png)\??.*$/,
+      loader: 'url-loader',
+      options: {
+        limit: 1000,
+        outputPath: 'image/',
+        publicPath: './image/',
+        name: '[name].[ext]?[hash]'
+      }
     }
     ]
   },
