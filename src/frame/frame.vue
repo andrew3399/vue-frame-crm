@@ -297,7 +297,7 @@
                             </ul>
                         </div>
                     </div>
-                    <div class="crm-wrapper" style="padding: 0 10px 15px!important;">
+                    <div class="crm-wrapper" style="padding: 0 10px 15px!important;" v-if="mpType === '2' && mpTreeData && mpTreeData.length">
                         <div :class="{'customer-tt-table': mpTreeData && mpTreeData.length > 7,
                                         'customer-tt-table-low': mpTreeData && mpTreeData.length <= 7}"
                              v-if="mpType === '2' && mpTreeData && mpTreeData.length">
