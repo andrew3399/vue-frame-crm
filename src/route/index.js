@@ -6,19 +6,20 @@ import {getQuery, uuid} from '../utils/utils.js'
 import {Base64} from 'js-base64'
 import store from '../store/index.js'
 
-export function beforeEach (to, from, next, authorization, requestInstance, cb) {
+export async function beforeEach (to, from, next, authorization, requestInstance, cb) {
   let routeArr = ['/res', '/cust', '/order', '/acct','/mks', '/rpt', '/prod', '/odp', '/base', '/']
   let localStorage = new LocalStorage()
   let sessionStorage = window.sessionStorage
+  let accessToken = localStorage.get('access_token')
+  let refreshToken = localStorage.get('refresh_token')
+  let sessionTime = localStorage.get('session_time')
   let redirectUri = authorization.redirect_uri
   // 路由拦截 根据路由配置中meta.requireAuth判断是否需要登录
   let locationHref = window.location.href;
   locationHref = locationHref.replace(/[?]{1}code=\w*[&]{1,}/g, '?');
   locationHref = locationHref.replace(/[?]{1}state=\w*[&]{1,}/g, '?');
-  locationHref = locationHref.replace(/[?]{1}acd=\w*[&]{1,}/g, '?');
-  locationHref = locationHref.replace(/[&]{0,}code=\w*/g, '');
-  locationHref = locationHref.replace(/[&]{0,}state=\w*/g, '');
-  locationHref = locationHref.replace(/[&]{0,}acd=\w*/g, '');
+  locationHref = locationHref.replace(/[&]{1,}code=\w*/g, '');
+  locationHref = locationHref.replace(/[&]{1,}state=\w*/g, '');
   // 从EIP跳转过来的菜单需要携带参数信息
   console.log('======================= from ========================')
   console.log(from)
@@ -28,15 +29,34 @@ export function beforeEach (to, from, next, authorization, requestInstance, cb) 
   let toApMenu = to.query.apMenu;
   let fromShowMenuHead = fromQuery.showMenuHead;
   let fromMpId = fromQuery.mpId;
-  if (toAcd !== undefined && toAcd !== null){
+  if (toAcd && toAcd !== undefined && toAcd !== null){
     redirectUri = locationHref
   }
-  if (toAcd && toAcd !== undefined && toAcd !== '' && toAcd === '1'){
-    localStorage.remove('access_token')
-    localStorage.remove('refresh_token')
-    localStorage.remove('session_time')
-    sessionStorage.clear()
-    to.query.acd = 0
+  if (toAcd && toAcd !== undefined && toAcd !== ''){
+    if (toAcd === '1') {
+      localStorage.remove('access_token')
+      localStorage.remove('refresh_token')
+      localStorage.remove('session_time')
+      sessionStorage.clear()
+      to.query.acd = 0
+      locationHref = locationHref.replace(/[&]{1}acd=\w*/g,'&acd=0')
+      let msg = {
+        client_id: authorization.client_id,
+        redirect_uri: encodeURIComponent(locationHref),
+        state: uuid(6, 16)
+      }
+      window.location.href = authorization.authorizeUri + '?client_id=' + msg.client_id + '&redirect_uri=' + msg.redirect_uri + '&response_type=code&scope=read&state=' + msg.state
+      return
+    } else if(toAcd === '0' && !accessToken){
+      let tokenRes =  await  requestInstance.post(authorization.tokenUri + '?code=' + to.query.code + '&state=' + to.query.state +
+        '&grant_type=authorization_code' + '&client_id=' + authorization.client_id + '&redirect_uri=' + encodeURIComponent(locationHref));
+      let time = new Date().getTime() + 8 * 60 * 60 * 1000
+      accessToken = tokenRes.data.access_token
+      localStorage.set('access_token', accessToken, tokenRes.data.expires_in * 1000)
+      refreshToken = tokenRes.data.refresh_token
+      localStorage.set('refresh_token', refreshToken, Math.pow(2, 32))
+      localStorage.set('session_time', time, 8 * 60 * 60 * 1000)
+    }
   }
   let loginUserName = to.query.user
   if (loginUserName && loginUserName !== ''){
@@ -63,7 +83,8 @@ export function beforeEach (to, from, next, authorization, requestInstance, cb) 
   }
 
   //去除切换参数
-  locationHref = locationHref.replace(/[?]{0,}apMenu=\w*[&]{0,}/g, '');
+  locationHref = locationHref.replace(/[?]{1}apMenu=\w*[&]{1}/g, '?');
+  locationHref = locationHref.replace(/[&]{1}apMenu=\w*/g, '');
   if(fromShowMenuHead && fromShowMenuHead !== '' && fromMpId && fromMpId !== '' && !to.query.showMenuHead && !to.query.mpId){
     to.query.showMenuHead = fromShowMenuHead
     to.query.mpId = fromMpId
@@ -115,13 +136,11 @@ export function beforeEach (to, from, next, authorization, requestInstance, cb) 
   console.log('======================= to ========================')
   console.log(to)
   console.log('======================= to end ========================')
-  let accessToken = localStorage.get('access_token')
-  let refreshToken = localStorage.get('refresh_token')
-  let sessionTime = localStorage.get('session_time')
   //校验是否有菜单权限信息
   let authorMenuArray = JSON.parse(sessionStorage.getItem('authorMenuArray'))
   let toPath = to.path
   if (to.meta && to.meta.requireAuth ) {
+    console.log('333333333333333333333333')
       if (accessToken && refreshToken && sessionTime) {
         if (authorMenuArray === null || to.meta.permission === null ||  to.meta.permission === undefined || !to.meta.permission ){
           next()
@@ -184,7 +203,7 @@ export function beforeEach (to, from, next, authorization, requestInstance, cb) 
               redirect_uri: encodeURIComponent(locationHref),
               state: uuid(6, 16)
             }
-            window.location.href = authorization.authorizeUri + '?client_id=' + msg.client_id + '&redirect_uri=' + msg.redirect_uri + '&response_type=code&scope=read&state=' + msg.state
+            // window.location.href = authorization.authorizeUri + '?client_id=' + msg.client_id + '&redirect_uri=' + msg.redirect_uri + '&response_type=code&scope=read&state=' + msg.state
           })
         } else {
           /**
