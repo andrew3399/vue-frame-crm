@@ -490,6 +490,8 @@
         },
         data() {
             return {
+                computSessionMenuList:'',
+                staffMpMenuName:'',
                 musterMenuList:[],
                 authMenuList:[],
                 formRight:{
@@ -532,13 +534,14 @@
             }
         },
         computed: {
-            staffMpMenuName(){
-              let sessionMpMenuName  = sessionStorage.getItem('staffMpMenuName');
-              if (sessionMpMenuName && sessionMpMenuName !== ''){
-                return sessionMpMenuName
-              }
-               return  this.lang === 'EN' ? this.staffMpMenu.mpNamecn : this.staffMpMenu.mpNameus
-            },
+            // staffMpMenuName(){
+            //   let sessionMpMenuName  = sessionStorage.getItem('staffMpMenuName');
+            //   console.log('sessionMpMenuName:  '+sessionMpMenuName)
+            //   if (sessionMpMenuName && sessionMpMenuName !== ''){
+            //     return sessionMpMenuName
+            //   }
+            //    return  this.lang === 'EN' ? this.staffMpMenu.mpNamecn : this.staffMpMenu.mpNameus
+            // },
             translateMusterMenuList(){
               return this.musterMenuList
             },
@@ -626,6 +629,15 @@
             if (this.mpType === '2'){
               this.getMusterMenu()
             }
+          },
+          'computSessionMenuList'(val){
+            let sessionMpMenuName  = sessionStorage.getItem('staffMpMenuName');
+            console.log('sessionMpMenuName:  '+sessionMpMenuName)
+            if (sessionMpMenuName && sessionMpMenuName !== ''){
+              this.staffMpMenuName = sessionMpMenuName
+              return
+            }
+             this.staffMpMenuName = this.lang === 'EN' ? this.staffMpMenu.mpNamecn : this.staffMpMenu.mpNameus
           }
         },
         methods: {
@@ -664,9 +676,11 @@
             if (this.lang === 'EN'){
               this.staffMpMenu.mpNamecn = this.tempStaffMpMenuName + mpMenuName
               sessionStorage.setItem('staffMpMenuName',this.staffMpMenu.mpNamecn)
+              this.computSessionMenuList =   this.staffMpMenu.mpNamecn
             } else {
               this.staffMpMenu.mpNameus = this.tempStaffMpMenuName + mpMenuName
               sessionStorage.setItem('staffMpMenuName',this.staffMpMenu.mpNameus)
+              this.computSessionMenuList = this.staffMpMenu.mpNameus
             }
             console.log('selectMpMenu:' + url)
             let urlInfoArray = url.split(';')
@@ -804,9 +818,14 @@
                 mpId: pathParams.mpId
               }).then(function(ret){
                 if (ret.status === 200 && ret.data != null ){
+                  console.log(' ==============================  this.authorization.getStaffMpMenue =============================== ')
                   console.log(ret)
+                  console.log( ret.data.menulist)
+                  console.log(' ==============================  this.authorization.getStaffMpMenue  end =============================== ')
                   that.$store.state.storeModule.staffMpMenu = ret.data
                   that.staffMpMenu = ret.data
+                  that.tempStaffMpMenuName = that.lang === 'EN' ? ret.data.mpNamecn : ret.data.mpNameus
+                  that.computSessionMenuList = that.tempStaffMpMenuName
                   let menuList = ret.data.menulist
                   that.translateMpMenu(menuList)
                 }
@@ -816,9 +835,12 @@
             }
           },
           translateMpMenu(menuList){
+            console.log(menuList)
             let that = this;
             let routePath = this.$route.path
-            if (menuList !== null && menuList.length > 0) {
+            console.log('000000000000000000000000000000000000')
+            if (menuList && menuList !== null && menuList.length > 0) {
+              console.log('11111111111111111111111111')
               let staffMpMenuList = new Array();
               for(let i = 0; i < menuList.length; i++){
                 staffMpMenuList.push(menuList[i].menuUrl)
@@ -1183,8 +1205,6 @@
                */
               this.translateMenu = transData(res, 'menuId', 'menuPid', 'children', 'menuOrder')
               this.translateMpMenuMap = translateMpMenuData(res, 'menuId', 'menuPid', 'children', 'menuOrder')
-              let menuId = this.$route.query.menuId
-              this.staffMpMenu.menulist = this.translateMpMenuMap[menuId ]
               /**
                * 设置自动展开
                */

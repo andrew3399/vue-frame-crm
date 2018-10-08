@@ -87,9 +87,11 @@ export async function beforeEach (to, from, next, authorization, requestInstance
   //去除切换参数
   locationHref = locationHref.replace(/[?]{1}apMenu=\w*[&]{1}/g, '?');
   locationHref = locationHref.replace(/[?,&]{1}apMenu=\w*/g, '');
-  if(fromShowMenuHead && fromShowMenuHead !== '' && fromMpId && fromMpId !== '' && !to.query.showMenuHead && !to.query.mpId){
+  if(fromShowMenuHead && fromShowMenuHead !== '' && !to.query.showMenuHead ){
+    if ( fromMpId && fromMpId !== '' && !to.query.mpId) {
+      to.query.mpId = fromMpId
+    }
     to.query.showMenuHead = fromShowMenuHead
-    to.query.mpId = fromMpId
     mustChangePage = false
     next({
       path: to.path,
@@ -99,7 +101,7 @@ export async function beforeEach (to, from, next, authorization, requestInstance
       name: to.name
     })
     return;
-  } else if(!to.query.showMenuHead && !to.query.mpId){
+  } else if(!to.query.showMenuHead){
     let refShowMenuHead = '';
     let refMpId = '';
     let referShowMenuHeadQuery = documentReferrer.match(new RegExp('[\?\&]showMenuHead=([^\&]+)', 'i'));
@@ -110,10 +112,12 @@ export async function beforeEach (to, from, next, authorization, requestInstance
     if (referMpIdQuery !== null && referMpIdQuery.length > 1){
       refMpId = referMpIdQuery[1]
     }
-    if ( refShowMenuHead && refShowMenuHead !== '' && refMpId && refMpId !== '' ){
+    if ( refShowMenuHead && refShowMenuHead !== '' ){
       mustChangePage = false
       to.query.showMenuHead = refShowMenuHead
-      to.query.mpId = refMpId
+      if (refMpId && refMpId !== '' && !to.query.mpId){
+        to.query.mpId = refMpId
+      }
       next({
         path: to.path,
         query: to.query,
