@@ -16,6 +16,7 @@ export async function beforeEach (to, from, next, authorization, requestInstance
   let redirectUri = authorization.redirect_uri
   // 路由拦截 根据路由配置中meta.requireAuth判断是否需要登录
   let locationHref = window.location.href;
+  locationHref = decodeURIComponent(locationHref)
   locationHref = locationHref.replace(/[?]{1}code=\w*[&]{1,}/g, '?');
   locationHref = locationHref.replace(/[?]{1}state=\w*[&]{1,}/g, '?');
   locationHref = locationHref.replace(/[?,&]{1,}code=\w*/g, '');
@@ -58,6 +59,7 @@ export async function beforeEach (to, from, next, authorization, requestInstance
       localStorage.set('session_time', time, 8 * 60 * 60 * 1000)
     }
   }
+  console.log(' ================  locationHref :   ' + locationHref)
   let loginUserName = to.query.user
   if (loginUserName && loginUserName !== ''){
     sessionStorage.setItem('loginUserName',loginUserName)

@@ -296,19 +296,18 @@
                          <div class="customer-tt-table"
                               v-if="mpType === '1'">
                             <ul class="menu" >
-                                <li v-for="staffMenu in staffMpMenu.menulist" @click="changeStaffMpMenu(staffMenu.systemUrl,staffMenu.menuUrl)" :class="{'z-crttab':staffMenu.menuUrl === staffMpMenuUrl}">
+                                <li v-for="staffMenu in mpTreeData" @click="changeStaffMpMenu(staffMenu.systemUrl,staffMenu.menuUrl)" :class="{'z-crttab':staffMenu.menuUrl === staffMpMenuUrl}">
                                     {{lang === 'EN'? staffMenu.menuName !== null && staffMenu.menuName !== '' ? staffMenu.menuName : staffMenu.menuEnName  : staffMenu.menuEnName}}
                                 </li>
                             </ul>
                         </div>
                     </div>
-                    <div class="crm-wrapper" style="padding: 0 10px 15px!important;" v-if="mpType === '2' && mpTreeData && mpTreeData.length">
-                        <div :class="{'customer-tt-table': mpTreeData && mpTreeData.length > 7,
-                                        'customer-tt-table-low': mpTreeData && mpTreeData.length <= 7}"
-                             v-if="mpType === '2' && mpTreeData && mpTreeData.length">
+                    <div class="crm-wrapper" style="padding: 0 10px 15px!important;" v-if="mpType === '2' && translateMusterMenuList && translateMusterMenuList.length">
+                        <div class="customer-tt-table-low"
+                             v-if="mpType === '2' && translateMusterMenuList && translateMusterMenuList.length">
                             <ul class="menu_eip">
                                 <!-- 在这里判断 -->
-                                <template  v-for="item in musterMenuList">
+                                <template  v-for="item in translateMusterMenuList">
                                     <li :class="{'z-crttab':item.url === $route.path}"
                                               :key="item.menuId" @click="selectMpMenu(item.url + ';' + item.url,lang === 'EN' ? ' > '+item.menuName : ' > '+item.menuEnName,authMenuList.indexOf(item.menuId)>-1?false:true)"
                                               v-if="!item.childMenu || item.childMenu.length < 0">
@@ -534,13 +533,21 @@
         },
         computed: {
             staffMpMenuName(){
-               return  sessionStorage.getItem('staffMpMenuName')
+              let sessionMpMenuName  = sessionStorage.getItem('staffMpMenuName');
+              if (sessionMpMenuName && sessionMpMenuName !== ''){
+                return sessionMpMenuName
+              }
+               return  this.lang === 'EN' ? this.staffMpMenu.mpNamecn : this.staffMpMenu.mpNameus
+            },
+            translateMusterMenuList(){
+              return this.musterMenuList
             },
             mpTreeData(){
+              console.log('this.staffMpMenu.menulist:  ')
+              console.log(this.staffMpMenu)
               return this.staffMpMenu.menulist
             },
             breadcrumbArr(){
-                debugger
                 return this.$store.state.storeModule.breadcrumbArr
             },
             treeData() {
@@ -602,7 +609,8 @@
               this.mpType = '1'
             }
             this.staffMpMenu.menulist = []
-            console.log('watch  $route:' + to.query.showMenuHead )
+            console.log('watch  $route: showMenuHead: ' + to.query.showMenuHead )
+            console.log('watch $route: mpType: ' + this.mpType)
             if (this.mpType && this.mpType === '2' && (!to.query.showMenuHead ||to.query.showMenuHead !== '4')) {
               //解析菜单对应的MENU信息
               let frameBaseInfo = JSON.parse(sessionStorage.getItem('frame-base-info'))
@@ -614,6 +622,9 @@
               }
             } else if(to.query.showMenuHead && to.query.showMenuHead === '4'){
               this.getStaffMpMenue()
+            }
+            if (this.mpType === '2'){
+              this.getMusterMenu()
             }
           }
         },
