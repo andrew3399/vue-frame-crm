@@ -37,7 +37,7 @@ export async function beforeEach (to, from, next, authorization, requestInstance
     if (toAcd === '1') {
       localStorage.remove('access_token')
       localStorage.remove('refresh_token')
-      localStorage.remove('session_time')
+      //localStorage.remove('session_time')
       sessionStorage.clear()
       to.query.acd = 0
       locationHref = locationHref.replace(/[&]{1}acd=\w*/g,'&acd=0')
