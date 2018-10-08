@@ -803,63 +803,12 @@
               this.instance.post(this.authorization.getStaffMpMenue,{
                 mpId: pathParams.mpId
               }).then(function(ret){
-                if (ret.status === 200 && ret.data != null && that.mpType === '1'){
+                if (ret.status === 200 && ret.data != null ){
+                  console.log(ret)
                   that.$store.state.storeModule.staffMpMenu = ret.data
                   that.staffMpMenu = ret.data
                   let menuList = ret.data.menulist
                   that.translateMpMenu(menuList)
-                } else if(ret.status === 200 && ret.data != null && that.mpType === '2'){
-                  that.$store.state.storeModule.staffMpMenu = ret.data
-                  that.staffMpMenu = ret.data
-                  that.tempStaffMpMenuName = that.lang === 'EN' ? that.staffMpMenu.mpNamecn : that.staffMpMenu.mpNameus
-                  if (that.showMenuHead === '4'){
-                    let routePath = that.$route.path
-                    let menuJson = transDataToJson(ret.data.menulist, 'menuId')
-                    let menuInfo = menuJson[routePath]
-                    if (menuInfo === null || menuInfo === undefined){
-                      let fullPath = that.$route.fullPath
-                      menuInfo = menuJson[fullPath]
-                      if (menuInfo === null || menuInfo === undefined){
-                        fullPath = fullPath.replace(/[?,&]{0,}apMenu=\w*/g, '');
-                        fullPath = fullPath.replace(/[?,&]{0,}acd=\w*/g, '');
-                        fullPath = fullPath.replace(/[?,&]{0,}code=\w*/g, '');
-                        fullPath = fullPath.replace(/[?,&]{0,}state=\w*/g, '');
-                        fullPath = fullPath.replace(/[?,&]{0,}mpType=\w*/g, '');
-                        fullPath = fullPath.replace(/[?,&]{0,}menuId=\w*/g, '');
-                        fullPath = fullPath.replace(/[?,&]{0,}showMenuHead=\w*/g, '');
-                        fullPath = fullPath.replace(/[?,&]{0,}mpId=\w*/g, '');
-                        console.log('fullPath:' + fullPath)
-                        menuInfo = menuJson[fullPath]
-                      }
-                    }
-                    let parentMenuInfo = {}
-                    if (menuInfo && menuInfo.menuPid){
-                      let menuPid = menuInfo.menuPid
-                      parentMenuInfo = menuJson[menuPid]
-                    }
-                    if (that.lang === 'EN'){
-                      if (parentMenuInfo && parentMenuInfo.menuName){
-                        that.staffMpMenu.mpNamecn = that.tempStaffMpMenuName + ' > ' + parentMenuInfo.menuName
-                        if (menuInfo && menuInfo.menuName){
-                          that.staffMpMenu.mpNamecn = that.staffMpMenu.mpNamecn + ' > ' + menuInfo.menuName
-                        }
-                      } else if (menuInfo &&  menuInfo.menuName){
-                        that.staffMpMenu.mpNamecn = that.tempStaffMpMenuName + ' > ' + menuInfo.menuName
-                      }
-                    } else {
-                      if (parentMenuInfo && parentMenuInfo.menuEnName){
-                        that.staffMpMenu.mpNameus = that.tempStaffMpMenuName + ' > ' + parentMenuInfo.menuEnName
-                        if (menuInfo && menuInfo.menuEnName){
-                          that.staffMpMenu.mpNameus =  that.staffMpMenu.mpNameus + ' > ' + menuInfo.menuEnName
-                        }
-                      }else if (menuInfo && menuInfo.menuEnName){
-                        that.staffMpMenu.mpNameus = that.tempStaffMpMenuName + ' > ' + menuInfo.menuEnName
-                      }
-                    }
-                  }
-                  that.translateMpMenuMap = translateMpMenuData(ret.data.menulist, 'menuId', 'menuPid', 'children', 'menuOrder')
-                  let menuId = that.$route.query.menuId
-                  that.staffMpMenu.menulist = that.translateMpMenuMap[menuId]
                 }
               }).catch(function(e){
                 console.error(e)
