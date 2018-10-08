@@ -264,11 +264,17 @@
                             <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12 col-xl-12 pl-0">
                                 <div class="breadcrumbs">
                                     <template v-for="(item, $idx) in breadcrumbArr" >
-                                        <router-link :to="{ path: getRouterLinkUrl(item.menuUrl) }" class="canclick" style="cursor: pointer"
-                                                v-if="$idx > 0 && $idx <= breadcrumbArr.length - 2 && item.menuUrl">
+                                        <router-link :to="{ path: getRouterLinkUrl(item.menuUrl) }" class="canclick"
+                                                v-if="item.rightTag === tag && $idx > 0 && $idx <= breadcrumbArr.length - 2 && item.menuUrl">
                                             <span> {{lang === 'EN' ? item.menuName : item.menuEnName}}</span>
                                             <span v-if="$idx <= breadcrumbArr.length - 2">></span>
                                         </router-link>
+                                        <a  :key="$idx" v-else-if="$idx > 0 && $idx <= breadcrumbArr.length - 2 && item.menuUrl"
+                                            class="canclick"
+                                            @click="($idx === breadcrumbArr.length - 1) && item.menuUrl ? '': changeToPage(item.menuUrl)">
+                                            <span> {{lang === 'EN' ? item.menuName : item.menuEnName}}</span>
+                                            <span v-if="$idx <= breadcrumbArr.length - 2">></span>
+                                        </a>
                                         <a  :key="$idx" v-else
                                             class="unclick"
                                             @click="($idx === breadcrumbArr.length - 1) && item.menuUrl ? '': changeToPage(item.menuUrl)">

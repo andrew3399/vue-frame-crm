@@ -18,8 +18,8 @@ export async function beforeEach (to, from, next, authorization, requestInstance
   let locationHref = window.location.href;
   locationHref = locationHref.replace(/[?]{1}code=\w*[&]{1,}/g, '?');
   locationHref = locationHref.replace(/[?]{1}state=\w*[&]{1,}/g, '?');
-  locationHref = locationHref.replace(/[&]{1,}code=\w*/g, '');
-  locationHref = locationHref.replace(/[&]{1,}state=\w*/g, '');
+  locationHref = locationHref.replace(/[?,&]{1,}code=\w*/g, '');
+  locationHref = locationHref.replace(/[?,&]{1,}state=\w*/g, '');
   // 从EIP跳转过来的菜单需要携带参数信息
   console.log('======================= from ========================')
   console.log(from)
@@ -84,7 +84,7 @@ export async function beforeEach (to, from, next, authorization, requestInstance
 
   //去除切换参数
   locationHref = locationHref.replace(/[?]{1}apMenu=\w*[&]{1}/g, '?');
-  locationHref = locationHref.replace(/[&]{1}apMenu=\w*/g, '');
+  locationHref = locationHref.replace(/[?,&]{1}apMenu=\w*/g, '');
   if(fromShowMenuHead && fromShowMenuHead !== '' && fromMpId && fromMpId !== '' && !to.query.showMenuHead && !to.query.mpId){
     to.query.showMenuHead = fromShowMenuHead
     to.query.mpId = fromMpId
@@ -203,7 +203,7 @@ export async function beforeEach (to, from, next, authorization, requestInstance
               redirect_uri: encodeURIComponent(locationHref),
               state: uuid(6, 16)
             }
-            // window.location.href = authorization.authorizeUri + '?client_id=' + msg.client_id + '&redirect_uri=' + msg.redirect_uri + '&response_type=code&scope=read&state=' + msg.state
+            window.location.href = authorization.authorizeUri + '?client_id=' + msg.client_id + '&redirect_uri=' + msg.redirect_uri + '&response_type=code&scope=read&state=' + msg.state
           })
         } else {
           /**
