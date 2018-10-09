@@ -534,20 +534,10 @@
             }
         },
         computed: {
-            // staffMpMenuName(){
-            //   let sessionMpMenuName  = sessionStorage.getItem('staffMpMenuName');
-            //   console.log('sessionMpMenuName:  '+sessionMpMenuName)
-            //   if (sessionMpMenuName && sessionMpMenuName !== ''){
-            //     return sessionMpMenuName
-            //   }
-            //    return  this.lang === 'EN' ? this.staffMpMenu.mpNamecn : this.staffMpMenu.mpNameus
-            // },
             translateMusterMenuList(){
               return this.musterMenuList
             },
             mpTreeData(){
-              console.log('this.staffMpMenu.menulist:  ')
-              console.log(this.staffMpMenu)
               return this.staffMpMenu.menulist
             },
             breadcrumbArr(){
@@ -638,16 +628,10 @@
               return
             }
              this.staffMpMenuName = this.lang === 'EN' ? this.staffMpMenu.mpNamecn : this.staffMpMenu.mpNameus
-          },
-          'authMenuList'(){
-
           }
         },
         methods: {
           checkMusterMenuAuth(menuId){
-            console.log('========================== this.authMenuList ================================')
-            console.log(this.authMenuList)
-            console.log('========================== this.authMenuList end ================================')
             return !(this.authMenuList && this.authMenuList.length > 0 && this.authMenuList.indexOf(menuId) > -1)
           },
           getMusterMenu(){
@@ -693,7 +677,7 @@
             }
             console.log('selectMpMenu:' + url)
             let urlInfoArray = url.split(';')
-            let systemUrl = urlInfoArray[0]
+            let systemUrl = ''
             let menuUrl = urlInfoArray[1]
             if (menuUrl.indexOf('?') > -1){
               if(menuUrl.indexOf('mpType=') < 0 && this.$route.query.mpType){
@@ -1304,6 +1288,13 @@
             document.body.onkeyup = function () {
                 that.handleRefreshSessionTime(that)
             }
+
+          if (this.$route.query.mpType && this.$route.query.mpType !== ''){
+            this.mpType = this.$route.query.mpType
+          } else {
+            this.mpType = '1'
+          }
+
             // let path = getQuery('path')
             // localStorage.set('aid-path', path, 5 * 60 * 1000)
             let accessToken = localStorage.get('access_token')
@@ -1316,14 +1307,22 @@
             console.log(' ====================  loginLanguage ==================')
             console.log(JSON.stringify(fetchLang))
           console.log(' ====================  loginLanguage  END ==================')
+            let aidLanguage = localStorage.get('aid-language') && localStorage.get('aid-language') !== '' ? localStorage.get('aid-language') : 'zh-CN';
+            let saveLanguage = '';
             if (fetchLang.data.toLowerCase() === 'zh' || fetchLang.data.toLowerCase() === 'zh-cn') {
                 this.lang = 'EN'
+                saveLanguage =  'zh-CN';
                 localStorage.set('aid-language', 'zh-CN')
                 this.$i18n.locale = 'zh-CN'
             } else {
                 this.lang = 'ZH'
+              saveLanguage =  'en-US';
                 localStorage.set('aid-language', 'en-US')
                 this.$i18n.locale = 'en-US'
+            }
+            if (saveLanguage !== '' && aidLanguage !== saveLanguage){
+              //来自外部的语言信息切换 此时需要进行刷新当前界面
+              this.$router.go(0)
             }
             console.log('lang: ' + this.lang)
             // this.$i18n.locale = language

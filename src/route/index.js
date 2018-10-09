@@ -87,7 +87,9 @@ export async function beforeEach (to, from, next, authorization, requestInstance
   //去除切换参数
   locationHref = locationHref.replace(/[?]{1}apMenu=\w*[&]{1}/g, '?');
   locationHref = locationHref.replace(/[?,&]{1}apMenu=\w*/g, '');
-  if(fromShowMenuHead && fromShowMenuHead !== '' && !to.query.showMenuHead ){
+  let showMenuHeadArray = ['1','2','3','4','5']
+  if(fromShowMenuHead && fromShowMenuHead !== '' && !to.query.showMenuHead
+        && showMenuHeadArray.indexOf(fromShowMenuHead) > -1){
     if ( fromMpId && fromMpId !== '' && !to.query.mpId) {
       to.query.mpId = fromMpId
     }
@@ -112,7 +114,7 @@ export async function beforeEach (to, from, next, authorization, requestInstance
     if (referMpIdQuery !== null && referMpIdQuery.length > 1){
       refMpId = referMpIdQuery[1]
     }
-    if ( refShowMenuHead && refShowMenuHead !== '' ){
+    if ( refShowMenuHead && refShowMenuHead !== '' &&  showMenuHeadArray.indexOf(refShowMenuHead) > -1 ){
       mustChangePage = false
       to.query.showMenuHead = refShowMenuHead
       if (refMpId && refMpId !== '' && !to.query.mpId){
@@ -181,7 +183,7 @@ export async function beforeEach (to, from, next, authorization, requestInstance
            *  oauth2
            */
           // cb(code, state, next, localStorage, uuid(6, 16))
-          if (showMenuHead !== '' && locationHref.indexOf('showMenuHead=') < 0){
+          if (showMenuHead !== '' && locationHref.indexOf('showMenuHead=') < 0 && showMenuHeadArray.indexOf(showMenuHead) > -1){
             if (locationHref.indexOf('?') > -1){
               locationHref = locationHref + '&showMenuHead=' + showMenuHead
             } else{
@@ -241,7 +243,7 @@ export async function beforeEach (to, from, next, authorization, requestInstance
                       // localStorage.set('refresh_token', res.data.refresh_token, Math.pow(2, 32))
                       next()
                     }).catch(res => {
-                      if (showMenuHead !== '' && locationHref.indexOf('showMenuHead=') < 0){
+                      if (showMenuHead !== '' && locationHref.indexOf('showMenuHead=') < 0  && showMenuHeadArray.indexOf(showMenuHead) > -1){
                         if (locationHref.indexOf('?') > -1){
                           locationHref = locationHref + '&showMenuHead=' + showMenuHead
                         } else{
@@ -267,7 +269,7 @@ export async function beforeEach (to, from, next, authorization, requestInstance
               }
             })
           } else {
-            if (showMenuHead !== '' && redirectUri.indexOf('showMenuHead=') < 0){
+            if (showMenuHead !== '' && redirectUri.indexOf('showMenuHead=') < 0  && showMenuHeadArray.indexOf(showMenuHead) > -1){
               if (redirectUri.indexOf('?') > -1){
                 redirectUri = redirectUri + '&showMenuHead=' + showMenuHead
               } else {
