@@ -289,7 +289,10 @@
                     <!-- EIP 集成导航栏和菜单栏 -->
                     <div class="bg-white pt-10"  v-if="showMenuHead === '4'">
                         <div class="customer-tt-title pl-10">
-                            <span class="eipBread">
+                            <span class="eipBread" v-if="mpType === '1'">
+                                {{lang === 'EN' ? staffMpMenu.mpNamecn : staffMpMenu.mpNameus}}
+                            </span>
+                            <span class="eipBread" v-if="mpType === '2'">
                                 {{staffMpMenuName}}
                             </span>
                         </div>
@@ -665,7 +668,7 @@
               || url === '' || url.indexOf(';') < 0){
               return;
             }
-
+            sessionStorage.setItem('apMenu','0')
             if (this.lang === 'EN'){
               this.staffMpMenu.mpNamecn = this.tempStaffMpMenuName + mpMenuName
               sessionStorage.setItem('staffMpMenuName',this.staffMpMenu.mpNamecn)
@@ -1088,11 +1091,7 @@
                 let sessionTime = localStorage.get('session_time')
                 let refreshToken = localStorage.get('refresh_token')
                 let that = this
-                if (url.indexOf('?') > -1){
-                  url = url + '&apMenu=1'
-                } else {
-                  url = url + '?apMenu=1'
-                }
+                sessionStorage.setItem('apMenu','1')
                 if (sessionTime && !accessToken) {
                     that.instance.post(that.authorization.tokenUri +
                         '?grant_type=refresh_token' + '&refresh_token=' + encodeURIComponent(refreshToken) + '&scope=read', '', {

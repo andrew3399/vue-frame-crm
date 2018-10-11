@@ -27,7 +27,6 @@ export async function beforeEach (to, from, next, authorization, requestInstance
   console.log('======================= from end ========================')
   let fromQuery = from.query;
   let toAcd = to.query.acd;
-  let toApMenu = to.query.apMenu;
   let fromShowMenuHead = fromQuery.showMenuHead;
   let fromMpId = fromQuery.mpId;
   if (toAcd && toAcd !== undefined && toAcd !== null){
@@ -64,16 +63,24 @@ export async function beforeEach (to, from, next, authorization, requestInstance
   if (loginUserName && loginUserName !== ''){
     sessionStorage.setItem('loginUserName',loginUserName)
   }
+  let mustChangePage = false;
   let documentReferrer = document.referrer
+  let apMenu = sessionStorage.getItem('apMenu')
+  if (apMenu && apMenu === '0') {
+    apMenu = to.query.apMenu
+  }
   let fromMpType = fromQuery.mpType
   let fromMenuId = fromQuery.menuId
-  let mustChangePage = false;
+  console.log('======================= toApMenu =================')
+  console.log(apMenu)
+  console.log('======================= toApMenu end =================')
   if (fromMpType && fromMpType !== '' && fromMenuId && fromMenuId !== ''
-    && !to.query.mpType && !to.query.menuId && !toApMenu && routeArr.indexOf(to.path) < 0){
+    && !to.query.mpType && !to.query.menuId && (!apMenu || apMenu === '0')
+    && routeArr.indexOf(to.path) < 0){
     to.query.mpType = fromMpType
     to.query.menuId = fromMenuId
     mustChangePage = true
-  } else if(!to.query.mpType && !to.query.menuId && !toApMenu && routeArr.indexOf(to.path) < 0){
+  } else if(!to.query.mpType && !to.query.menuId && (!apMenu || apMenu === '0') && routeArr.indexOf(to.path) < 0){
     let referMpTypeQuery = documentReferrer.match(new RegExp('[\?\&]mpType=([^\&]+)', 'i'));
     let referMenuIdQuery = documentReferrer.match(new RegExp('[\?\&]menuId=([^\&]+)', 'i'));
     if (referMpTypeQuery && referMpTypeQuery !== '' && referMpTypeQuery.length
