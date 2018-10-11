@@ -296,7 +296,7 @@
                                 {{staffMpMenuName}}
                             </span>
                         </div>
-                         <div class="customer-tt-table"
+                         <div :class="{'customer-tt-table':true,'customer-tt-table-angural-width':mpTreeData.length > 7}"
                               v-if="mpType === '1'">
                             <ul class="menu" >
                                 <li v-for="staffMenu in mpTreeData" @click="changeStaffMpMenu(staffMenu.systemUrl,staffMenu.menuUrl)" :class="{'z-crttab':staffMenu.menuUrl === staffMpMenuUrl}">

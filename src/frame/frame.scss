@@ -718,10 +718,13 @@
     border-right:1px solid #0085D0;
 }
 
+.customer-tt-table-angural-width ul li{
+    width: 16.666%
+}
+
 .customer-tt-table ul li{
     float:left;
     cursor: pointer;
-    width: 16.666%;
     margin-bottom:4px;
     padding:0 20px;
     height:40px;
