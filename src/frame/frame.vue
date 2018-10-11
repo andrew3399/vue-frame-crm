@@ -624,6 +624,16 @@
             }
           },
           'computSessionMenuList'(val){
+            let sessionHandleTodo = sessionStorage.getItem('handleTodoBread');
+            if (sessionHandleTodo && this.tempStaffMpMenuName){
+              if ( sessionHandleTodo.indexOf(this.tempStaffMpMenuName) < 0){
+                this.staffMpMenuName = this.tempStaffMpMenuName + " > " + sessionHandleTodo
+                return
+              } else {
+                this.staffMpMenuName = sessionHandleTodo
+                return
+              }
+            }
             let sessionMpMenuName  = sessionStorage.getItem('staffMpMenuName');
             console.log('sessionMpMenuName:  '+sessionMpMenuName)
             if (sessionMpMenuName && sessionMpMenuName !== ''){
@@ -669,6 +679,7 @@
               return;
             }
             sessionStorage.setItem('apMenu','0')
+            sessionStorage.removeItem('handleTodoBread')
             if (this.lang === 'EN'){
               this.staffMpMenu.mpNamecn = this.tempStaffMpMenuName + mpMenuName
               sessionStorage.setItem('staffMpMenuName',this.staffMpMenu.mpNamecn)
@@ -1092,6 +1103,7 @@
                 let refreshToken = localStorage.get('refresh_token')
                 let that = this
                 sessionStorage.setItem('apMenu','1')
+                sessionStorage.removeItem('handleTodoBread')
                 if (sessionTime && !accessToken) {
                     that.instance.post(that.authorization.tokenUri +
                         '?grant_type=refresh_token' + '&refresh_token=' + encodeURIComponent(refreshToken) + '&scope=read', '', {
