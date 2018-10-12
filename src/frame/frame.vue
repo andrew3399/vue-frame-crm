@@ -305,7 +305,7 @@
                             </ul>
                         </div>
                     </div>
-                    <div class="crm-wrapper" style="padding: 0 10px 15px!important;" ref="musterMenuListId" v-if="mpType === '2' && translateMusterMenuList && translateMusterMenuList.length">
+                    <div class="crm-wrapper" style="padding: 0 10px 15px!important;" ref="musterMenuListId" v-if="mpType === '2' && translateMusterMenuList && translateMusterMenuList.length && (!showMenuHead || showMenuHead === '4')">
                         <div class="customer-tt-table-low"
                              v-if="mpType === '2' && translateMusterMenuList && translateMusterMenuList.length">
                             <ul class="menu_eip">
