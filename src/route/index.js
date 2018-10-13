@@ -54,6 +54,7 @@ export async function beforeEach (to, from, next, authorization, requestInstance
       accessToken = tokenRes.data.access_token
       localStorage.set('access_token', accessToken, tokenRes.data.expires_in * 1000)
       refreshToken = tokenRes.data.refresh_token
+      sessionTime = time
       localStorage.set('refresh_token', refreshToken, Math.pow(2, 32))
       localStorage.set('session_time', time, 8 * 60 * 60 * 1000)
     }
@@ -155,7 +156,6 @@ export async function beforeEach (to, from, next, authorization, requestInstance
   let authorMenuArray = JSON.parse(sessionStorage.getItem('authorMenuArray'))
   let toPath = to.path
   if (to.meta && to.meta.requireAuth ) {
-    console.log('333333333333333333333333')
       if (accessToken && refreshToken && sessionTime) {
         if (authorMenuArray === null || to.meta.permission === null ||  to.meta.permission === undefined || !to.meta.permission ){
           next()

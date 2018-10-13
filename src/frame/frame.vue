@@ -296,7 +296,7 @@
                                 {{staffMpMenuName}}
                             </span>
                         </div>
-                         <div :class="{'customer-tt-table':true,'customer-tt-table-angural-width':mpTreeData.length > 7}"
+                         <div :class="{'customer-tt-table':true,'customer-tt-table-angural-width':mpTreeData && mpTreeData.length && mpTreeData.length > 7}"
                               v-if="mpType === '1'">
                             <ul class="menu" >
                                 <li v-for="staffMenu in mpTreeData" @click="changeStaffMpMenu(staffMenu.systemUrl,staffMenu.menuUrl)" :class="{'z-crttab':staffMenu.menuUrl === staffMpMenuUrl}">
@@ -312,7 +312,9 @@
                                 <!-- 在这里判断 -->
                                 <template  v-for="item in translateMusterMenuList">
                                     <li :class="{'z-crttab':item.url === $route.path}"
-                                              :key="item.menuId" @click="selectMpMenu(item.url + ';' + item.url,lang === 'EN' ? ' > '+item.menuName : ' > '+item.menuEnName,authMenuList.indexOf(item.menuId)>-1?false:true)"
+                                              :key="item.menuId" @click="selectMpMenu(item.url + ';' + item.url,
+                                              lang === 'EN' ? ' > '+item.menuName : ' > '+item.menuEnName,
+                                              authMenuList.indexOf(item.menuId) <= -1)"
                                               v-if="!item.childMenu || item.childMenu.length < 0">
                                         <svg class="icon glyph-icon" aria-hidden="true">
                                             <use :xlink:href="item.menuIcon"></use>
@@ -782,7 +784,7 @@
             //RAP路径信息
             let rapPathStart = '.jsp';
             if (url.indexOf(rapPathStart) < 0){
-              if (url.indexOf(routePath) === -1){
+              if (url.indexOf(routePath) === -1 || url.indexOf(this.$route.path) > -1){
                 this.changeToPage(systemUrl + url)
               } else {
                 this.$router.push(url)
