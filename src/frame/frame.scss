@@ -708,7 +708,7 @@
 .customer-tt-table{
     width: 100%;
     display: inline-block;
-    padding:10px 15px;
+    padding:15px 15px 0px 15px;
     background:#E5F1FE;
 
 }
@@ -717,34 +717,36 @@
     width:100%;
 }
 .customer-tt-table-angural-width ul li{
-    width: 16.666%;
+    //width: 16.666%;
 }
 
 .customer-tt-table ul li{
     float:left;
     cursor: pointer;
-    margin-bottom:4px;
-    padding:0 20px;
-    height:40px;
-    line-height: 40px;
-    background: #EFF7FF;
-    border-left:1px solid #0085D0;
-    border-top:1px solid #0085D0;
-    border-bottom:1px solid #0085D0;
-    border-right:1px solid #0085D0;
+    margin-bottom:10px;
+    padding:0 9px;
+    height:30px;
+    line-height: 30px;
+    //background: #EFF7FF;
+    //border-left:1px solid #0085D0;
+    //border-top:1px solid #0085D0;
+    //border-bottom:1px solid #0085D0;
+    //border-right:1px solid #0085D0;
     color:#0085D0;
     font-size:14px;
+    border-radius:5px;
+    margin-right:20px;
 }
 
 .customer-tt-table ul li:last-child{
-    border-right:1px solid #0085D0;
-    border-radius:0 5px 5px  0;
+    //border-right:1px solid #0085D0;
+    //border-radius:0 5px 5px  0;
 }
 .customer-tt-table ul li:first-child{
-    border-radius:5px 0px 0px  5px;
+    //border-radius:5px 0px 0px  5px;
 }
 .customer-tt-table-onlyone ul li{
-    border-radius:5px !important;
+    //border-radius:5px !important;
 }
 .customer-tt-table ul .z-crttab{
     background: #0085D0;
