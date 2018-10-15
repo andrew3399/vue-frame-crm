@@ -788,7 +788,7 @@
             //RAP路径信息
             let rapPathStart = '.jsp';
             if (url.indexOf(rapPathStart) < 0){
-              if (url.indexOf(routePath) === -1 || url.indexOf(this.$route.path) > -1){
+              if (url.indexOf(routePath) === -1){
                 this.changeToPage(systemUrl + url)
               } else {
                 this.$router.push(url)
@@ -832,10 +832,6 @@
                 mpId: pathParams.mpId
               }).then(function(ret){
                 if (ret.status === 200 && ret.data != null ){
-                  console.log(' ==============================  this.authorization.getStaffMpMenue =============================== ')
-                  console.log(ret)
-                  console.log( ret.data.menulist)
-                  console.log(' ==============================  this.authorization.getStaffMpMenue  end =============================== ')
                   that.$store.state.storeModule.staffMpMenu = ret.data
                   that.staffMpMenu = ret.data
                   that.tempStaffMpMenuName = that.lang === 'EN' ? ret.data.mpNamecn : ret.data.mpNameus
@@ -849,12 +845,9 @@
             }
           },
           translateMpMenu(menuList){
-            console.log(menuList)
             let that = this;
             let routePath = this.$route.path
-            console.log('000000000000000000000000000000000000')
             if (menuList && menuList !== null && menuList.length > 0) {
-              console.log('11111111111111111111111111')
               let staffMpMenuList = new Array();
               for(let i = 0; i < menuList.length; i++){
                 staffMpMenuList.push(menuList[i].menuUrl)
@@ -1395,7 +1388,22 @@
               this.staffMpMenuUrl = sessionStorage.getItem('staffMpMenuUrl')
               let currentPath = this.$router.history.current.path;
               if (!this.staffMpMenuUrl || this.staffMpMenuUrl === '' || this.staffMpMenuUrl.indexOf(currentPath) <= -1){
-                this.staffMpMenuUrl = this.$router.history.current.path
+                let currentFullPath = this.$route.fullPath
+                currentFullPath = currentFullPath.replace(/[?]{1}user=\w*[&]{1,}/g, '?');
+                currentFullPath = currentFullPath.replace(/[?]{1}code=\w*[&]{1,}/g, '?');
+                currentFullPath = currentFullPath.replace(/[?]{1}state=\w*[&]{1,}/g, '?');
+                currentFullPath = currentFullPath.replace(/[?]{1}showMenuHead=\w*[&]{1,}/g, '?');
+                currentFullPath = currentFullPath.replace(/[?]{1}acd=\w*[&]{1,}/g, '?');
+                currentFullPath = currentFullPath.replace(/[?]{1}path=\w*[&]{1,}/g, '?');
+                currentFullPath = currentFullPath.replace(/[?]{1}mpId=\w*[&]{1,}/g, '?');
+                currentFullPath = currentFullPath.replace(/[?,&]{1}showMenuHead=\w*/g, '');
+                currentFullPath = currentFullPath.replace(/[?,&]{1}acd=\w*/g, '');
+                currentFullPath = currentFullPath.replace(/[?,&]{1}path=\w*/g, '');
+                currentFullPath = currentFullPath.replace(/[?,&]{1}mpId=\w*/g, '');
+                currentFullPath = currentFullPath.replace(/[?,&]{1}user=\w*/g, '');
+                currentFullPath = currentFullPath.replace(/[?,&]{1}code=\w*/g, '');
+                currentFullPath = currentFullPath.replace(/[?,&]{1}state=\w*/g, '');
+                this.staffMpMenuUrl = currentFullPath
               }
               sessionStorage.setItem('staffMpMenuUrl',this.staffMpMenuUrl)
             }
