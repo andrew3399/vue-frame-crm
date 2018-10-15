@@ -301,8 +301,8 @@
                                        'customer-tt-table-onlyone': mpTreeData && mpTreeData.length && mpTreeData.length === 1}"
                               v-if="mpType === '1'">
                             <ul class="menu" >
-                                <li v-for="staffMenu in mpTreeData" @click="changeStaffMpMenu(staffMenu.systemUrl,staffMenu.menuUrl)" :class="{'z-crttab':staffMenu.menuUrl === staffMpMenuUrl}">
-                                    {{lang === 'EN'? staffMenu.menuName !== null && staffMenu.menuName !== '' ? staffMenu.menuName : staffMenu.menuEnName  : staffMenu.menuEnName}}
+                                <li v-for="staffMenu in mpTreeData" @click="changeStaffMpMenu(staffMenu.systemUrl,staffMenu.menuUrl)" >
+                                    <a :class="{'z-crttab':staffMenu.menuUrl === staffMpMenuUrl}">{{lang === 'EN'? staffMenu.menuName !== null && staffMenu.menuName !== '' ? staffMenu.menuName : staffMenu.menuEnName  : staffMenu.menuEnName}}</a>
                                 </li>
                             </ul>
                         </div>
