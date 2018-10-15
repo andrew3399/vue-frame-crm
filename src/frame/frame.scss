@@ -715,11 +715,9 @@
 .customer-tt-table ul{
     float:left;
     width:100%;
-    border-right:1px solid #0085D0;
 }
-
 .customer-tt-table-angural-width ul li{
-    width: 16.666%
+    width: 16.666%;
 }
 
 .customer-tt-table ul li{
@@ -733,6 +731,7 @@
     border-left:1px solid #0085D0;
     border-top:1px solid #0085D0;
     border-bottom:1px solid #0085D0;
+    border-right:1px solid #0085D0;
     color:#0085D0;
     font-size:14px;
 }
@@ -743,6 +742,9 @@
 }
 .customer-tt-table ul li:first-child{
     border-radius:5px 0px 0px  5px;
+}
+.customer-tt-table-onlyone ul li{
+    border-radius:5px !important;
 }
 .customer-tt-table ul .z-crttab{
     background: #0085D0;

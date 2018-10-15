@@ -29,6 +29,12 @@ export async function beforeEach (to, from, next, authorization, requestInstance
   let toAcd = to.query.acd;
   let fromShowMenuHead = fromQuery.showMenuHead;
   let fromMpId = fromQuery.mpId;
+  let sessionFromMpId = sessionStorage.getItem('fromMpId');
+  if (to.query.mpId && sessionFromMpId && to.query.mpId !== sessionFromMpId){
+    sessionStorage.removeItem('fromMpId')
+    sessionStorage.removeItem('staffMpMenuUrl')
+  }
+  sessionStorage.setItem('fromMpId',to.query.mpId)
   if (toAcd && toAcd !== undefined && toAcd !== null){
     redirectUri = locationHref
   }

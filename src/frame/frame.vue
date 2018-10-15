@@ -31,7 +31,7 @@
                             @on-select="hdMenuClick"
                             ref="sidebarMenu">
                         <template v-for="(item1, x) in treeData">
-                            <t-submenu :name="item1.menuName" v-if="item1.children && item1.children.length">
+                            <t-submenu :name="item1.menuName ? item1.menuName : ''" v-if="item1.children && item1.children.length">
                                 <template slot="title">
                                     <t-icon :type="item1.menuIcon" v-if="item1.menuIcon"></t-icon>
                                     <t-avatar size="sm" bg-state="success" :text="item1.rightTag" :dot="false"
@@ -48,7 +48,7 @@
                                     <span class="sub-text" :title="lang === 'EN'?item1.menuName:item1.menuEnName" v-else>{{lang === 'EN'?item1.menuName:item1.menuEnName}}</span>
                                 </template>
                                 <template v-for="(item2, y) in item1.children">
-                                    <t-submenu v-if="item2.children && item2.children.length" :name="item2.menuName"
+                                    <t-submenu v-if="item2.children && item2.children.length" :name="item2.menuName ? item2.menuName : ''"
                                                class="second-submenu">
                                         <template slot="title">
                                             <router-link :to="{ path: getRouterLinkUrl(item2.menuUrl)}"
@@ -65,8 +65,8 @@
                                         </template>
                                         <template v-for="(item3, z) in item2.children">
                                             <t-submenu v-if="item3.children && item3.children.length"
-                                                       :name="item3.menuName" :id="x + '' +y" class="second-submenu">
-                                                <t-menu-item v-for="(item4, w) in item3.children" :name="item4.menuName"
+                                                       :name="item3.menuName ? item3.menuName : ''" :id="x + '' +y" class="second-submenu">
+                                                <t-menu-item v-for="(item4, w) in item3.children" :name="item4.menuName ? item4.menuName : ''"
                                                              :key="w" @click.native="getMenu(item4)" class="sec-item">
                                                     <router-link :to="{ path: getRouterLinkUrl(item4.menuUrl) }"
                                                                  v-if="item4.rightTag === tag && item4.menuUrl">
@@ -82,7 +82,7 @@
                                                           v-else>{{lang === 'EN'?item4.menuName:item4.menuEnName}}</span>
                                                 </t-menu-item>
                                             </t-submenu>
-                                            <t-menu-item :name="item3.menuName" :key="z" @click.native="getMenu(item3)"
+                                            <t-menu-item :name="item3.menuName ?  item3.menuName : ''" :key="z" @click.native="getMenu(item3)"
                                                          class="sec-item" v-else>
                                                 <router-link :to="{ path: getRouterLinkUrl(item3.menuUrl) }"
                                                              v-if="item3.rightTag === tag && item3.menuUrl">
@@ -101,7 +101,7 @@
                                             </t-menu-item>
                                         </template>
                                     </t-submenu>
-                                    <t-menu-item :name="item2.menuName" v-else>
+                                    <t-menu-item :name="item2.menuName ? item2.menuName : ''" v-else>
                                         <router-link :to="{ path: getRouterLinkUrl(item2.menuUrl) }"
                                                      v-if="item2.rightTag === tag && item2.menuUrl">
                                             <span class="sub-text" :title="lang === 'EN'?item2.menuName:item2.menuEnName">{{lang === 'EN'?item2.menuName:item2.menuEnName}}</span>
@@ -115,7 +115,7 @@
                                     </t-menu-item>
                                 </template>
                             </t-submenu>
-                            <t-menu-item :name="item1.menuName" v-else>
+                            <t-menu-item :name="item1.menuName ? item1.menuName : ''" v-else>
                                 <t-icon :type="item1.menuIcon" v-if="item1.menuIcon"></t-icon>
                                 <t-avatar size="sm" bg-state="success" :text="item1.rightTag" :dot="false"
                                           v-else></t-avatar>
@@ -155,7 +155,7 @@
                             >
 
                                 <template v-for="(item, x) in navs">
-                                    <t-submenu v-if="item.children" :name="x">
+                                    <t-submenu v-if="item.children" :name="x ? x : ''">
                                         <template slot="title">
                                             <t-icon :type="item.icon" v-if="item.icon"></t-icon>
                                             <span class="sub-text" v-if="item.name">{{item.name}}</span>
@@ -166,7 +166,7 @@
                                             <span class="sub-text" v-if="item1.name">{{item1.name}}</span>
                                         </t-menu-item>
                                     </t-submenu>
-                                    <t-menu-item :name="x" v-else>
+                                    <t-menu-item :name="x ? x : ''" v-else>
                                         <span v-if="x=='0'">
                                             <t-icon type="clock">
                                             </t-icon><font color="#0085D0">HK</font>&nbsp&nbsp{{formRight.HKTime}}&nbsp&nbsp&nbsp
@@ -296,7 +296,9 @@
                                 {{staffMpMenuName}}
                             </span>
                         </div>
-                         <div :class="{'customer-tt-table':true,'customer-tt-table-angural-width':mpTreeData && mpTreeData.length && mpTreeData.length > 7}"
+                         <div :class="{'customer-tt-table':true,
+                                        'customer-tt-table-angural-width':mpTreeData && mpTreeData.length && mpTreeData.length > 7,
+                                       'customer-tt-table-onlyone': mpTreeData && mpTreeData.length && mpTreeData.length === 1}"
                               v-if="mpType === '1'">
                             <ul class="menu" >
                                 <li v-for="staffMenu in mpTreeData" @click="changeStaffMpMenu(staffMenu.systemUrl,staffMenu.menuUrl)" :class="{'z-crttab':staffMenu.menuUrl === staffMpMenuUrl}">
@@ -305,7 +307,8 @@
                             </ul>
                         </div>
                     </div>
-                    <div class="crm-wrapper" style="padding: 0 10px 15px!important;" ref="musterMenuListId" v-if="mpType === '2' && translateMusterMenuList && translateMusterMenuList.length && (!showMenuHead || showMenuHead === '4')">
+                    <div class="crm-wrapper" style="padding: 0 10px 15px!important;" ref="musterMenuListId" v-if="mpType === '2' && translateMusterMenuList && translateMusterMenuList.length
+                            && (showMenuHead === '1' || showMenuHead === '4' || showMenuHead === '2' || showMenuHead === '3')">
                         <div class="customer-tt-table-low"
                              v-if="mpType === '2' && translateMusterMenuList && translateMusterMenuList.length">
                             <ul class="menu_eip">
@@ -770,6 +773,7 @@
           changeStaffMpMenu(systemUrl,url){
             console.log('changeStaffMpMenu:  ' + url)
             this.staffMpMenuUrl = url
+            sessionStorage.setItem('staffMpMenuUrl',this.staffMpMenuUrl)
             if (url.indexOf('showMenuHead=') === -1 && this.$route.query.showMenuHead){
               if (url.indexOf('?') > -1){
                 url = url + "&showMenuHead=" + this.$route.query.showMenuHead
@@ -1388,7 +1392,12 @@
                 that.showMenu = true
             }
             if (this.showMenuHead === '4'){
-              this.staffMpMenuUrl = this.$router.history.current.path
+              this.staffMpMenuUrl = sessionStorage.getItem('staffMpMenuUrl')
+              let currentPath = this.$router.history.current.path;
+              if (!this.staffMpMenuUrl || this.staffMpMenuUrl === '' || this.staffMpMenuUrl.indexOf(currentPath) <= -1){
+                this.staffMpMenuUrl = this.$router.history.current.path
+              }
+              sessionStorage.setItem('staffMpMenuUrl',this.staffMpMenuUrl)
             }
 
             window.addEventListener('resize', () => {
