@@ -7,7 +7,7 @@ import {Base64} from 'js-base64'
 import store from '../store/index.js'
 
 export async function beforeEach (to, from, next, authorization, requestInstance, cb) {
-  let routeArr = ['/res', '/cust', '/order', '/acct','/mks', '/rpt', '/prod', '/odp', '/base', '/']
+  let routeArr = ['/res', '/cust/', '/order', '/acct','/mks/', '/rpt', '/prod', '/odp', '/base', '/']
   let localStorage = new LocalStorage()
   let sessionStorage = window.sessionStorage
   let accessToken = localStorage.get('access_token')
