@@ -297,7 +297,8 @@
                             </span>
                         </div>
                          <div :class="{'customer-tt-table':true,
-                                        'customer-tt-table-angural-width':mpTreeData && mpTreeData.length && mpTreeData.length > 7,
+                                        'customer-tt-table-angural-width':mpTreeData && mpTreeData.length && mpTreeData.length > 7 && lang === 'EN',
+                                        'customer-tt-table-angural-width-en':mpTreeData && mpTreeData.length && mpTreeData.length > 5 && lang !== 'EN',
                                        'customer-tt-table-onlyone': mpTreeData && mpTreeData.length && mpTreeData.length === 1}"
                               v-if="mpType === '1'">
                             <ul class="menu" >
@@ -646,6 +647,13 @@
               return
             }
              this.staffMpMenuName = this.lang === 'EN' ? this.staffMpMenu.mpNamecn : this.staffMpMenu.mpNameus
+          },
+          lang(newVal,oldVal){
+            let sessionMpMenuName  = sessionStorage.getItem('staffMpMenuName');
+            if (!sessionMpMenuName || sessionMpMenuName === ''){
+              this.staffMpMenuName = newVal === 'EN' ? this.staffMpMenu.mpNamecn : this.staffMpMenu.mpNameus
+            }
+            this.tempStaffMpMenuName = newVal === 'EN' ? this.staffMpMenu.mpNamecn : this.staffMpMenu.mpNameus
           }
         },
         methods: {
