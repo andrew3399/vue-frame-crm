@@ -287,7 +287,7 @@
                         </div>
                     </div>
                     <!-- EIP 集成导航栏和菜单栏 -->
-                    <div class="bg-white pt-10"  v-if="showMenuHead === '4'">
+                    <div class="bg-white pt-10"  v-if="showMenuHead === '4' && !isIframe">
                         <div class="customer-tt-title pl-10">
                             <span class="eipBread" v-if="mpType === '1'">
                                 {{lang === 'EN' ? staffMpMenu.mpNamecn : staffMpMenu.mpNameus}}
@@ -518,6 +518,7 @@
                 hideSlip: true,
                 hideSlideWrapSlip: true,
                 isIframeContent: false,
+                isIframe:false,
                 iframeUrl: '',
               staffMpMenuUrl: '',
                 accordion: true,
@@ -622,7 +623,7 @@
                 let menuId = this.$route.query.menuId
                 this.staffMpMenu.menulist = this.translateMpMenuMap[menuId ]
               }
-            } else if(to.query.showMenuHead && to.query.showMenuHead === '4'){
+            } else if(to.query.showMenuHead && (to.query.showMenuHead === '4' || to.query.showMenuHead === '5')){
               this.getStaffMpMenue()
             }
             if (this.mpType === '2'){
@@ -1415,7 +1416,10 @@
               }
               sessionStorage.setItem('staffMpMenuUrl',this.staffMpMenuUrl)
             }
-
+            // 初始化isIframe对应的参数信息
+            if (this.$route.query.isIframe && this.$route.query.isIframe !== ''){
+              this.isIframe = this.$route.query.isIframe === '1'
+            }
             window.addEventListener('resize', () => {
                 let clientWidth = document.body.clientWidth || document.body.offsetWidth
                 that.clientWidth = clientWidth

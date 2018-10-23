@@ -144,6 +144,16 @@ export async function beforeEach (to, from, next, authorization, requestInstance
       return;
     }
   }
+  if (to.query.showMenuHead && !to.query.mpId){
+    let referMpIdQuery = documentReferrer.match(new RegExp('[\?\&]mpId=([^\&]+)', 'i'));
+    let refMpId = '';
+    if (referMpIdQuery !== null && referMpIdQuery.length > 1){
+      refMpId = referMpIdQuery[1]
+    }
+    if (refMpId && refMpId !== '' && !to.query.mpId){
+      to.query.mpId = refMpId
+    }
+  }
   if (mustChangePage){
     next({
       path: to.path,
