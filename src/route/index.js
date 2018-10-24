@@ -54,6 +54,20 @@ export async function beforeEach (to, from, next, authorization, requestInstance
       window.location.href = authorization.authorizeUri + '?client_id=' + msg.client_id + '&redirect_uri=' + msg.redirect_uri + '&response_type=code&scope=read&state=' + msg.state
       return
     } else if(toAcd === '0' && !accessToken){
+      if (!to.query.code || to.query.code === 'undefined'){
+        let msg = {
+          client_id: authorization.client_id,
+          redirect_uri: encodeURIComponent(locationHref),
+          state: uuid(6, 16)
+        }
+        window.location.href = authorization.authorizeUri + '?client_id=' + msg.client_id + '&redirect_uri=' + msg.redirect_uri + '&response_type=code&scope=read&state=' + msg.state
+        return
+      }
+      console.log(' ================= await  requestInstance.post(authorization.tokenUri  ======================== ' )
+      console.log(to)
+      console.log(authorization.tokenUri + '?code=' + to.query.code + '&state=' + to.query.state +
+        '&grant_type=authorization_code' + '&client_id=' + authorization.client_id + '&redirect_uri=' + encodeURIComponent(locationHref))
+      console.log(' ================= await  requestInstance.post(authorization.tokenUri  end ======================== ')
       let tokenRes =  await  requestInstance.post(authorization.tokenUri + '?code=' + to.query.code + '&state=' + to.query.state +
         '&grant_type=authorization_code' + '&client_id=' + authorization.client_id + '&redirect_uri=' + encodeURIComponent(locationHref));
       let time = new Date().getTime() + 8 * 60 * 60 * 1000
@@ -196,8 +210,11 @@ export async function beforeEach (to, from, next, authorization, requestInstance
 
       } else {
         sessionStorage.clear()
+        console.log('=====================  start router get code ========= ')
         let code = getQuery('code')
         let state = getQuery('state')
+        console.log(window.location.search)
+        console.log('=====================  end router get code ========= '  + code)
         let showMenuHead = getQuery("showMenuHead");
         let mpId = getQuery("mpId");
         if (code && state) {
@@ -220,15 +237,26 @@ export async function beforeEach (to, from, next, authorization, requestInstance
               locationHref = locationHref + '?mpId=' + mpId
             }
           }
+          console.log(' ==============  11111111111111111111111 ========================')
+          console.log('==================== 11111111111111111111111  tokenUri ========================= ')
+          console.log(authorization.tokenUri + '?code=' + code + '&state=' + state +
+            '&grant_type=authorization_code' + '&client_id=' + authorization.client_id + '&redirect_uri=' + encodeURIComponent(locationHref))
+          console.log('==================== 11111111111111111111111  tokenUri end ========================= ')
           requestInstance.post(authorization.tokenUri + '?code=' + code + '&state=' + state +
             '&grant_type=authorization_code' + '&client_id=' + authorization.client_id + '&redirect_uri=' + encodeURIComponent(locationHref))
             .then(res => {
+              console.log(' ============  1111111111111111111111111 ======== ')
+              console.log(res)
+              console.log('\' ============  1111111111111111111111111 ======== end response ')
               let time = new Date().getTime() + 8 * 60 * 60 * 1000
               localStorage.set('access_token', res.data.access_token, res.data.expires_in * 1000)
               localStorage.set('refresh_token', res.data.refresh_token, Math.pow(2, 32))
               localStorage.set('session_time', time, 8 * 60 * 60 * 1000)
               next()
             }).catch(res => {
+            console.log(' ============  1111111111111111111111111 catch ======== ')
+            console.log(res)
+            console.log('\' ============  1111111111111111111111111 ======== end catch ')
             let msg = {
               client_id: authorization.client_id,
               redirect_uri: encodeURIComponent(locationHref),
@@ -245,6 +273,7 @@ export async function beforeEach (to, from, next, authorization, requestInstance
              * 如果生效，且accessToken 失效，
              * 需要重新获取accessToken
              */
+            console.log(' ================  222222222222222  =============  ' )
             requestInstance.post(authorization.tokenUri + '?grant_type=refresh_token' + '&refresh_token=' + encodeURIComponent(refreshToken) + '&scope=read', '', {
               headers: {
                 Authorization: 'Basic ' + Base64.encode(authorization.client_id + ':' + authorization.clientSecret)
@@ -257,6 +286,7 @@ export async function beforeEach (to, from, next, authorization, requestInstance
               if (res && res.response) {
                 switch (res.response.status) {
                   case 401:
+                    console.log(' ================  333333333333333333333333  =============  ' )
                     requestInstance.post(authorization.tokenUri + '?grant_type=refresh_token' + '&refresh_token=' + refreshToken + '&scope=read', '', {
                       headers: {
                         Authorization: 'Basic ' + Base64.encode(authorization.client_id + ':' + authorization.clientSecret)

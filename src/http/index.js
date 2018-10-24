@@ -29,8 +29,11 @@ export function requestInterceptor (config, authorization, tokenUri) {
       config.headers.Authorization = 'Bearer ' + accessToken
     }
   } else {
+    console.log('=====================  start http get code ========= ')
     let code = getQuery('code')
     let state = getQuery('state')
+    console.log(window.location.search)
+    console.log('=====================  end http get code ========= '  + code)
     if (code && state) {
       config.headers.Authorization = 'Basic ' + Base64.encode(authorization.client_id + ':' + authorization.clientSecret)
     } else {
