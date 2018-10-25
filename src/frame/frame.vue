@@ -314,7 +314,7 @@
                              v-if="mpType === '2' && translateMusterMenuList && translateMusterMenuList.length">
                             <ul class="menu_eip">
                                 <!-- 在这里判断 -->
-                                <template  v-for="item in translateMusterMenuList">
+                                <template  v-for="(item,index) in translateMusterMenuList">
                                     <li :class="{'z-crttab':item.url === $route.path}"
                                               :key="item.menuId" @click="selectMpMenu(item.url + ';' + item.url,
                                               lang === 'EN' ? ' > '+item.menuName : ' > '+item.menuEnName,
@@ -337,7 +337,7 @@
                                                 <i class="glygh-line"></i>
                                             </div>
                                             <t-dropdown-menu slot="list" class="cl-frame-dropdown">
-                                                <t-dropdown-item  v-for="staffMenu in item.childMenu" :key="staffMenu.menuId"
+                                                <t-dropdown-item  v-for="staffMenu in item.childMenu" :key="staffMenu.menuUrl"
                                                                   v-on:on-click="selectMpMenu(staffMenu.url + ';' + staffMenu.url,
                                                                                             lang === 'EN' ? ' > ' + item.menuName +  ' > ' + staffMenu.menuName
                                                                                                           : ' > ' + item.menuEnName +  ' > ' + staffMenu.menuEnName,checkMusterMenuAuth(staffMenu.menuId))"
@@ -666,6 +666,7 @@
               if (this.authorization && this.authorization.getMusterMenu){
                 this.instance.post(this.authorization.getMusterMenu,{}).then(res=>{
                   let resData = res.data.result;
+                  console.log(res)
                   that.musterMenuList = resData
                 })
               }
