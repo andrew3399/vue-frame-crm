@@ -666,8 +666,24 @@
               if (this.authorization && this.authorization.getMusterMenu){
                 this.instance.post(this.authorization.getMusterMenu,{}).then(res=>{
                   let resData = res.data.result;
-                  console.log(res)
                   that.musterMenuList = resData
+                  let routerPath = that.$route.path
+                  let apMenu = that.$route.query.apMenu
+                  let authorMenuArray = JSON.parse(sessionStorage.getItem("authorMenuArray"))
+                  if (apMenu && apMenu === '1' && that.$route.query.mpType && that.$route.query.mpType === '2' && that.$route.query.menuId){
+                    a:for(let musterMenuIndex in that.musterMenuList){
+                      let musterMenu = that.musterMenuList[musterMenuIndex];
+                      for(let musterMenuChildIndex in musterMenu.childMenu){
+                        let musterMenuChild = musterMenu.childMenu[musterMenuChildIndex]
+                        if(!that.checkMusterMenuAuth(musterMenuChild.menuId) ){
+                          that.selectMpMenu(musterMenuChild.url + ';' + musterMenuChild.url,
+                            that.lang === 'EN' ? ' > ' + musterMenu.menuName +  ' > ' + musterMenuChild.menuName
+                              : ' > ' + musterMenu.menuEnName +  ' > ' + musterMenuChild.menuEnName,that.checkMusterMenuAuth(musterMenuChild.menuId));
+                          break a;
+                        }
+                      }
+                    }
+                  }
                 })
               }
           },
