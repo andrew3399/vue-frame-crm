@@ -42,6 +42,12 @@ export default new Router({
           path: '/handle',
           name: 'handle',
           component: require('../src/views/handle.vue')
+        },
+        //已办
+        {
+            path: '/eip-link',
+            name: 'eip-link',
+            component: require('../src/views/eiplink.vue')
         }
       ]
     }

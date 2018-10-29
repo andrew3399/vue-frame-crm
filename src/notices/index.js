@@ -46,5 +46,14 @@ export default [
     meta: {
       requireAuth: true
     }
+  },
+  //eip跳转链接
+  {
+      path: 'eip-link',
+      name: 'eip-link',
+      component: require('../views/eiplink.vue'),
+      meta: {
+          requireAuth: true
+      }
   }
 ]
