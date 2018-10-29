@@ -39,7 +39,10 @@ export async function beforeEach (to, from, next, authorization, requestInstance
     redirectUri = locationHref
   }
   if (toAcd && toAcd !== undefined && toAcd !== ''){
-    if (toAcd === '1') {
+    let loginUserName = sessionStorage.getItem('loginUserName')
+    console.log(' ============== loginUserName: ' + loginUserName)
+    console.log(' ============ to.query.user: ' + to.query.user)
+    if (toAcd === '1' || (toAcd === '0' && loginUserName && to.query.user && loginUserName !== to.query.user)) {
       localStorage.remove('access_token')
       localStorage.remove('refresh_token')
       //localStorage.remove('session_time')
