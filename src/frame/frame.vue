@@ -811,9 +811,10 @@
               url = url + "&mpId=" + this.mpId
             }
             let routePath = this.$route.matched[0].path
+            let showType = this.$route.query.showType;
             //RAP路径信息
             let rapPathStart = '.jsp';
-            if (url.indexOf(rapPathStart) < 0){
+            if (!showType || showType !== '2'){
               if (url.indexOf(routePath) === -1){
                 this.changeToPage(systemUrl + url)
               } else {
@@ -880,7 +881,8 @@
               }
               let defaultMenu = menuList[0]
               let menuUrl = defaultMenu.menuUrl
-              if (staffMpMenuList.indexOf(routePath) < 0 && menuUrl.indexOf('.jsp') > 0){
+              let showType = this.$route.query.showType;
+              if (staffMpMenuList.indexOf(routePath) < 0 && showType && showType === '2'){
                 that.changeStaffMpMenu(defaultMenu.systemUrl,menuUrl)
               }
             }
