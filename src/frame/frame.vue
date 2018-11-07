@@ -1030,6 +1030,9 @@
                 localStorage.remove('access_token')
                 localStorage.remove('refresh_token')
                 localStorage.remove('session_time')
+                localStorage.remove('billId')
+                localStorage.remove('qryType')
+                localStorage.remove('areaCode')
                 window.location.href = this.authorization.logout_uri
             },
             /* 到修改密码 */
