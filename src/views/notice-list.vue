@@ -23,7 +23,7 @@
             </div>
         </div> -->
         <!-- 面包屑end -->
-        <div class="row">
+        <div class="row" v-show="unHandleHandleShow">
             <div class="col-6">
                 <div class="enquiries notice-state-wrap">
                     <!-- 标题 star-->
@@ -185,6 +185,8 @@
     export default {
         data () {
             return {
+              //隐藏代办已办
+              unHandleHandleShow:false,
               lang: storage.get("aid-language"),
               bulletinTitle:'',
               basicInfoDiv:true,
@@ -564,8 +566,8 @@
             setTimeout(() => {
                 this.getBulletinList()
                 this.initTasklistFilter()
-                this.getUnHandleList()
-                this.getHandleList()
+                // this.getUnHandleList()
+                // this.getHandleList()
             }, 300)
         },
     }
