@@ -31,7 +31,7 @@
                         <span></span>{{$t('handle_local.handle.unHandle')}}
                     </div>
                     <!-- 标题 end-->
-                    <div class="notice-manage-wrap" v-for="item in handleItems">
+                    <div class="notice-manage-wrap" v-for="item in handleItems" :key="item">
                         <!-- <div class="row notice-state-content">
                             <div class="col-12 row mb8">
                                 <div class="col-6 text-left">已办流程标题</div>
@@ -66,7 +66,7 @@
                         <span></span>{{$t('handle_local.handle.handle')}}
                     </div>
                     <!-- 标题 end-->
-                    <div class="notice-manage-wrap" v-for="item in unHandleItems">
+                    <div class="notice-manage-wrap" v-for="item in unHandleItems" :key="item">
                         <!-- <div class="row notice-state-content">
                             <div class="col-12 row mb8">
                                 <div class="col-6 text-left">已办流程标题</div>
@@ -106,12 +106,12 @@
                     </div>
                 </div>
             </div>
-            <div class="notice-manage-wrap"  v-if="total!=0" v-for="item in items" @click="navToDetail(item)">
+            <div class="notice-manage-wrap"  v-if="total!=0" v-for="item in items" @click="navToDetail(item)" :key="item">
                 <div class="notice-manage-content">
                     <div class="text-left content-title">
                         <t-tag state='warning' v-if="parseInt(item.topFlag) === 1">{{$t('notice_local.notice.list_tag_top')}}</t-tag>
-                        <t-tag state='success'v-if="parseInt(item.bulletinLevel) === 3">{{$t('notice_local.notice.list_tag_emergency')}}</t-tag>
-                        <t-tag state='info'v-if="parseInt(item.bulletinLevel) === 2">{{$t('notice_local.notice.list_tag_important')}}</t-tag>
+                        <t-tag state='success' v-if="parseInt(item.bulletinLevel) === 3">{{$t('notice_local.notice.list_tag_emergency')}}</t-tag>
+                        <t-tag state='info' v-if="parseInt(item.bulletinLevel) === 2">{{$t('notice_local.notice.list_tag_important')}}</t-tag>
                         <span>{{item.bulletinTitle}}</span>
                     </div>
                     <!-- <div v-html="item.bulletinContent"></div> -->
@@ -155,7 +155,7 @@
 
             <div  class="selectTable">
                 <!-- 查询结果tab star-->
-                <div class="enquiries-tab" class="res-selectTable">
+                <div class="enquiries-tab res-selectTable">
                     <div class="cmi-tab mt-15 table-aa">
                         <t-table  border :columns="columns" :data="queryData" :all-ellipsis="true"></t-table>
                     </div>
