@@ -5,8 +5,10 @@ import LocalStorage from '../utils/localStorage.js'
 import { Base64 } from 'js-base64'
 import { getQuery, uuid } from '../utils/utils.js'
 // import { TModal } from 'aid-taurus-desktop'
-
+import Vuex from 'vuex'
+import axios from 'axios'
 let localStorage = new LocalStorage()
+
 
 /***
   sessionTime 设置来实现单点登录设置
@@ -16,31 +18,44 @@ let localStorage = new LocalStorage()
   4. 重新获取token 可在用户操作中直接请求
   4. 如果sessionTime不存在，重新登录
 */
-
 export function requestInterceptor (config, authorization, tokenUri) {
+    let cluservisitlogvo = {
+        requestUrl:config.url,
+        inputParam:config.data
+    }
+   let  params = {}
+   params = cluservisitlogvo
   let accessToken = localStorage.get('access_token')
   let refreshToken = localStorage.get('refresh_token')
   let sessionTime = localStorage.get('session_time')
   // let sessionTime = localStorage.get('session-time')
   if (accessToken && refreshToken) {
     if (config.url && config.url.indexOf(tokenUri) !== -1) {
-      config.headers.Authorization = 'Basic ' + Base64.encode(authorization.client_id + ':' + authorization.clientSecret)
+        config.headers.Authorization = 'Basic ' + Base64.encode(authorization.client_id + ':' + authorization.clientSecret)
     } else {
-      config.headers.Authorization = 'Bearer ' + accessToken
+        config.headers.Authorization = 'Bearer ' + accessToken
+        if(config.url){
+            axios.defaults.headers.common['Authorization'] = config.headers.Authorization;
+            let instance = axios.create();
+            if(authorization.useClickEvent){
+                if(config.data && config.data.menuClickFlag !=1){
+                    instance.post(authorization.useClickEvent, params)
+                }
+            }
+        }
     }
+
   } else {
-    console.log('=====================  start http get code ========= ')
     let code = getQuery('code')
     let state = getQuery('state')
     console.log(window.location.search)
-    console.log('=====================  end http get code ========= '  + code)
     if (code && state) {
-      config.headers.Authorization = 'Basic ' + Base64.encode(authorization.client_id + ':' + authorization.clientSecret)
-    } else {
-      if (sessionTime && !accessToken) {
         config.headers.Authorization = 'Basic ' + Base64.encode(authorization.client_id + ':' + authorization.clientSecret)
+    } else {
+        if (sessionTime && !accessToken) {
+            config.headers.Authorization = 'Basic ' + Base64.encode(authorization.client_id + ':' + authorization.clientSecret)
       } else {
-        let msg = {
+            let msg = {
           client_id: authorization.client_id,
           redirect_uri: encodeURIComponent(authorization.redirect_uri),
           state: uuid(6, 16)
@@ -49,6 +64,7 @@ export function requestInterceptor (config, authorization, tokenUri) {
       }
     }
   }
+
 
   return config
 }

@@ -1,6 +1,6 @@
 {
   "name": "vue-frame-crm",
-  "version": "1.1.39",
+  "version": "1.1.40",
   "description": "vue components for crm system",
   "main": "lib/frame.js",
   "scripts": {
@@ -69,6 +69,7 @@
     "inject-html-webpack-plugin": "^0.0.27",
     "json-loader": "^0.5.4",
     "lodash.debounce": "^4.0.8",
+    "axios": "^0.15.3",
     "node-sass": "^4.9.2",
     "nva-test": "^0.5.73",
     "progress-bar-webpack-plugin": "^1.9.3",
