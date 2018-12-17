@@ -38,14 +38,14 @@
                                               v-else></t-avatar>
                                     <router-link :to="{ path: getRouterLinkUrl(item1.menuUrl) }"
                                                  v-if="item1.rightTag === tag && item1.menuUrl" @click.native="useClickEvent(item1)">
-                                        <span class="sub-text" :title="lang === 'EN'?item1.menuName:item1.menuEnName">{{lang === 'EN'?item1.menuName:item1.menuEnName}}0000001</span>
+                                        <span class="sub-text" :title="lang === 'EN'?item1.menuName:item1.menuEnName">{{lang === 'EN'?item1.menuName:item1.menuEnName}}</span>
                                     </router-link>
                                     <a href="javascript:;" @click="handleOtherRegin(item1.systemUrl + item1.menuUrl, item1)"
                                        target="_self"
                                        v-else-if="item1.systemUrl && item1.menuUrl && item1.rightTag !== tag">
-                                        <span class="sub-text" :title="lang === 'EN'?item1.menuName:item1.menuEnName">{{lang === 'EN'?item1.menuName:item1.menuEnName}}0000002</span>
+                                        <span class="sub-text" :title="lang === 'EN'?item1.menuName:item1.menuEnName">{{lang === 'EN'?item1.menuName:item1.menuEnName}}</span>
                                     </a>
-                                    <span class="sub-text" :title="lang === 'EN'?item1.menuName:item1.menuEnName" v-else>{{lang === 'EN'?item1.menuName:item1.menuEnName}}0000003</span>
+                                    <span class="sub-text" :title="lang === 'EN'?item1.menuName:item1.menuEnName" v-else>{{lang === 'EN'?item1.menuName:item1.menuEnName}}</span>
                                 </template>
                                 <template v-for="(item2, y) in item1.children">
                                     <t-submenu v-if="item2.children && item2.children.length" :name="item2.menuName ? item2.menuName : ''"
@@ -53,15 +53,15 @@
                                         <template slot="title">
                                             <router-link :to="{ path: getRouterLinkUrl(item2.menuUrl)}"
                                                          v-if="item2.rightTag === tag && item2.menuUrl"  @click.native="useClickEvent(item2)" >
-                                                <span class="sub-text" :title="lang === 'EN'?item2.menuName:item2.menuEnName">{{lang === 'EN'?item2.menuName:item2.menuEnName}}0000004</span>
+                                                <span class="sub-text" :title="lang === 'EN'?item2.menuName:item2.menuEnName">{{lang === 'EN'?item2.menuName:item2.menuEnName}}</span>
                                             </router-link>
                                             <a href="javascript:;"
                                                @click="handleOtherRegin(item2.systemUrl + item2.menuUrl,item2)" target="_self"
                                                v-else-if="item2.systemUrl && item2.menuUrl && item2.rightTag !== tag">
-                                                <span class="sub-text" :title="lang === 'EN'?item2.menuName:item2.menuEnName">{{lang === 'EN'?item2.menuName:item2.menuEnName}}0000005</span>
+                                                <span class="sub-text" :title="lang === 'EN'?item2.menuName:item2.menuEnName">{{lang === 'EN'?item2.menuName:item2.menuEnName}}</span>
                                             </a>
                                             <span class="sub-text" :title="lang === 'EN'?item2.menuName:item2.menuEnName"
-                                                  v-else  @click="useClickEvent(item2)">{{lang === 'ZH'?item2.menuName:item2.menuEnName}}0000006</span>
+                                                  v-else  @click="useClickEvent(item2)">{{lang === 'ZH'?item2.menuName:item2.menuEnName}}</span>
                                         </template>
                                         <template v-for="(item3, z) in item2.children">
                                             <t-submenu v-if="item3.children && item3.children.length"
@@ -70,16 +70,16 @@
                                                              :key="w" @click.native="getMenu(item4)" class="sec-item">
                                                     <router-link :to="{ path: getRouterLinkUrl(item4.menuUrl) }"
                                                                  v-if="item4.rightTag === tag && item4.menuUrl"   @click.native="useClickEvent(item4)">
-                                                        <span class="sub-text" :title="lang === 'EN'?item4.menuName:item4.menuEnName">{{lang === 'EN'?item4.menuName:item4.menuEnName}}0000007</span>
+                                                        <span class="sub-text" :title="lang === 'EN'?item4.menuName:item4.menuEnName">{{lang === 'EN'?item4.menuName:item4.menuEnName}}</span>
                                                     </router-link>
                                                     <a href="javascript:;"
                                                        @click="handleOtherRegin(item4.systemUrl + item4.menuUrl, item4)"
                                                        target="_self"
                                                        v-else-if="item4.systemUrl && item4.menuUrl && item4.rightTag !== tag" >
-                                                        <span class="sub-text" :title="lang === 'EN'?item4.menuName:item4.menuEnName">{{lang === 'EN'?item4.menuName:item4.menuEnName}}0000008</span>
+                                                        <span class="sub-text" :title="lang === 'EN'?item4.menuName:item4.menuEnName">{{lang === 'EN'?item4.menuName:item4.menuEnName}}</span>
                                                     </a>
                                                     <span class="sub-text" :title="lang === 'EN'?item4.menuName:item4.menuEnName"  @click="useClickEvent(item4)"
-                                                          v-else>{{lang === 'EN'?item4.menuName:item4.menuEnName}}0000009</span>
+                                                          v-else>{{lang === 'EN'?item4.menuName:item4.menuEnName}}</span>
                                                 </t-menu-item>
                                             </t-submenu>
                                             <t-menu-item :name="item3.menuName ?  item3.menuName : ''" :key="z" @click.native="getMenu(item3)"
@@ -87,14 +87,14 @@
                                                 <router-link :to="{ path: getRouterLinkUrl(item3.menuUrl) }"
                                                              v-if="item3.rightTag === tag && item3.menuUrl"  @click.native="useClickEvent(item3)">
                                                     <span class="sub-text"
-                                                          :title="lang === 'EN'?item3.menuName:item3.menuEnName" @click="useClickEvent(item3)">{{lang === 'EN'?item3.menuName:item3.menuEnName}}00000010</span>
+                                                          :title="lang === 'EN'?item3.menuName:item3.menuEnName" @click="useClickEvent(item3)">{{lang === 'EN'?item3.menuName:item3.menuEnName}}</span>
                                                 </router-link>
                                                 <a href="javascript:;"
                                                    @click="handleOtherRegin(item3.systemUrl + item3.menuUrl, item3)"
                                                    target="_self"
                                                    v-else-if="item3.systemUrl && item3.menuUrl && item3.rightTag !== tag">
                                                     <span class="sub-text"
-                                                          :title="lang === 'EN'?item3.menuName:item3.menuEnName">{{lang === 'EN'?item3.menuName:item3.menuEnName}}00000011</span>
+                                                          :title="lang === 'EN'?item3.menuName:item3.menuEnName">{{lang === 'EN'?item3.menuName:item3.menuEnName}}</span>
                                                 </a>
                                                 <span class="sub-text" :title="lang === 'EN'?item3.menuName:item3.menuEnName"  @click="useClickEvent(item3)"
                                                       v-else>{{lang === 'EN'?item3.menuName:item3.menuEnName}}</span>
@@ -104,14 +104,14 @@
                                     <t-menu-item :name="item2.menuName ? item2.menuName : ''" v-else>
                                         <router-link :to="{ path: getRouterLinkUrl(item2.menuUrl) }"
                                                      v-if="item2.rightTag === tag && item2.menuUrl"  @click.native="useClickEvent(item2)">
-                                            <span class="sub-text" :title="lang === 'EN'?item2.menuName:item2.menuEnName" >{{lang === 'EN'?item2.menuName:item2.menuEnName}}00000012</span>
+                                            <span class="sub-text" :title="lang === 'EN'?item2.menuName:item2.menuEnName" >{{lang === 'EN'?item2.menuName:item2.menuEnName}}</span>
                                         </router-link>
                                         <a href="javascript:;"
                                            @click="handleOtherRegin(item2.systemUrl + item2.menuUrl, item)" target="_self"
                                            v-else-if="item2.systemUrl && item2.menuUrl && item2.rightTag !== tag">
-                                            <span class="sub-text" :title="lang === 'EN'?item2.menuName:item2.menuEnName">{{lang === 'EN'?item2.menuName:item2.menuEnName}}00000013</span>
+                                            <span class="sub-text" :title="lang === 'EN'?item2.menuName:item2.menuEnName">{{lang === 'EN'?item2.menuName:item2.menuEnName}}</span>
                                         </a>
-                                        <span class="sub-text" :title="lang === 'EN'?item2.menuName:item2.menuEnName" v-else  @click="useClickEvent(item2)">{{lang === 'EN'?item2.menuName:item2.menuEnName}}00000014</span>
+                                        <span class="sub-text" :title="lang === 'EN'?item2.menuName:item2.menuEnName" v-else  @click="useClickEvent(item2)">{{lang === 'EN'?item2.menuName:item2.menuEnName}}</span>
                                     </t-menu-item>
                                 </template>
                             </t-submenu>
@@ -121,14 +121,14 @@
                                           v-else></t-avatar>
                                 <router-link :to="{ path: getRouterLinkUrl(item1.menuUrl) }"
                                              v-if="item1.rightTag === tag && item1.menuUrl"  @click.native="useClickEvent(item1)">
-                                    <span class="sub-text" :title="lang === 'EN'?item1.menuName:item1.menuEnName" >{{lang === 'EN'?item1.menuName:item1.menuEnName}}00000015</span>
+                                    <span class="sub-text" :title="lang === 'EN'?item1.menuName:item1.menuEnName" >{{lang === 'EN'?item1.menuName:item1.menuEnName}}</span>
                                 </router-link>
                                 <a href="javascript:;" @click="handleOtherRegin(item1.systemUrl + item1.menuUrl, item1)"
                                    target="_self"
                                    v-else-if="item1.systemUrl && item1.menuUrl && item1.rightTag !== tag">
-                                    <span class="sub-text" :title="lang === 'EN'?item1.menuName:item1.menuEnName"  @click="useClickEvent(item1)">{{lang === 'EN'?item1.menuName:item1.menuEnName}}00000016</span>
+                                    <span class="sub-text" :title="lang === 'EN'?item1.menuName:item1.menuEnName"  @click="useClickEvent(item1)">{{lang === 'EN'?item1.menuName:item1.menuEnName}}</span>
                                 </a>
-                                <span class="sub-text" :title="lang === 'EN'?item1.menuName:item1.menuEnName" v-else @click="useClickEvent(item1)">{{lang === 'EN'?item1.menuName:item1.menuEnName}}00000017</span>
+                                <span class="sub-text" :title="lang === 'EN'?item1.menuName:item1.menuEnName" v-else @click="useClickEvent(item1)">{{lang === 'EN'?item1.menuName:item1.menuEnName}}</span>
                             </t-menu-item>
                         </template>
                     </t-menu>
