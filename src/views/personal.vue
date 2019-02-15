@@ -159,10 +159,10 @@
                         </t-form-item>
                     </div>
                     <div class="col-xs-12 col-sm-12 col-md-6 col-lg-6 col-xl-6">
-                        <t-form-item :label="$t('frame.postCode')" class="pt-15" prop="postCode"  label-span="220px">
+                        <t-form-item :label="$t('frame.postCode')" class="pt-15" prop="postCode" label-span="220px">
                             <div class="row">
                                 <div class="col-8 pr-0">
-                                    <t-input  v-model="formRight.postCode" :maxlength="6"></t-input>
+                                    <t-input  v-model="formRight.postCode"  :maxlength="64" ></t-input>
                                 </div>
                             </div>
                         </t-form-item>
@@ -347,11 +347,11 @@
                   callback(rule.message);
                 } else {
                   //验证是否是正整数
-                  let posPattern = /^[1-9][0-9]{5}$/;
+                  let posPattern = /[\u4E00-\u9FA5]/g;
                   let result = posPattern.test(value);
-                  if (!result) {
+                  if (result) {
                     rule.message = this.that.$t('frame.postCode') + this.that.$t("frame.emailError"),
-                      callback(rule.message);
+                    callback(rule.message);
                   } else
                     callback();
                 }
