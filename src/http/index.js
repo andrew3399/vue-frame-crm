@@ -36,10 +36,10 @@ export function requestInterceptor (config, authorization, tokenUri) {
         config.headers.Authorization = 'Bearer ' + accessToken
         if(config.url){
             axios.defaults.headers.common['Authorization'] = config.headers.Authorization;
-            let instance = axios.create();
+            let instance =  axios.create();
             if(authorization.useClickEvent){
                 if(config.data && config.data.menuClickFlag !=1){
-                    instance.post(authorization.useClickEvent, params)
+                    getUseClick(config,params)
                 }
             }
         }
@@ -67,6 +67,15 @@ export function requestInterceptor (config, authorization, tokenUri) {
 
 
   return config
+}
+
+export async function getUseClick(config,params) {
+    let instance =  axios.create();
+    if(authorization.useClickEvent){
+        if(config.data && config.data.menuClickFlag !=1){
+            instance.post(authorization.useClickEvent, params)
+        }
+    }
 }
 
 export function handleResponseError (error, authorization) {

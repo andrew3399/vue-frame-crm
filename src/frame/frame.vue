@@ -658,7 +658,7 @@
           }
         },
         methods: {
-          useClickEvent(config){
+            async useClickEvent(config){
               console.log("useClickEvent")
               if(config.menuUrl && config.menuId){
                   let params = {
@@ -1139,22 +1139,22 @@
                     that.handleResponseExcept(res)
                 })
             },
-            
             /* 跳出当前域，并将其 path 保存下来 */
             handleOtherRegin(url, config) {
                 console.log("handleOtherRegin")
                 if(config!=undefined && config != null && config!=''){
-                    if(config.menuUrl!=undefined && config.menuId!=undefined){
-                        let params = {
-                            requestUrl:config.menuUrl?config.menuUrl:'',
-                            menuId:config.menuId?config.menuId:'',
-                            menuName:config.menuName?config.menuName:'',
-                            menuClickFlag:1
-                        }
-                        if(this.authorization.useClickEvent){
-                            this.instance.post(this.authorization.useClickEvent, params)
-                        }
-                    }
+                    this.useClickEvent(config)
+//                    if(config.menuUrl!=undefined && config.menuId!=undefined){
+//                        let params = {
+//                            requestUrl:config.menuUrl?config.menuUrl:'',
+//                            menuId:config.menuId?config.menuId:'',
+//                            menuName:config.menuName?config.menuName:'',
+//                            menuClickFlag:1
+//                        }
+//                        if(this.authorization.useClickEvent){
+//                            this.instance.post(this.authorization.useClickEvent, params)
+//                        }
+//                    }
                 }
                 console.log("=======handleOtherRegin=========")
                 let accessToken = localStorage.get('access_token')
