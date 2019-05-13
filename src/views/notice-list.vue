@@ -133,7 +133,7 @@
                     </div>
                     <div  class="col-xs-12 col-sm-12 col-md-7 col-lg-7 col-xl-7">
                         <div class="d-flex justify-content-start">
-                            <div  class="col-xs-12 col-sm-12 col-md-4 col-lg-4 col-xl-4" style=" font-size: .875rem; padding: 1.3% 0 0 0;  font-weight: 400;text-align:right;color:#868e8f">
+                            <div  class="col-xs-12 col-sm-12 col-md-4 col-lg-4 col-xl-4" style=" font-size: .875rem; padding: 1% 0 0 0;  font-weight: 400;text-align:right;color:#868e8f">
                                 {{$t('my_task.taskListFilter')}}
                             </div>
                             <div  class="col-xs-12 col-sm-12 col-md-6 col-lg-6 col-xl-6">
@@ -144,7 +144,7 @@
                                 </t-select>
                             </div>
                             <!--查询区域 star-->
-                            <div class="manag-rt-btn">
+                            <div class="manag-rt-btn" v-if="!isAgentFlag">
                                 <t-button type="primary" @click="handleJumpToAdd()">{{$t('my_task.newTask')}}</t-button>
                             </div>
                         </div>
@@ -185,6 +185,7 @@
     export default {
         data () {
             return {
+              isAgentFlag:false,
               //隐藏代办已办
               unHandleHandleShow:false,
               lang: storage.get("aid-language"),
@@ -393,6 +394,10 @@
             this.instance.get(this.authorization.initTasklistFilter, {}
             ).then(res => {
               this.changeTaskListFilterList  = res.data.result.tasklistFilterData;
+              if(res.data.result.isAgent != undefined){
+                this.isAgentFlag = res.data.result.isAgent;
+              }
+              // console.log(this.isAgentFlag)
               this.filterType ='101';
               this.queryMyTasks(this.filterType);
             }).catch(res => {
