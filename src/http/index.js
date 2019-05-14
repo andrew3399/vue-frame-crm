@@ -21,7 +21,7 @@ let localStorage = new LocalStorage()
 export function requestInterceptor (config, authorization, tokenUri) {
     let cluservisitlogvo = {
         requestUrl:config.url,
-        inputParam:config.data
+        inputParam:config.data?config.data:(config.params?config.params:'')
     }
    let  params = {}
    params = cluservisitlogvo
@@ -38,8 +38,8 @@ export function requestInterceptor (config, authorization, tokenUri) {
             axios.defaults.headers.common['Authorization'] = config.headers.Authorization;
             let instance =  axios.create();
             if(authorization.useClickEvent){
-                if(config.data && config.data.menuClickFlag !=1){
-                    getUseClick(config,params)
+                if((config.data && config.data.menuClickFlag !=1 ) || config.params){
+                    getUseClick(config,params,authorization)
                 }
             }
         }
@@ -69,10 +69,10 @@ export function requestInterceptor (config, authorization, tokenUri) {
   return config
 }
 
-export async function getUseClick(config,params) {
+export async function getUseClick(config,params,authorization) {
     let instance =  axios.create();
     if(authorization.useClickEvent){
-        if(config.data && config.data.menuClickFlag !=1){
+        if((config.data && config.data.menuClickFlag !=1) || config.params){
             instance.post(authorization.useClickEvent, params)
         }
     }
