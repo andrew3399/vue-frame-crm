@@ -289,7 +289,7 @@
                     <!-- EIP 集成导航栏和菜单栏 -->
                     <div class="bg-white pt-10"  v-if="showMenuHead === '4' && !isIframe">
                         <div class="customer-tt-title pl-10">
-                            <span class="eipBread" v-if="mpType === '1'">
+                            <span class="eipBread" v-if="mpType === '1' || mpType === '10'">
                                 {{lang === 'EN' ? staffMpMenu.mpNamecn : staffMpMenu.mpNameus}}
                             </span>
                             <span class="eipBread" v-if="mpType === '2'">
